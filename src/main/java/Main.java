@@ -11,7 +11,7 @@ public class Main {
             }else if (input.startsWith("echo ")){
                 String[] split = input.split(" ");
                 for (int i = 1; i < split.length; i++){
-                    System.out.print(split[i]);
+                    System.out.print(split[i] + " ");
                 }
                 System.out.println();
             }
