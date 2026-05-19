@@ -39,7 +39,7 @@ public class Main {
         String[] paths = path.split(separator);
 
         for (String path1 : paths){
-            Path p = Paths.get(path1);
+            Path p = Paths.get(path1, input);
             if (p.getFileName().equals(input) && p.toFile().exists() && Files.isExecutable(p)){
                 System.out.println(input + " is " + p.toFile().getAbsolutePath());
                 return;
