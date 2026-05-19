@@ -1,5 +1,7 @@
 import java.io.File;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class Main {
@@ -37,9 +39,9 @@ public class Main {
         String[] paths = path.split(separator);
 
         for (String path1 : paths){
-            File file = new File(path1);
-            if (file.getName().equals(input) && file.exists() && Files.isExecutable(file.toPath())){
-                System.out.println(input + " is " + file.getAbsolutePath());
+            Path p = Paths.get(path1);
+            if (p.getFileName().equals(input) && p.toFile().exists() && Files.isExecutable(p)){
+                System.out.println(input + " is " + p.toFile().getAbsolutePath());
                 return;
             }else {
                 System.out.println(input + ": not found");
