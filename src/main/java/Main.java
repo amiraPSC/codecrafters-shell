@@ -32,7 +32,9 @@ public class Main {
                 String resultSearch = searchInDirs(split[0]);
                 if (!resultSearch.contains("not found")){
                     ProcessBuilder processBuilder = new ProcessBuilder(split);
-                    processBuilder.start();
+                    Process process = processBuilder.start();
+                    process.getInputStream().transferTo(System.out);
+                    process.waitFor();
                 }else {
                     System.out.println(input + ": command not found");
                 }
