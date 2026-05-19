@@ -20,7 +20,8 @@ public class Main {
                 if (split[1].equals("exit") || split[1].equals("echo") || split[1].equals("type")){
                     System.out.println(split[1] + " is a shell builtin");
                 }else{
-                    searchInDirs(split[1]);
+                    String result = searchInDirs(split[1]);
+                    System.out.println(result);
                 }
             }else if (input.startsWith("echo ")){
                 for (int i = 1; i < split.length; i++){
@@ -28,12 +29,18 @@ public class Main {
                 }
                 System.out.println();
             }else {
-                System.out.println(input + ": command not found");
+                String resultSearch = searchInDirs(split[0]);
+                if (!resultSearch.contains("not found")){
+                    ProcessBuilder processBuilder = new ProcessBuilder(split);
+                    processBuilder.start();
+                }else {
+                    System.out.println(input + ": command not found");
+                }
             }
         }
     }
 
-    private static void searchInDirs(String input){
+    private static String searchInDirs(String input){
         String path = System.getenv("PATH");
         String separator = System.getProperty("path.separator");
         String[] paths = path.split(separator);
@@ -41,10 +48,9 @@ public class Main {
         for (String path1 : paths){
             Path p = Paths.get(path1, input);
             if (p.toFile().exists() && p.toFile().canExecute()){
-                System.out.println(input + " is " + p.toFile().getAbsolutePath());
-                return;
+                return (input + " is " + p.toFile().getAbsolutePath());
             }
         }
-        System.out.println(input + ": not found");
+        return (input + ": not found");
     }
 }
