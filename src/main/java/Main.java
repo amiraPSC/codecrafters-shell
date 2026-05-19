@@ -43,9 +43,8 @@ public class Main {
             if (p.getFileName().equals(input) && p.toFile().exists() && Files.isExecutable(p)){
                 System.out.println(input + " is " + p.toFile().getAbsolutePath());
                 return;
-            }else {
-                System.out.println(input + ": not found");
             }
         }
+        System.out.println(input + ": not found");
     }
 }
