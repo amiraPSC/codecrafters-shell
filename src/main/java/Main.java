@@ -1,3 +1,5 @@
+import java.io.File;
+import java.nio.file.Files;
 import java.util.Scanner;
 
 public class Main {
@@ -8,15 +10,15 @@ public class Main {
             System.out.print("$ ");
             input = sc.nextLine();
             String[] split = input.split(" ");
-            if (input.equals("exit")){
+            if (input.trim().equals("exit")){
                 break;
             }
-            
+
             if (input.startsWith("type ")){
                 if (split[1].equals("exit") || split[1].equals("echo") || split[1].equals("type")){
                     System.out.println(split[1] + " is a shell builtin");
-                }else  {
-                    System.out.println(split[1] + ": not found");
+                }else{
+                    searchInDirs(split[1]);
                 }
             }else if (input.startsWith("echo ")){
                 for (int i = 1; i < split.length; i++){
@@ -25,6 +27,22 @@ public class Main {
                 System.out.println();
             }else {
                 System.out.println(input + ": command not found");
+            }
+        }
+    }
+
+    private static void searchInDirs(String input){
+        String path = System.getenv("PATH");
+        String separator = System.getProperty("path.separator");
+        String[] paths = path.split(separator);
+
+        for (String path1 : paths){
+            File file = new File(path1);
+            if (file.getName().equals(input) && file.exists() && Files.isExecutable(file.toPath())){
+                System.out.println(input + " is " + file.getAbsolutePath());
+                return;
+            }else {
+                System.out.println(input + ": not found");
             }
         }
     }
