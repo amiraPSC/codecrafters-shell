@@ -2,14 +2,19 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        while (true) {
+        Scanner sc = new Scanner(System.in);
+        String input = "";
+        do {
             System.out.print("$ ");
-            Scanner sc = new Scanner(System.in);
-            String input = sc.nextLine();
-            if (input.equals("exit")){
-                break;
+            input = sc.nextLine();
+            String[] split = input.split(" ");
+            if (input.startsWith("type ")){
+                if (split[1].equals("exit") || split[1].equals("echo") || split[1].equals("type")){
+                    System.out.println(split[1] + " is a shell builtin");
+                }else  {
+                    System.out.println(split[1] + ": not found");
+                }
             }else if (input.startsWith("echo ")){
-                String[] split = input.split(" ");
                 for (int i = 1; i < split.length; i++){
                     System.out.print(split[i] + " ");
                 }
@@ -17,6 +22,6 @@ public class Main {
             }else {
                 System.out.println(input + ": command not found");
             }
-        }
+        }while (!input.equals("exit"));
     }
 }
