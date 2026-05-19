@@ -40,11 +40,9 @@ public class Main {
 
         for (String path1 : paths){
             Path p = Paths.get(path1, input);
-            if (p.getFileName().equals(input)){
-                if (p.toFile().exists() && p.toFile().canExecute()){
-                    System.out.println(input + " is " + p.toFile().getAbsolutePath());
-                    return;
-                }
+            if (p.toFile().exists() && p.toFile().canExecute()){
+                System.out.println(input + " is " + p.toFile().getAbsolutePath());
+                return;
             }
         }
         System.out.println(input + ": not found");
