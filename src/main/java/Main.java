@@ -4,10 +4,14 @@ public class Main {
     public static void main(String[] args) throws Exception {
         Scanner sc = new Scanner(System.in);
         String input = "";
-        do {
+        while (true){
             System.out.print("$ ");
             input = sc.nextLine();
             String[] split = input.split(" ");
+            if (input.equals("exit")){
+                break;
+            }
+            
             if (input.startsWith("type ")){
                 if (split[1].equals("exit") || split[1].equals("echo") || split[1].equals("type")){
                     System.out.println(split[1] + " is a shell builtin");
@@ -22,6 +26,6 @@ public class Main {
             }else {
                 System.out.println(input + ": command not found");
             }
-        }while (!input.equals("exit"));
+        }
     }
 }
