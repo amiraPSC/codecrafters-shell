@@ -24,7 +24,7 @@ public class Main {
                     System.out.println(result);
                 }
             }else if (input.startsWith("pwd")){
-                System.out.println(System.getenv("user.dir"));
+                System.out.println(System.getProperty("user.dir"));
             }else if (input.startsWith("echo ")){
                 for (int i = 1; i < split.length; i++){
                     System.out.print(split[i] + " ");
