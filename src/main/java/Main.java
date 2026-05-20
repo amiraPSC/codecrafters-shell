@@ -5,6 +5,7 @@ import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class Main {
+    private static Path currentDir =  Paths.get(System.getProperty("user.dir"));
     public static void main(String[] args) throws Exception {
         Scanner sc = new Scanner(System.in);
         String input = "";
@@ -17,14 +18,26 @@ public class Main {
             }
 
             if (input.startsWith("type ")){
-                if (split[1].equals("exit") || split[1].equals("echo") || split[1].equals("type") || split[1].equals("pwd")){
+                if (split[1].equals("exit") || split[1].equals("echo")
+                        || split[1].equals("type") || split[1].equals("pwd")
+                        || split[1].equals("cd")){
                     System.out.println(split[1] + " is a shell builtin");
                 }else{
                     String result = searchInDirs(split[1]);
                     System.out.println(result);
                 }
+            }else if (input.startsWith("cd")){
+                Path path = Paths.get(split[1]);
+                if (path.isAbsolute()){
+                    String resultSearch = searchInDirs(split[1]);
+                    if (!resultSearch.equals("not found")){
+                        currentDir = Paths.get(resultSearch);
+                    }else {
+                        System.out.println("cd: " + split[1] + " No such file or directory");
+                    }
+                }
             }else if (input.startsWith("pwd")){
-                System.out.println(System.getProperty("user.dir"));
+                System.out.println(currentDir);
             }else if (input.startsWith("echo ")){
                 for (int i = 1; i < split.length; i++){
                     System.out.print(split[i] + " ");
