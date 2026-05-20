@@ -33,7 +33,7 @@ public class Main {
                         currentDir = path;
                     }
                 }else {
-                    System.out.println("cd: " + split[1] + " No such file or directory");
+                    System.out.println("cd: " + split[1] + ": No such file or directory");
                 }
             }else if (input.startsWith("pwd")){
                 System.out.println(currentDir);
