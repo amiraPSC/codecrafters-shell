@@ -17,7 +17,7 @@ public class Main {
             }
 
             if (input.startsWith("type ")){
-                if (split[1].equals("exit") || split[1].equals("echo") || split[1].equals("type")){
+                if (split[1].equals("exit") || split[1].equals("echo") || split[1].equals("type") || split[1].equals("pwd")){
                     System.out.println(split[1] + " is a shell builtin");
                 }else{
                     String result = searchInDirs(split[1]);
