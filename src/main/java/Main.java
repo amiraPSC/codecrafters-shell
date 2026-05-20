@@ -16,7 +16,9 @@ public class Main {
                 break;
             }
 
-            if (input.startsWith("type ")){
+            if (input.startsWith("pwd")){
+                System.out.println(System.getenv("user.dir"));
+            }else if (input.startsWith("type ")){
                 if (split[1].equals("exit") || split[1].equals("echo") || split[1].equals("type")){
                     System.out.println(split[1] + " is a shell builtin");
                 }else{
