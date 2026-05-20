@@ -28,13 +28,12 @@ public class Main {
                 }
             }else if (input.startsWith("cd")){
                 Path path = Paths.get(split[1]);
-                if (path.isAbsolute()){
-                    String resultSearch = searchInDirs(split[1]);
-                    if (!resultSearch.equals("not found")){
-                        currentDir = Paths.get(resultSearch);
-                    }else {
-                        System.out.println("cd: " + split[1] + " No such file or directory");
+                if (path.toFile().exists()){
+                    if (path.isAbsolute()) {
+                        currentDir = path;
                     }
+                }else {
+                    System.out.println("cd: " + split[1] + " No such file or directory");
                 }
             }else if (input.startsWith("pwd")){
                 System.out.println(currentDir);
