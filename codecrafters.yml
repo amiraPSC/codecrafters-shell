@@ -2,7 +2,10 @@
 #
 # These can be VERY verbose, so we suggest turning them off
 # unless you really need them.
-debug: false
+debug: true
+  git add .
+  git commit -m "Enable debug mode"
+  git push
 
 # Use this to change the Java version used to run your code
 # on Codecrafters.
