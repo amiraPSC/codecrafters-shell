@@ -9,7 +9,7 @@ public class CdCommand implements Command{
     @Override
     public void execute(String[] args) throws Exception {
         if (args[1].equals("~")) {
-            PathSearch.setCurrentDir(Paths.get(System.getProperty("HOME")));
+            PathSearch.setCurrentDir(Paths.get(System.getProperty("user.home")));
             return;
         }
         Path path = Paths.get(args[1]);
