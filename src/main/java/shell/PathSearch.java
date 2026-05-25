@@ -23,7 +23,7 @@ public class PathSearch {
     public static void walkLevels(int level){
         Path p = currentDir;
         for (int i = 0; i < level; i++){
-            p = currentDir.getParent();
+            p = p.getParent();
         }
         currentDir = p;
     }
