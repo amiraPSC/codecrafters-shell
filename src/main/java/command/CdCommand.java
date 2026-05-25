@@ -8,6 +8,10 @@ import java.nio.file.Paths;
 public class CdCommand implements Command{
     @Override
     public void execute(String[] args) throws Exception {
+        if (args[1].equals("~")) {
+            PathSearch.setCurrentDir(Paths.get(System.getProperty("HOME")));
+            return;
+        }
         Path path = Paths.get(args[1]);
         if (!path.isAbsolute()){
             path = Paths.get(PathSearch.getCurrentDir().toString(), args[1]).normalize();
