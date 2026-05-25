@@ -14,7 +14,7 @@ public class CdCommand implements Command{
                 PathSearch.setCurrentDir(path);
             } else {
                 if (args[1].contains("./")){
-                    Path p = Paths.get(PathSearch.getCurrentDir().toString(), args[1]);
+                    Path p = Paths.get(PathSearch.getCurrentDir().toString(), args[1]).normalize();
                     PathSearch.setCurrentDir(p);
                 }else {
                     int count = countOccurrences(args[1], "../");
