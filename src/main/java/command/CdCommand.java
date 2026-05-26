@@ -7,24 +7,25 @@ import java.nio.file.Paths;
 
 public class CdCommand implements Command{
     @Override
-    public void execute(String[] args) throws Exception {
-        if (args[1].equals("~")) {
+    public void execute(CommandLine commandLine) throws Exception {
+        String arg1 = commandLine.getArgs()[0];
+        if (arg1.equals("~")) {
             PathSearch.setCurrentDir(Paths.get(System.getenv("HOME")));
             return;
         }
-        Path path = Paths.get(args[1]);
+        Path path = Paths.get(arg1);
         if (!path.isAbsolute()){
-            path = Paths.get(PathSearch.getCurrentDir().toString(), args[1]).normalize();
+            path = Paths.get(PathSearch.getCurrentDir().toString(), arg1).normalize();
         }
         if (path.toFile().exists()){
-            if (args[1].contains("../")){
-                int count = countOccurrences(args[1], "../");
+            if (arg1.contains("../")){
+                int count = countOccurrences(arg1, "../");
                 PathSearch.walkLevels(count);
             }else {
                 PathSearch.setCurrentDir(path);
             }
         }else {
-            System.out.println("cd: " + args[1] + ": No such file or directory");
+            System.out.println("cd: " + arg1 + ": No such file or directory");
         }
     }
 

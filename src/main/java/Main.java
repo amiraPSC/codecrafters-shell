@@ -1,18 +1,21 @@
 import command.Command;
 import command.CommandFactory;
+import command.CommandLine;
+
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws Exception {
         Scanner sc = new Scanner(System.in);
-        String input = "";
+
         while (true){
             System.out.print("$ ");
-            input = sc.nextLine();
-            String[] split = input.split(" ");
+            String input = sc.nextLine();
+            CommandLine commandLine = new CommandLine(input);
 
-            Command cmd = CommandFactory.getCommand(split[0]);
-            cmd.execute(split);
+            Command cmd = CommandFactory.getCommand(commandLine.getCommand());
+            cmd.execute(commandLine);
         }
     }
 }

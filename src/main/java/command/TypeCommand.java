@@ -4,11 +4,12 @@ import shell.PathSearch;
 
 public class TypeCommand implements Command{
     @Override
-    public void execute(String[] args) throws Exception {
-        if (Types.isBuiltin(args[1])){
-            System.out.println(args[1] + " is a shell builtin");
+    public void execute(CommandLine commandLine) throws Exception {
+        String arg1 = commandLine.getArgs()[0];
+        if (Types.isBuiltin(arg1)){
+            System.out.println(arg1 + "is a shell builtin");
         }else{
-            String result = PathSearch.searchInDirs(args[1]);
+            String result = PathSearch.searchInDirs(arg1);
             System.out.println(result);
         }
     }
