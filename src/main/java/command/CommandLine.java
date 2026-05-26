@@ -29,6 +29,7 @@ public class CommandLine {
                 builder.append(input.charAt(i));
             }
         }
+        list.add(builder.toString());
         args = list.toArray(new String[0]);
     }
 
