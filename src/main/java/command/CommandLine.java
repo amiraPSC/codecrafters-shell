@@ -22,7 +22,9 @@ public class CommandLine {
                 continue;
             }
             if (!openQuote && input.charAt(i) == ' '){
-                builder.append(input.charAt(i));
+                if(builder.charAt(builder.length()-1) != ' '){
+                    builder.append(input.charAt(i));
+                }
                 list.add(builder.toString());
                 builder.delete(0, builder.length()+1);
             }else {
