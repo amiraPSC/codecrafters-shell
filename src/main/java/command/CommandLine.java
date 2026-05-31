@@ -11,28 +11,44 @@ public class CommandLine {
     }
 
     private void parseCommandLine(String input){
-        command = input.substring(0, input.indexOf(" "));
         var list = new ArrayList<String>();
         StringBuilder builder = new StringBuilder();
         boolean openQuote = false;
+        boolean tokenStarted = false;
 
-        for (int i = input.indexOf(" ") +1; i < input.length(); i++){
-            if (input.charAt(i) == '\'') {
+        for (int i = 0; i < input.length(); i++){
+            char current = input.charAt(i);
+
+            if (current == '\'') {
                 openQuote = !openQuote;
+                tokenStarted = true;
                 continue;
             }
-            if (!openQuote && input.charAt(i) == ' '){
-                if (!builder.isEmpty() && builder.charAt(builder.length()-1) != ' '){
-                    builder.append(input.charAt(i));
+
+            if (!openQuote && Character.isWhitespace(current)) {
+                if (tokenStarted) {
+                    list.add(builder.toString());
+                    builder.setLength(0);
+                    tokenStarted = false;
                 }
-                list.add(builder.toString());
-                builder.delete(0, builder.length()+1);
-            }else {
-                builder.append(input.charAt(i));
+                continue;
             }
+
+            builder.append(current);
+            tokenStarted = true;
         }
-        list.add(builder.toString());
-        args = list.toArray(new String[0]);
+
+        if (tokenStarted) {
+            list.add(builder.toString());
+        }
+
+        if (!list.isEmpty()) {
+            command = list.get(0);
+            args = list.subList(1, list.size()).toArray(new String[0]);
+        } else {
+            command = "";
+            args = new String[0];
+        }
     }
 
     public String getCommand() {

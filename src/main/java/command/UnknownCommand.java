@@ -13,20 +13,15 @@ public class UnknownCommand implements Command {
         list.addAll(Arrays.asList(commandLine.getArgs()));
         String[] args = list.toArray(new String[0]);
 
-        StringBuilder builder = new StringBuilder();
-        for (String s : args) {
-            builder.append(s);
-        }
-
         String resultSearch = PathSearch.searchInDirs(commandLine.getCommand());
         if (!resultSearch.contains("not found")){
             ProcessBuilder processBuilder = new ProcessBuilder(args);
+            processBuilder.directory(PathSearch.getCurrentDir().toFile());
             Process process = processBuilder.start();
-            System.err.print(args.toString());
             process.getInputStream().transferTo(System.out);
             process.waitFor();
         }else {
-            System.out.println(builder.toString().trim() + ": command not found");
+            System.out.println(String.join(" ", args) + ": command not found");
         }
     }
 }
