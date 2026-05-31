@@ -20,10 +20,13 @@ public class UnknownCommand implements Command {
 
         String resultSearch = PathSearch.searchInDirs(commandLine.getCommand());
         if (!resultSearch.contains("not found")){
+            var results = new ArrayList<Process>();
             ProcessBuilder processBuilder = new ProcessBuilder(args);
-            Process process = processBuilder.start();
-            process.getInputStream().transferTo(System.out);
-            process.waitFor();
+            results.add(processBuilder.start());
+            for (Process process : results) {
+                process.getInputStream().transferTo(System.out);
+                process.waitFor();
+            }
         }else {
             System.out.println(builder.toString().trim() + ": command not found");
         }
