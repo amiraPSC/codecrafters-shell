@@ -22,7 +22,8 @@ public class UnknownCommand implements Command {
         if (!resultSearch.contains("not found")){
             String programmeName = args[0];
             for (int i = 1; i < args.length; i++){
-                ProcessBuilder processBuilder = new ProcessBuilder(programmeName + args[i]);
+                String[] subArgs = new String[]{programmeName, args[i]};
+                ProcessBuilder processBuilder = new ProcessBuilder(subArgs);
                 Process process = processBuilder.start();
                 process.getInputStream().transferTo(System.out);
                 process.waitFor();
