@@ -26,33 +26,33 @@ public class CommandLine {
                 isEscaping = true;
             }
 
-            if (!isEscaping){
+            if (!isEscaping) {
+
+                if ((current == '\'' || current == '\"') && !openQuote) {
+                    quote = current;
+                }
+
+                if (current == quote) {
+                    openQuote = !openQuote;
+                    tokenStarted = true;
+                    continue;
+                }
+
+                if (!openQuote && Character.isWhitespace(current)) {
+                    if (tokenStarted) {
+                        list.add(builder.toString());
+                        builder.setLength(0);
+                        tokenStarted = false;
+                    }
+                    continue;
+                }
+
+                builder.append(current);
+                tokenStarted = true;
+            }else {
                 builder.append(current);
                 isEscaping = false;
-                continue;
             }
-
-            if ((current == '\'' || current == '\"') && !openQuote) {
-                quote = current;
-            }
-
-            if (current == quote){
-                openQuote = !openQuote;
-                tokenStarted = true;
-                continue;
-            }
-
-            if (!openQuote && Character.isWhitespace(current)) {
-                if (tokenStarted) {
-                    list.add(builder.toString());
-                    builder.setLength(0);
-                    tokenStarted = false;
-                }
-                continue;
-            }
-
-            builder.append(current);
-            tokenStarted = true;
         }
 
         if (tokenStarted) {
