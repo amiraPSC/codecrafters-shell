@@ -15,11 +15,22 @@ public class CommandLine {
         StringBuilder builder = new StringBuilder();
         boolean openQuote = false;
         boolean tokenStarted = false;
+        boolean isEscaping  = false;
 
         char quote = '\'';
 
         for (int i = 0; i < input.length(); i++){
             char current = input.charAt(i);
+
+            if (current == '\\' && !isEscaping){
+                isEscaping = true;
+            }
+
+            if (!isEscaping){
+                builder.append(current);
+                isEscaping = false;
+                continue;
+            }
 
             if ((current == '\'' || current == '\"') && !openQuote) {
                 quote = current;
