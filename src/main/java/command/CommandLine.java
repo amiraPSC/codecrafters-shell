@@ -29,6 +29,14 @@ public class CommandLine {
 
             if (!isEscaping) {
 
+                if (current == '\\' && openQuote && quote == '\"' && i+1 < input.length()){
+                    char nextChar = input.charAt(i+1);
+                    if (nextChar == '\\' || nextChar == '\"'){
+                        isEscaping = true;
+                        continue;
+                    }
+                }
+
                 if ((current == '\'' || current == '\"') && !openQuote) {
                     quote = current;
                 }
