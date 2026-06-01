@@ -16,10 +16,16 @@ public class CommandLine {
         boolean openQuote = false;
         boolean tokenStarted = false;
 
+        char quote = '\'';
+
         for (int i = 0; i < input.length(); i++){
             char current = input.charAt(i);
 
-            if (current == '\'') {
+            if ((current == '\'' || current == '\"') && !openQuote) {
+                quote = current;
+            }
+
+            if (current == quote){
                 openQuote = !openQuote;
                 tokenStarted = true;
                 continue;

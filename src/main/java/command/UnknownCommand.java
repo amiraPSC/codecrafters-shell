@@ -21,7 +21,7 @@ public class UnknownCommand implements Command {
             process.getInputStream().transferTo(System.out);
             process.waitFor();
         }else {
-            System.out.println(String.join(" ", args) + ": command not found");
+            System.out.println(commandLine.getCommand() + ": command not found");
         }
     }
 }
