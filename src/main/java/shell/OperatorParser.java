@@ -38,7 +38,7 @@ public class OperatorParser {
                         process.getInputStream().transferTo(otf);
                         process.waitFor();
                     }catch (IOException | InterruptedException e) {
-                        System.out.println(command + ": " + list.get(1) + ": No such file or directory");
+                        e.printStackTrace();
                     }
                 }else {
                     System.out.println(command + ": " + list.get(1) + ": No such file or directory");
