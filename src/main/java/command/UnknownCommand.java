@@ -1,5 +1,6 @@
 package command;
 
+import shell.OperatorParser;
 import shell.PathSearch;
 
 import java.util.ArrayList;
@@ -8,20 +9,22 @@ import java.util.Arrays;
 public class UnknownCommand implements Command {
     @Override
     public void execute(CommandLine commandLine) throws Exception {
-        var list = new ArrayList<String>();
-        list.add(commandLine.getCommand());
-        list.addAll(Arrays.asList(commandLine.getArgs()));
-        String[] args = list.toArray(new String[0]);
+        if (!OperatorParser.haveOperator(commandLine)){
+            var list = new ArrayList<String>();
+            list.add(commandLine.getCommand());
+            list.addAll(Arrays.asList(commandLine.getArgs()));
+            String[] args = list.toArray(new String[0]);
 
-        String resultSearch = PathSearch.searchInDirs(commandLine.getCommand());
-        if (!resultSearch.contains("not found")){
-            ProcessBuilder processBuilder = new ProcessBuilder(args);
-            processBuilder.directory(PathSearch.getCurrentDir().toFile());
-            Process process = processBuilder.start();
-            process.getInputStream().transferTo(System.out);
-            process.waitFor();
-        }else {
-            System.out.println(commandLine.getCommand() + ": command not found");
+            String resultSearch = PathSearch.searchInDirs(commandLine.getCommand());
+            if (!resultSearch.contains("not found")) {
+                ProcessBuilder processBuilder = new ProcessBuilder(args);
+                processBuilder.directory(PathSearch.getCurrentDir().toFile());
+                Process process = processBuilder.start();
+                process.getInputStream().transferTo(System.out);
+                process.waitFor();
+            } else {
+                System.out.println(commandLine.getCommand() + ": command not found");
+            }
         }
     }
 }
