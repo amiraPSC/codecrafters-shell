@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -20,7 +21,6 @@ public class OperatorParser {
         if (result){
             int indexOfOperator = (list.indexOf(">") != -1) ? list.indexOf(">") : list.indexOf("1>");
             File file = new File(list.get(indexOfOperator + 1));
-            String path = PathSearch.searchInDirs(list.get(indexOfOperator -1));
 
             if (commandType == Types.UNKNOWN) {
                 var list2 = new ArrayList<String>();
@@ -30,7 +30,9 @@ public class OperatorParser {
                 list2.remove("1>");
                 String[] args = list2.toArray(new String[0]);
 
-                if (!path.contains("not found")){
+                Path path = Path.of(list.get(indexOfOperator - 1));
+
+                if (Files.exists(path)) {
                     try(FileOutputStream otf = new FileOutputStream(file, false)) {
                         ProcessBuilder processBuilder = new ProcessBuilder(args);
                         processBuilder.directory(PathSearch.getCurrentDir().toFile());
@@ -41,7 +43,7 @@ public class OperatorParser {
                         e.printStackTrace();
                     }
                 }else {
-                    System.out.println(command + ": " + list.get(1) + ": No such file or directory");
+                    System.out.println(command + ": " + list2.get(indexOfOperator-1) + ": No such file or directory");
                 }
             } else {
                 StringBuilder stringBuilder = new StringBuilder();
