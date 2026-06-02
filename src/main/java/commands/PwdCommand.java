@@ -1,6 +1,7 @@
-package command;
+package commands;
 
-import shell.PathSearch;
+import parser.CommandLine;
+import utils.PathSearch;
 
 public class PwdCommand implements Command {
     @Override

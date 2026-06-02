@@ -1,7 +1,7 @@
-package shell;
+package parser;
 
-import command.CommandLine;
-import command.Types;
+import commands.Types;
+import utils.PathSearch;
 
 import java.io.File;
 import java.io.FileOutputStream;

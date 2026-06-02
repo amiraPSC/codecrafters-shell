@@ -1,4 +1,6 @@
-package command;
+package commands;
+
+import parser.CommandLine;
 
 public class ExitCommand implements Command {
     @Override

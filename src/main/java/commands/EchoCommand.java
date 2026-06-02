@@ -1,6 +1,7 @@
-package command;
+package commands;
 
-import shell.OperatorParser;
+import parser.CommandLine;
+import parser.OperatorParser;
 
 public class EchoCommand implements Command{
     @Override

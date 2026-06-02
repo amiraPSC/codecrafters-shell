@@ -1,6 +1,7 @@
-package command;
+package commands;
 
-import shell.PathSearch;
+import parser.CommandLine;
+import utils.PathSearch;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;

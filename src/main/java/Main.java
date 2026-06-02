@@ -1,8 +1,7 @@
-import command.Command;
-import command.CommandFactory;
-import command.CommandLine;
+import commands.Command;
+import commands.CommandFactory;
+import parser.CommandLine;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {

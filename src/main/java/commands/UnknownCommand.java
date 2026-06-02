@@ -1,7 +1,8 @@
-package command;
+package commands;
 
-import shell.OperatorParser;
-import shell.PathSearch;
+import parser.CommandLine;
+import parser.OperatorParser;
+import utils.PathSearch;
 
 import java.util.ArrayList;
 import java.util.Arrays;
