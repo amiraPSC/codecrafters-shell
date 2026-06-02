@@ -20,6 +20,7 @@ public class OperatorParser {
         if (result){
             int indexOfOperator = (list.indexOf(">") != -1) ? list.indexOf(">") : list.indexOf("1>");
             File file = new File(list.get(indexOfOperator + 1));
+            String path = PathSearch.searchInDirs(list.get(indexOfOperator -1));
 
             if (commandType == Types.UNKNOWN) {
                 var list2 = new ArrayList<String>();
@@ -29,7 +30,7 @@ public class OperatorParser {
                 list2.remove("1>");
                 String[] args = list2.toArray(new String[0]);
 
-                if (new File(list.get(0)).exists()){
+                if (!path.contains("not found")){
                     try(FileOutputStream otf = new FileOutputStream(file, false)) {
                         ProcessBuilder processBuilder = new ProcessBuilder(args);
                         processBuilder.directory(PathSearch.getCurrentDir().toFile());
