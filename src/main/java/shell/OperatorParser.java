@@ -25,6 +25,8 @@ public class OperatorParser {
                 var list2 = new ArrayList<String>();
                 list2.add(commandLine.getCommand());
                 list2.addAll(Arrays.asList(commandLine.getArgs()));
+                list2.remove(">");
+                list2.remove("1>");
                 String[] args = list2.toArray(new String[0]);
 
                 if (new File(list.get(0)).exists()){
