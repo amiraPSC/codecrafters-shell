@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class OperatorParser {
     public static boolean haveOperator(CommandLine commandLine) {
@@ -39,7 +40,7 @@ public class OperatorParser {
 
                         try(BufferedReader bos = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
                             String line;
-                            ArrayList<String> lines = (ArrayList<String>) bos.readAllLines();
+                            List<String> lines = bos.readAllLines();
                             for (String s : lines){
                                 if(s.matches("^[^/\\\\\\\\]+$")){
                                     otf.write(s.getBytes());
