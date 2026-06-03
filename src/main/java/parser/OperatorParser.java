@@ -23,12 +23,13 @@ public class OperatorParser {
             File file = new File(list.get(indexOfOperator + 1));
 
             if (commandType == Types.UNKNOWN) {
-                var list2 = new ArrayList<String>();
-                list2.add(commandLine.getCommand());
-                list2.addAll(Arrays.asList(commandLine.getArgs()));
-                list2.remove(">");
-                list2.remove("1>");
-                String[] args = list2.toArray(new String[0]);
+                var tokensBeforeOperator = new ArrayList<String>();
+                tokensBeforeOperator.add(commandLine.getCommand());
+                tokensBeforeOperator.addAll(Arrays.asList(commandLine.getArgs()));
+                for (int i = 0; i < tokensBeforeOperator.size(); i++) {
+                    if (i > indexOfOperator) tokensBeforeOperator.remove(i);
+                }
+                String[] args = tokensBeforeOperator.toArray(new String[0]);
 
                 Path path = Path.of(list.get(indexOfOperator - 1));
 
@@ -43,7 +44,7 @@ public class OperatorParser {
                         e.printStackTrace();
                     }
                 }else {
-                    System.out.println(command + ": " + list2.get(indexOfOperator-1) + ": No such file or directory");
+                    System.out.println(command + ": " + tokensBeforeOperator.get(indexOfOperator-1) + ": No such file or directory");
                 }
             } else {
                 StringBuilder stringBuilder = new StringBuilder();
