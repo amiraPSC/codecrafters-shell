@@ -42,6 +42,7 @@ public class OperatorParser {
                             while ((line = bos.readLine()) != null){
                                 if (line.matches("^[^/\\\\\\\\]+$")){
                                     otf.write(line.getBytes());
+                                    otf.write('\n');
                                 }
                             }
                         }
