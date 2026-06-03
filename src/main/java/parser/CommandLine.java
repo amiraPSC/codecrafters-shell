@@ -1,6 +1,7 @@
 package parser;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class CommandLine {
     private String command;
@@ -75,6 +76,14 @@ public class CommandLine {
             command = "";
             args = new String[0];
         }
+    }
+
+    public String[] getArgsWithCommand(){
+        var list = new ArrayList<String>();
+        list.add(getCommand());
+        list.addAll(Arrays.asList(getArgs()));
+        String[] args = list.toArray(new String[0]);
+        return args;
     }
 
     public String getCommand() {

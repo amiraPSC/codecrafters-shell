@@ -4,17 +4,11 @@ import parser.CommandLine;
 import parser.OperatorParser;
 import utils.PathSearch;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 public class UnknownCommand implements Command {
     @Override
     public void execute(CommandLine commandLine) throws Exception {
         if (!OperatorParser.haveOperator(commandLine)){
-            var list = new ArrayList<String>();
-            list.add(commandLine.getCommand());
-            list.addAll(Arrays.asList(commandLine.getArgs()));
-            String[] args = list.toArray(new String[0]);
+            String[] args = commandLine.getArgsWithCommand();
 
             String resultSearch = PathSearch.searchInDirs(commandLine.getCommand());
             if (!resultSearch.contains("not found")) {
