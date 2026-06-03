@@ -39,12 +39,21 @@ public class OperatorParser {
 
                         try(BufferedReader bos = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
                             String line;
-                            while ((line = bos.readLine()) != null){
+                            ArrayList<String> lines = (ArrayList<String>) bos.readAllLines();
+                            for (String s : lines){
+                                if(s.matches("^[^/\\\\\\\\]+$")){
+                                    otf.write(s.getBytes());
+                                }
+                                if (!s.equals(lines.get(lines.size()-1))){
+                                    otf.write('\n');
+                                }
+                            }
+                            /*while ((line = bos.readLine()) != null){
                                 if (line.matches("^[^/\\\\\\\\]+$")){
                                     otf.write(line.getBytes());
                                     otf.write('\n');
                                 }
-                            }
+                            }*/
                         }
                         process.waitFor();
                     }catch (IOException | InterruptedException e) {
