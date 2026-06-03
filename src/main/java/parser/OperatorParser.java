@@ -3,9 +3,7 @@ package parser;
 import commands.Types;
 import utils.PathSearch;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -38,7 +36,15 @@ public class OperatorParser {
                         ProcessBuilder processBuilder = new ProcessBuilder(args);
                         processBuilder.directory(PathSearch.getCurrentDir().toFile());
                         Process process = processBuilder.start();
-                        process.getInputStream().transferTo(otf);
+
+                        try(BufferedReader bos = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+                            String line;
+                            while ((line = bos.readLine()) != null){
+                                if (line.matches("^[^/\\\\\\\\]+$")){
+                                    otf.write(line.getBytes());
+                                }
+                            }
+                        }
                         process.waitFor();
                     }catch (IOException | InterruptedException e) {
                         e.printStackTrace();
