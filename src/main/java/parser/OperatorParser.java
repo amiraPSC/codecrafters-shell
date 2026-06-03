@@ -44,8 +44,9 @@ public class OperatorParser {
                             for (String s : lines){
                                 if(s.matches("^[^/\\\\\\\\]+$")){
                                     otf.write(s.getBytes());
-                                }else if (!s.equals(lines.get(lines.size()-1))){
-                                    otf.write('\n');
+                                    if (!s.equals(lines.get(lines.size()-1))){
+                                        otf.write('\n');
+                                    }
                                 }
                             }
                             /*while ((line = bos.readLine()) != null){
