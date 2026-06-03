@@ -60,7 +60,7 @@ public class OperatorParser {
                     stringBuilder.append(list.get(i) + " ");
                 }
                 try {
-                    Files.writeString(file.toPath(), stringBuilder.toString().trim());
+                    Files.writeString(file.toPath(), stringBuilder.toString().trim() + '\n');
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
