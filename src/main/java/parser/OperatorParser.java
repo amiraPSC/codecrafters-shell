@@ -51,7 +51,7 @@ public class OperatorParser {
                         e.printStackTrace();
                     }
                 }else {
-                    System.out.println(command + ": " + tokensBeforeOperator.get(indexOfOperator-1) + ": No such file or directory");
+                    System.out.println(command + ": " + tokensBeforeOperator.get(indexOfOperator) + ": No such file or directory");
                 }
             } else {
                 StringBuilder stringBuilder = new StringBuilder();
