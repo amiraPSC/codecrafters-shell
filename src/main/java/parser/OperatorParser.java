@@ -37,11 +37,8 @@ public class OperatorParser {
         String command = commandLine.getCommand();
 
         var tokensBeforeOperator = new ArrayList<String>();
-        tokensBeforeOperator.add(commandLine.getCommand());
-        tokensBeforeOperator.addAll(commandLine.getArgs());
-        for (int i = 0; i < tokensBeforeOperator.size(); i++) {
-            if (i > indexOfOperator) tokensBeforeOperator.remove(i);
-        }
+        tokensBeforeOperator.add(command);
+        tokensBeforeOperator.addAll(args.subList(0, indexOfOperator));
 
         try(FileOutputStream otf = new FileOutputStream(file, false)) {
             ProcessBuilder processBuilder = new ProcessBuilder(tokensBeforeOperator);
