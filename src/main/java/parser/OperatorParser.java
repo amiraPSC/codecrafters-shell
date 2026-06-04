@@ -39,21 +39,24 @@ public class OperatorParser {
         var tokensBeforeOperator = new ArrayList<String>();
         tokensBeforeOperator.add(commandLine.getCommand());
 
-        int size = args.size() - indexOfOperator;
-        for (int i = 0; i < size; i++) {
-            Path path = Path.of(args.get(i));
-            if (args.get(i).matches("^[^/\\\\\\\\]+$")){
-                tokensBeforeOperator.add(args.get(i));
-                continue;
-            }
-            tokensBeforeOperator.add(args.get(i));
+        List<Process>  processes = new ArrayList<>();
 
-            if (Files.exists(path)) {
-                try (FileOutputStream otf = new FileOutputStream(file, false)) {
+        int size = args.size() - indexOfOperator;
+        try (FileOutputStream otf = new FileOutputStream(file, false)){
+            for (int i = 0; i < size; i++) {
+                Path path = Path.of(args.get(i));
+                if (args.get(i).matches("^[^/\\\\\\\\]+$")) {
+                    tokensBeforeOperator.add(args.get(i));
+                    continue;
+                }
+                tokensBeforeOperator.add(args.get(i));
+
+                if (Files.exists(path)) {
                     ProcessBuilder processBuilder = new ProcessBuilder(tokensBeforeOperator);
                     processBuilder.directory(PathSearch.getCurrentDir().toFile());
                     Process process = processBuilder.start();
 
+                    processes.add(process);
                     try (BufferedReader bos = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
                         String line;
                         while ((line = bos.readLine()) != null) {
@@ -63,16 +66,18 @@ public class OperatorParser {
                             }
                         }
                     }
-                    process.waitFor();
-                } catch (IOException | InterruptedException e) {
-                    e.printStackTrace();
-                }
 
-                tokensBeforeOperator.clear();
-                tokensBeforeOperator.add(command);
-            } else {
-                System.out.println(command + ": " + tokensBeforeOperator.get(tokensBeforeOperator.size()-1) + ": No such file or directory");
+                    tokensBeforeOperator.clear();
+                    tokensBeforeOperator.add(command);
+                } else {
+                    System.out.println(command + ": " + tokensBeforeOperator.get(tokensBeforeOperator.size() - 1) + ": No such file or directory");
+                }
             }
+            for (Process process : processes) {
+                process.waitFor();
+            }
+        }catch (IOException | InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
