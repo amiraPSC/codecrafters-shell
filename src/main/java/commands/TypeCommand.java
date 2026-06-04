@@ -6,7 +6,7 @@ import utils.PathSearch;
 public class TypeCommand implements Command{
     @Override
     public void execute(CommandLine commandLine) throws Exception {
-        String arg1 = commandLine.getArgs()[0];
+        String arg1 = commandLine.getArgs().get(0);
         if (Types.isBuiltin(arg1)){
             System.out.println(arg1 + " is a shell builtin");
         }else{

@@ -12,7 +12,7 @@ import java.util.List;
 
 public class OperatorParser {
     public static boolean haveOperator(CommandLine commandLine) {
-        var list = new ArrayList<String>(Arrays.asList(commandLine.getArgs()));
+        var list = commandLine.getArgs();
         boolean result = list.contains(">") || list.contains("1>");
         String command = commandLine.getCommand();
         Types commandType = Types.getType(command);
@@ -24,17 +24,16 @@ public class OperatorParser {
             if (commandType == Types.UNKNOWN) {
                 var tokensBeforeOperator = new ArrayList<String>();
                 tokensBeforeOperator.add(commandLine.getCommand());
-                tokensBeforeOperator.addAll(Arrays.asList(commandLine.getArgs()));
+                tokensBeforeOperator.addAll(commandLine.getArgs());
                 for (int i = 0; i < tokensBeforeOperator.size(); i++) {
                     if (i > indexOfOperator) tokensBeforeOperator.remove(i);
                 }
-                String[] args = tokensBeforeOperator.toArray(new String[0]);
 
                 Path path = Path.of(list.get(indexOfOperator - 1));
 
                 if (Files.exists(path)) {
                     try(FileOutputStream otf = new FileOutputStream(file, false)) {
-                        ProcessBuilder processBuilder = new ProcessBuilder(args);
+                        ProcessBuilder processBuilder = new ProcessBuilder(tokensBeforeOperator);
                         processBuilder.directory(PathSearch.getCurrentDir().toFile());
                         Process process = processBuilder.start();
 

@@ -2,10 +2,11 @@ package parser;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class CommandLine {
     private String command;
-    private String[] args;
+    private List<String> args;
 
     public CommandLine(String input){
         parseCommandLine(input);
@@ -71,26 +72,25 @@ public class CommandLine {
 
         if (!list.isEmpty()) {
             command = list.get(0);
-            args = list.subList(1, list.size()).toArray(new String[0]);
+            args = list.subList(1, list.size());
         } else {
             command = "";
-            args = new String[0];
+            args = new ArrayList<>();
         }
     }
 
-    public String[] getArgsWithCommand(){
+    public List<String> getArgsWithCommand(){
         var list = new ArrayList<String>();
         list.add(getCommand());
-        list.addAll(Arrays.asList(getArgs()));
-        String[] args = list.toArray(new String[0]);
-        return args;
+        list.addAll(args);
+        return list;
     }
 
     public String getCommand() {
         return command;
     }
 
-    public String[] getArgs() {
+    public List<String> getArgs() {
         return args;
     }
 }

@@ -9,7 +9,7 @@ import java.nio.file.Paths;
 public class CdCommand implements Command{
     @Override
     public void execute(CommandLine commandLine) throws Exception {
-        String arg1 = commandLine.getArgs()[0];
+        String arg1 = commandLine.getArgs().get(0);
         if (arg1.equals("~")) {
             PathSearch.setCurrentDir(Paths.get(System.getenv("HOME")));
             return;
