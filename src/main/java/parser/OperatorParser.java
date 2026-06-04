@@ -71,7 +71,7 @@ public class OperatorParser {
                 tokensBeforeOperator.clear();
                 tokensBeforeOperator.add(command);
             } else {
-                System.out.println(command + ": " + tokensBeforeOperator.get(indexOfOperator) + ": No such file or directory");
+                System.out.println(command + ": " + tokensBeforeOperator.get(tokensBeforeOperator.size()-1) + ": No such file or directory");
             }
         }
     }
