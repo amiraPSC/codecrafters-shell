@@ -16,6 +16,7 @@ public class UnknownCommand implements Command {
             if (!resultSearch.contains("not found")) {
                 ProcessBuilder processBuilder = new ProcessBuilder(args);
                 processBuilder.directory(PathSearch.getCurrentDir().toFile());
+                processBuilder.redirectError(ProcessBuilder.Redirect.INHERIT);
                 Process process = processBuilder.start();
                 process.getInputStream().transferTo(System.out);
                 process.waitFor();
