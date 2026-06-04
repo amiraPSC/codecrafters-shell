@@ -43,29 +43,32 @@ public class OperatorParser {
             if (i > indexOfOperator) tokensBeforeOperator.remove(i);
         }
 
-        Path path = Path.of(args.get(indexOfOperator - 1));
+        int size = args.size() - indexOfOperator;
+        for (int i = 0; i < size; i++) {
+            Path path = Path.of(args.get(i));
 
-        if (Files.exists(path)) {
-            try(FileOutputStream otf = new FileOutputStream(file, false)) {
-                ProcessBuilder processBuilder = new ProcessBuilder(tokensBeforeOperator);
-                processBuilder.directory(PathSearch.getCurrentDir().toFile());
-                Process process = processBuilder.start();
+            if (Files.exists(path)) {
+                try (FileOutputStream otf = new FileOutputStream(file, false)) {
+                    ProcessBuilder processBuilder = new ProcessBuilder(tokensBeforeOperator);
+                    processBuilder.directory(PathSearch.getCurrentDir().toFile());
+                    Process process = processBuilder.start();
 
-                try(BufferedReader bos = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-                    String line;
-                    while ((line = bos.readLine()) != null){
-                        if (line.matches("^[^/\\\\\\\\]+$")){
-                            otf.write(line.getBytes());
-                            otf.write('\n');
+                    try (BufferedReader bos = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+                        String line;
+                        while ((line = bos.readLine()) != null) {
+                            if (line.matches("^[^/\\\\\\\\]+$")) {
+                                otf.write(line.getBytes());
+                                otf.write('\n');
+                            }
                         }
                     }
+                    process.waitFor();
+                } catch (IOException | InterruptedException e) {
+                    e.printStackTrace();
                 }
-                process.waitFor();
-            }catch (IOException | InterruptedException e) {
-                e.printStackTrace();
+            } else {
+                System.out.println(command + ": " + tokensBeforeOperator.get(indexOfOperator) + ": No such file or directory");
             }
-        }else {
-            System.out.println(command + ": " + tokensBeforeOperator.get(indexOfOperator) + ": No such file or directory");
         }
     }
 
