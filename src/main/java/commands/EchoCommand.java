@@ -8,6 +8,8 @@ public class EchoCommand implements Command{
     public void execute(CommandLine commandLine) throws Exception {
         if (!OperatorParser.haveOperator(commandLine)){
             System.out.println(String.join(" ", commandLine.getArgs()));
+        }else  {
+            OperatorParser.handleStdoutRedirection(commandLine);
         }
     }
 }

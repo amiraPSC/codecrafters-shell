@@ -11,8 +11,8 @@ public class Main {
         while (true){
             System.out.print("$ ");
             String input = sc.nextLine();
-            CommandLine commandLine = new CommandLine(input);
 
+            CommandLine commandLine = new CommandLine(input);
             Command cmd = CommandFactory.getCommand(commandLine.getCommand());
             cmd.execute(commandLine);
         }

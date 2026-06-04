@@ -22,6 +22,8 @@ public class UnknownCommand implements Command {
             } else {
                 System.out.println(commandLine.getCommand() + ": command not found");
             }
+        }else {
+            OperatorParser.handleStdoutRedirection(commandLine);
         }
     }
 }
