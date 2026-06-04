@@ -38,14 +38,15 @@ public class OperatorParser {
 
         var tokensBeforeOperator = new ArrayList<String>();
         tokensBeforeOperator.add(commandLine.getCommand());
-        tokensBeforeOperator.addAll(commandLine.getArgs());
-        for (int i = 0; i < tokensBeforeOperator.size(); i++) {
-            if (i > indexOfOperator) tokensBeforeOperator.remove(i);
-        }
 
         int size = args.size() - indexOfOperator;
         for (int i = 0; i < size; i++) {
             Path path = Path.of(args.get(i));
+            if (args.get(i).matches("^[^/\\\\\\\\]+$")){
+                tokensBeforeOperator.add(args.get(i));
+                continue;
+            }
+            tokensBeforeOperator.add(args.get(i));
 
             if (Files.exists(path)) {
                 try (FileOutputStream otf = new FileOutputStream(file, false)) {
@@ -66,6 +67,9 @@ public class OperatorParser {
                 } catch (IOException | InterruptedException e) {
                     e.printStackTrace();
                 }
+
+                tokensBeforeOperator.clear();
+                tokensBeforeOperator.add(command);
             } else {
                 System.out.println(command + ": " + tokensBeforeOperator.get(indexOfOperator) + ": No such file or directory");
             }
