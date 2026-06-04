@@ -38,44 +38,27 @@ public class OperatorParser {
 
         var tokensBeforeOperator = new ArrayList<String>();
         tokensBeforeOperator.add(commandLine.getCommand());
+        tokensBeforeOperator.addAll(commandLine.getArgs());
+        for (int i = 0; i < tokensBeforeOperator.size(); i++) {
+            if (i > indexOfOperator) tokensBeforeOperator.remove(i);
+        }
 
-        List<Process>  processes = new ArrayList<>();
+        try(FileOutputStream otf = new FileOutputStream(file, false)) {
+            ProcessBuilder processBuilder = new ProcessBuilder(tokensBeforeOperator);
+            processBuilder.directory(PathSearch.getCurrentDir().toFile());
+            processBuilder.redirectError(ProcessBuilder.Redirect.INHERIT);
+            Process process = processBuilder.start();
 
-        int size = args.size() - indexOfOperator;
-        try (FileOutputStream otf = new FileOutputStream(file, false)){
-            for (int i = 0; i < size; i++) {
-                Path path = Path.of(args.get(i));
-                if (args.get(i).matches("^[^/\\\\\\\\]+$")) {
-                    tokensBeforeOperator.add(args.get(i));
-                    continue;
-                }
-                tokensBeforeOperator.add(args.get(i));
-
-                if (Files.exists(path)) {
-                    ProcessBuilder processBuilder = new ProcessBuilder(tokensBeforeOperator);
-                    processBuilder.directory(PathSearch.getCurrentDir().toFile());
-                    Process process = processBuilder.start();
-
-                    processes.add(process);
-                    try (BufferedReader bos = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-                        String line;
-                        while ((line = bos.readLine()) != null) {
-                            if (line.matches("^[^/\\\\\\\\]+$")) {
-                                otf.write(line.getBytes());
-                                otf.write('\n');
-                            }
-                        }
+            try(BufferedReader bos = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+                String line;
+                while ((line = bos.readLine()) != null){
+                    if (line.matches("^[^/\\\\\\\\]+$")){
+                        otf.write(line.getBytes());
+                        otf.write('\n');
                     }
-
-                    tokensBeforeOperator.clear();
-                    tokensBeforeOperator.add(command);
-                } else {
-                    System.out.println(command + ": " + tokensBeforeOperator.get(tokensBeforeOperator.size() - 1) + ": No such file or directory");
                 }
             }
-            for (Process process : processes) {
-                process.waitFor();
-            }
+            process.waitFor();
         }catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
