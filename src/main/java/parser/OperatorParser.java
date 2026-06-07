@@ -112,6 +112,12 @@ public class OperatorParser {
     }
 
     private static void handelEchoCommandStderr(CommandLine commandLine, int indexOfOperator, File file) {
-        System.out.println(String.join(" ", commandLine.getArgs()));
+        List<String> args = commandLine.getArgs();
+        String command = commandLine.getCommand();
+
+        var tokensBeforeOperator = new ArrayList<String>();
+        tokensBeforeOperator.addAll(args.subList(0, indexOfOperator));
+
+        System.out.println(String.join(" ", tokensBeforeOperator));
     }
 }
