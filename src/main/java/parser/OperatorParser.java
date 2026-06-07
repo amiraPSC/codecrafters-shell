@@ -85,7 +85,7 @@ public class OperatorParser {
         tokensBeforeOperator.addAll(args.subList(0, indexOfOperator));
 
         try {
-            ProcessBuilder processBuilder = new ProcessBuilder(args);
+            ProcessBuilder processBuilder = new ProcessBuilder(tokensBeforeOperator);
             processBuilder.directory(PathSearch.getCurrentDir().toFile());
             processBuilder.redirectError(ProcessBuilder.Redirect.to(file));
             Process process = processBuilder.start();
