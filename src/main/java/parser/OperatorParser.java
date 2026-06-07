@@ -113,7 +113,11 @@ public class OperatorParser {
 
     private static void handelEchoCommandStderr(CommandLine commandLine, int indexOfOperator, File file) {
         List<String> args = commandLine.getArgs();
-        String command = commandLine.getCommand();
+        try {
+            Files.createFile(file.toPath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         var tokensBeforeOperator = new ArrayList<String>();
         tokensBeforeOperator.addAll(args.subList(0, indexOfOperator));
