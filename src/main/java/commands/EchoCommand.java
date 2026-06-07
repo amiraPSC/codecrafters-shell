@@ -9,7 +9,7 @@ public class EchoCommand implements Command{
         if (!OperatorParser.haveOperator(commandLine)){
             System.out.println(String.join(" ", commandLine.getArgs()));
         }else  {
-            OperatorParser.handleStdoutRedirection(commandLine);
+            OperatorParser.handleStandersRedirection(commandLine);
         }
     }
 }

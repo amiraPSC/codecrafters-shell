@@ -12,26 +12,42 @@ import java.util.List;
 public class OperatorParser {
     public static boolean haveOperator(CommandLine commandLine) {
         var list = commandLine.getArgs();
-        boolean result = list.contains(">") || list.contains("1>");
+        boolean result = list.contains(">") || list.contains("1>") || list.contains("2>");
         return result;
     }
 
-    public static void handleStdoutRedirection(CommandLine commandLine) {
+    public static void handleStandersRedirection(CommandLine commandLine) {
         List<String> args = commandLine.getArgs();
         String command = commandLine.getCommand();
         Types commandType = Types.getType(command);
 
-        int indexOfOperator = (args.indexOf(">") != -1) ? args.indexOf(">") : args.indexOf("1>");
+        boolean theStanderIs1 = (!args.contains("2>") ? true : false);
+        int indexOfOperator;
+
+        if (theStanderIs1){
+            indexOfOperator = (args.indexOf(">") != -1) ? args.indexOf(">") : args.indexOf("1>");
+        }else {
+            indexOfOperator = args.indexOf("2>");
+        }
+
         File file = new File(args.get(indexOfOperator + 1));
 
-        if (commandType == Types.UNKNOWN) {
-            handelExternalExecutables(commandLine, indexOfOperator, file);
-        } else {
-            handelEchoCommand(commandLine, indexOfOperator, file);
+        if (theStanderIs1){
+            if (commandType == Types.UNKNOWN) {
+                handelExternalExecutablesStdout(commandLine, indexOfOperator, file);
+            } else {
+                handelEchoCommandStdout(commandLine, indexOfOperator, file);
+            }
+        }else {
+            if (commandType == Types.UNKNOWN) {
+                handelExternalExecutablesStderr(commandLine, indexOfOperator, file);
+            } else {
+                handelEchoCommandStderr(commandLine, indexOfOperator, file);
+            }
         }
     }
 
-    private static void handelExternalExecutables(CommandLine commandLine, int indexOfOperator, File file) {
+    private static void handelExternalExecutablesStdout(CommandLine commandLine, int indexOfOperator, File file) {
         List<String> args = commandLine.getArgs();
         String command = commandLine.getCommand();
 
@@ -60,7 +76,27 @@ public class OperatorParser {
         }
     }
 
-    private static void handelEchoCommand(CommandLine commandLine, int indexOfOperator, File file) {
+    private static void handelExternalExecutablesStderr(CommandLine commandLine, int indexOfOperator, File file) {
+        List<String> args = commandLine.getArgs();
+        String command = commandLine.getCommand();
+
+        var tokensBeforeOperator = new ArrayList<String>();
+        tokensBeforeOperator.add(command);
+        tokensBeforeOperator.addAll(args.subList(0, indexOfOperator));
+
+        try {
+            ProcessBuilder processBuilder = new ProcessBuilder(args);
+            processBuilder.directory(PathSearch.getCurrentDir().toFile());
+            processBuilder.redirectError(ProcessBuilder.Redirect.to(file));
+            Process process = processBuilder.start();
+            process.getInputStream().transferTo(System.out);
+            process.waitFor();
+        } catch (InterruptedException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void handelEchoCommandStdout(CommandLine commandLine, int indexOfOperator, File file) {
         List<String> args = commandLine.getArgs();
 
         StringBuilder stringBuilder = new StringBuilder();
@@ -73,5 +109,9 @@ public class OperatorParser {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private static void handelEchoCommandStderr(CommandLine commandLine, int indexOfOperator, File file) {
+        System.out.println(String.join(" ", commandLine.getArgs()));
     }
 }
