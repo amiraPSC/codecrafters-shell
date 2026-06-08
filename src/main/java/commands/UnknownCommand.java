@@ -9,7 +9,8 @@ import java.util.List;
 public class UnknownCommand implements Command {
     @Override
     public void execute(CommandLine commandLine) throws Exception {
-        if (!OperatorHandler.haveOperator(commandLine)){
+        OperatorHandler operatorHandler = new OperatorHandler(commandLine);
+        if (!operatorHandler.haveOperator()){
             List<String> args = commandLine.getArgsWithCommand();
 
             String resultSearch = PathSearch.searchInDirs(commandLine.getCommand());
@@ -23,7 +24,7 @@ public class UnknownCommand implements Command {
                 System.out.println(commandLine.getCommand() + ": command not found");
             }
         }else {
-            OperatorHandler.handleStandersRedirection(commandLine);
+            operatorHandler.handleStandersRedirection();
         }
     }
 }
