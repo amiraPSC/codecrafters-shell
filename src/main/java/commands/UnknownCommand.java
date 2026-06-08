@@ -1,7 +1,7 @@
 package commands;
 
 import parser.CommandLine;
-import parser.OperatorParser;
+import parser.OperatorHandler;
 import utils.PathSearch;
 
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.List;
 public class UnknownCommand implements Command {
     @Override
     public void execute(CommandLine commandLine) throws Exception {
-        if (!OperatorParser.haveOperator(commandLine)){
+        if (!OperatorHandler.haveOperator(commandLine)){
             List<String> args = commandLine.getArgsWithCommand();
 
             String resultSearch = PathSearch.searchInDirs(commandLine.getCommand());
@@ -23,7 +23,7 @@ public class UnknownCommand implements Command {
                 System.out.println(commandLine.getCommand() + ": command not found");
             }
         }else {
-            OperatorParser.handleStandersRedirection(commandLine);
+            OperatorHandler.handleStandersRedirection(commandLine);
         }
     }
 }

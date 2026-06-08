@@ -1,127 +1,76 @@
 package parser;
 
-import commands.Types;
-import utils.PathSearch;
-
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
+import java.nio.file.Path;
 import java.util.List;
 
-
 public class OperatorParser {
-    public static boolean haveOperator(CommandLine commandLine) {
-        var list = commandLine.getArgs();
-        boolean result = list.contains(">") || list.contains("1>") || list.contains("2>");
-        return result;
-    }
+    private OperatorType operatorType;
+    private int operatorIndex;
+    private List<String> tokens;
+    private File file;
 
-    public static void handleStandersRedirection(CommandLine commandLine) {
-        List<String> args = commandLine.getArgs();
-        String command = commandLine.getCommand();
-        Types commandType = Types.getType(command);
-
-        boolean theStanderIs1 = (!args.contains("2>") ? true : false);
-        int indexOfOperator;
-
-        if (theStanderIs1){
-            indexOfOperator = (args.indexOf(">") != -1) ? args.indexOf(">") : args.indexOf("1>");
-        }else {
-            indexOfOperator = args.indexOf("2>");
-        }
-
-        File file = new File(args.get(indexOfOperator + 1));
-
-        if (theStanderIs1){
-            if (commandType == Types.UNKNOWN) {
-                handelExternalExecutablesStdout(commandLine, indexOfOperator, file);
-            } else {
-                handelEchoCommandStdout(commandLine, indexOfOperator, file);
-            }
-        }else {
-            if (commandType == Types.UNKNOWN) {
-                handelExternalExecutablesStderr(commandLine, indexOfOperator, file);
-            } else {
-                handelEchoCommandStderr(commandLine, indexOfOperator, file);
-            }
+    protected OperatorParser(CommandLine commandLine) {
+        List<String> args = commandLine.getArgsWithCommand();
+        if (haveOperator(args)) {
+            setOperatorIndex(args);
+            setOperatorType(args);
+            setTokens(args);
+            setFile(args);
         }
     }
 
-    private static void handelExternalExecutablesStdout(CommandLine commandLine, int indexOfOperator, File file) {
-        List<String> args = commandLine.getArgs();
-        String command = commandLine.getCommand();
+    protected boolean haveOperator(List<String> tokens) {
+        boolean haveOperator =
+                tokens.contains(">") || tokens.contains("1>") ||
+                tokens.contains(">>") || tokens.contains("1>>") ||
+                tokens.contains("2>") || tokens.contains("2>>");
 
-        var tokensBeforeOperator = new ArrayList<String>();
-        tokensBeforeOperator.add(command);
-        tokensBeforeOperator.addAll(args.subList(0, indexOfOperator));
+        return haveOperator;
+    }
 
-        try(FileOutputStream otf = new FileOutputStream(file, false)) {
-            ProcessBuilder processBuilder = new ProcessBuilder(tokensBeforeOperator);
-            processBuilder.directory(PathSearch.getCurrentDir().toFile());
-            processBuilder.redirectError(ProcessBuilder.Redirect.INHERIT);
-            Process process = processBuilder.start();
+    private void setOperatorType(List<String> tokens) {
+        operatorType = OperatorType.operatorType(tokens.get(operatorIndex));
+    }
 
-            try(BufferedReader bos = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-                String line;
-                while ((line = bos.readLine()) != null){
-                    if (line.matches("^[^/\\\\\\\\]+$")){
-                        otf.write(line.getBytes());
-                        otf.write('\n');
-                    }
-                }
+    private void setOperatorIndex(List<String> tokens) {
+        String[] operators = {">", "1>", ">>", "1>>", "2>", "2>>"};
+        for (String operator : operators) {
+            int index = tokens.indexOf(operator);
+            if (index != -1) {
+                operatorIndex = index;
+                break;
             }
-            process.waitFor();
-        }catch (IOException | InterruptedException e) {
-            e.printStackTrace();
         }
     }
 
-    private static void handelExternalExecutablesStderr(CommandLine commandLine, int indexOfOperator, File file) {
-        List<String> args = commandLine.getArgs();
-        String command = commandLine.getCommand();
+    private void setTokens(List<String> tokens){
+        this.tokens = tokens.subList(0, operatorIndex);
+    }
 
-        var tokensBeforeOperator = new ArrayList<String>();
-        tokensBeforeOperator.add(command);
-        tokensBeforeOperator.addAll(args.subList(0, indexOfOperator));
-
+    private void setFile(List<String> tokens) {
         try {
-            ProcessBuilder processBuilder = new ProcessBuilder(tokensBeforeOperator);
-            processBuilder.directory(PathSearch.getCurrentDir().toFile());
-            processBuilder.redirectError(ProcessBuilder.Redirect.to(file));
-            Process process = processBuilder.start();
-            process.getInputStream().transferTo(System.out);
-            process.waitFor();
-        } catch (InterruptedException | IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static void handelEchoCommandStdout(CommandLine commandLine, int indexOfOperator, File file) {
-        List<String> args = commandLine.getArgs();
-
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < args.size(); i++) {
-            if (i == indexOfOperator) break;
-            stringBuilder.append(args.get(i) + " ");
-        }
-        try {
-            Files.writeString(file.toPath(), stringBuilder.toString().trim() + '\n');
+            this.file = Files.createFile(Path.of(tokens.get(operatorIndex + 1))).toFile();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private static void handelEchoCommandStderr(CommandLine commandLine, int indexOfOperator, File file) {
-        List<String> args = commandLine.getArgs();
-        try {
-            Files.createFile(file.toPath());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public OperatorType getOperatorType() {
+        return operatorType;
+    }
 
-        var tokensBeforeOperator = new ArrayList<String>();
-        tokensBeforeOperator.addAll(args.subList(0, indexOfOperator));
+    public int getOperatorIndex() {
+        return operatorIndex;
+    }
 
-        System.out.println(String.join(" ", tokensBeforeOperator));
+    public List<String> getTokens() {
+        return tokens;
+    }
+
+    public File getFile() {
+        return file;
     }
 }
