@@ -52,7 +52,12 @@ public class OperatorParser {
 
     private void setFile(List<String> tokens) {
         try {
-            this.file = Files.createFile(Path.of(tokens.get(operatorIndex + 1))).toFile();
+            Path path = Path.of(tokens.get(operatorIndex + 1));
+            {
+                if (!Files.exists(path)){
+                    this.file = Files.createFile(path).toFile();
+                }
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
