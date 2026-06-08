@@ -6,6 +6,7 @@ import utils.PathSearch;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,9 +26,9 @@ public class OperatorHandler {
         return operatorParser.haveOperator(commandLine.getArgsWithCommand());
     }
 
-    private void stdoutRedirect(){
+    private void stdoutRedirect(boolean isAppend){
         if (commandType == Types.UNKNOWN){
-            try (FileOutputStream otf = new FileOutputStream(operatorParser.getFile(), false)) {
+            try (FileOutputStream otf = new FileOutputStream(operatorParser.getFile(), isAppend)) {
                 ProcessBuilder processBuilder = new ProcessBuilder(operatorParser.getTokens());
                 processBuilder.directory(PathSearch.getCurrentDir().toFile());
                 processBuilder.redirectError(ProcessBuilder.Redirect.INHERIT);
@@ -52,7 +53,11 @@ public class OperatorHandler {
                 stringBuilder.append(operatorParser.getTokens().get(i) + " ");
             }
             try {
-                Files.writeString(operatorParser.getFile().toPath(), stringBuilder.toString().trim() + '\n');
+                if (!isAppend) {
+                    Files.writeString(operatorParser.getFile().toPath(), stringBuilder.toString().trim() + '\n');
+                }else{
+                    Files.writeString(operatorParser.getFile().toPath(), stringBuilder.toString().trim() + '\n', StandardOpenOption.APPEND);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -78,8 +83,9 @@ public class OperatorHandler {
 
     public void handleStandersRedirection() {
         switch (operatorParser.getOperatorType()){
-            case STDOUT_REDIRECT ->  stdoutRedirect();
+            case STDOUT_REDIRECT ->  stdoutRedirect(false);
             case STDERR_REDIRECT -> stderrRedirect();
+            case APPEND_STDOUT ->  stdoutRedirect(true);
         }
     }
 }
