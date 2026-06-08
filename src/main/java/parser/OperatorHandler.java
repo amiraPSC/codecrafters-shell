@@ -22,6 +22,15 @@ public class OperatorHandler {
         operatorParser = new OperatorParser(commandLine);
     }
 
+    public void handleStandersRedirection() {
+        switch (operatorParser.getOperatorType()){
+            case STDOUT_REDIRECT ->  stdoutRedirect(false);
+            case STDERR_REDIRECT -> stderrRedirect(false);
+            case APPEND_STDOUT ->  stdoutRedirect(true);
+            case APPEND_STDERR ->  stderrRedirect(true);
+        }
+    }
+
     public boolean haveOperator() {
         return operatorParser.haveOperator(commandLine.getArgsWithCommand());
     }
@@ -64,13 +73,17 @@ public class OperatorHandler {
         }
     }
 
-    private void stderrRedirect(){
+    private void stderrRedirect(boolean isAppend){
         List<String> tokens = operatorParser.getTokens();
         if (commandType == Types.UNKNOWN){
             try {
                 ProcessBuilder processBuilder = new ProcessBuilder(tokens);
                 processBuilder.directory(PathSearch.getCurrentDir().toFile());
-                processBuilder.redirectError(ProcessBuilder.Redirect.to(operatorParser.getFile()));
+                if (!isAppend) {
+                    processBuilder.redirectError(ProcessBuilder.Redirect.to(operatorParser.getFile()));
+                }else {
+                    processBuilder.redirectError(ProcessBuilder.Redirect.appendTo(operatorParser.getFile()));
+                }
                 Process process = processBuilder.start();
                 process.getInputStream().transferTo(System.out);
                 process.waitFor();
@@ -79,14 +92,6 @@ public class OperatorHandler {
             }
         } else if (commandType == Types.ECHO) {
             System.out.println(String.join(" ", tokens.subList(1, tokens.size())));
-        }
-    }
-
-    public void handleStandersRedirection() {
-        switch (operatorParser.getOperatorType()){
-            case STDOUT_REDIRECT ->  stdoutRedirect(false);
-            case STDERR_REDIRECT -> stderrRedirect();
-            case APPEND_STDOUT ->  stdoutRedirect(true);
         }
     }
 }
