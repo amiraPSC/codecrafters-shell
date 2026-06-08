@@ -56,6 +56,8 @@ public class OperatorParser {
             {
                 if (!Files.exists(path)){
                     this.file = Files.createFile(path).toFile();
+                }else  {
+                    this.file = path.toFile();
                 }
             }
         } catch (IOException e) {
