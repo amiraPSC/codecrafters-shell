@@ -65,9 +65,10 @@ public class OperatorHandler {
     }
 
     private void stderrRedirect(){
+        List<String> tokens = operatorParser.getTokens();
         if (commandType == Types.UNKNOWN){
             try {
-                ProcessBuilder processBuilder = new ProcessBuilder(operatorParser.getTokens());
+                ProcessBuilder processBuilder = new ProcessBuilder(tokens);
                 processBuilder.directory(PathSearch.getCurrentDir().toFile());
                 processBuilder.redirectError(ProcessBuilder.Redirect.to(operatorParser.getFile()));
                 Process process = processBuilder.start();
@@ -77,7 +78,7 @@ public class OperatorHandler {
                 e.printStackTrace();
             }
         } else if (commandType == Types.ECHO) {
-            System.out.println(String.join(" ", operatorParser.getTokens()));
+            System.out.println(String.join(" ", tokens.subList(1, tokens.size())));
         }
     }
 
