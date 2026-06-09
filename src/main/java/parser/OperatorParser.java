@@ -1,28 +1,27 @@
 package parser;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
 
 public class OperatorParser {
+    private CommandLine commandLine;
     private OperatorType operatorType;
     private int operatorIndex;
     private List<String> tokens;
-    private File file;
+    private String fileName;
 
-    protected OperatorParser(CommandLine commandLine) {
+    public OperatorParser(CommandLine commandLine) {
+        this.commandLine = commandLine;
         List<String> args = commandLine.getArgsWithCommand();
-        if (haveOperator(args)) {
+        if (haveOperator()) {
             setOperatorIndex(args);
             setOperatorType(args);
             setTokens(args);
-            setFile(args);
+            setFileName(args);
         }
     }
 
-    protected boolean haveOperator(List<String> tokens) {
+    public boolean haveOperator() {
+        List<String> tokens = commandLine.getArgsWithCommand();
         boolean haveOperator =
                 tokens.contains(">") || tokens.contains("1>") ||
                 tokens.contains(">>") || tokens.contains("1>>") ||
@@ -50,34 +49,19 @@ public class OperatorParser {
         this.tokens = tokens.subList(0, operatorIndex);
     }
 
-    private void setFile(List<String> tokens) {
-        try {
-            Path path = Path.of(tokens.get(operatorIndex + 1));
-            {
-                if (!Files.exists(path)){
-                    this.file = Files.createFile(path).toFile();
-                }else  {
-                    this.file = path.toFile();
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private void setFileName(List<String> tokens) {
+        fileName = tokens.get(operatorIndex + 1);
     }
 
     public OperatorType getOperatorType() {
         return operatorType;
     }
 
-    public int getOperatorIndex() {
-        return operatorIndex;
-    }
-
     public List<String> getTokens() {
         return tokens;
     }
 
-    public File getFile() {
-        return file;
+    public String getFileName() {
+        return fileName;
     }
 }
