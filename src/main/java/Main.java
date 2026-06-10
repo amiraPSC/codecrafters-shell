@@ -18,7 +18,7 @@ public class Main {
                     .build();
 
             while (true) {
-                String line = reader.readLine("& ");
+                String line = reader.readLine("$ ");
 
                 CommandLine commandLine = new CommandLine(line);
                 Command cmd = CommandFactory.getCommand(commandLine.getCommand());
