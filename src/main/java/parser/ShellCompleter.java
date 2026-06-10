@@ -14,7 +14,7 @@ public class ShellCompleter implements Completer {
         String word = line.word();
         for (String command : commands) {
             if (command.startsWith(word)) {
-                candidates.add(new Candidate(command + " "));
+                candidates.add(new Candidate(command));
             }
         }
     }
