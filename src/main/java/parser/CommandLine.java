@@ -55,24 +55,19 @@ public class CommandLine {
                 tokenStarted = true;
 
             }else if (quote == '\"'){
-                if (isEscaping){
-                    builder.append(current);
-                    isEscaping = false;
-                    tokenStarted = true;
-                    continue;
+                if (current == '\\' && i+1 < input.length()){
+                    char nextChar = input.charAt(i+1);
+                    if (nextChar == '\\' || nextChar == '\"' || nextChar == '$' || nextChar == '`'){
+                        builder.append(nextChar);
+                        tokenStarted = true;
+                        i++;
+                        continue;
+                    }
                 }
 
                 if (current == '\"'){
                     openQuote = false;
                     continue;
-                }
-
-                if (current == '\\' && i+1 < input.length()){
-                    char nextChar = input.charAt(i+1);
-                    if (nextChar == '\\' || nextChar == '\"'){
-                        isEscaping = true;
-                        continue;
-                    }
                 }
 
                 builder.append(current);
