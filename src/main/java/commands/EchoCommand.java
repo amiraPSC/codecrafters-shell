@@ -46,6 +46,7 @@ public class EchoCommand implements Command{
     }
 
     private void stderrRedirect(OperatorParser operatorParser, boolean isAppend){
+        File file = createFile(operatorParser);
         List<String> tokens = operatorParser.getTokens();
         System.out.println(String.join(" ", tokens.subList(1, tokens.size())));
     }
