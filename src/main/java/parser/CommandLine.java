@@ -63,9 +63,6 @@ public class CommandLine {
                 }
 
                 if (current == '\"'){
-                    list.add(builder.toString());
-                    builder.setLength(0);
-                    tokenStarted = false;
                     openQuote = false;
                     continue;
                 }
@@ -83,9 +80,6 @@ public class CommandLine {
 
             } else if (quote == '\'') {
                 if (current == '\''){
-                    list.add(builder.toString());
-                    builder.setLength(0);
-                    tokenStarted = false;
                     openQuote = false;
                     continue;
                 }
