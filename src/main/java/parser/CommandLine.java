@@ -1,7 +1,6 @@
 package parser;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class CommandLine {
@@ -24,33 +23,27 @@ public class CommandLine {
         for (int i = 0; i < input.length(); i++){
             char current = input.charAt(i);
 
-            if (current == '\\' && !isEscaping && !openQuote){
-                isEscaping = true;
-                continue;
-            }
-
-            if (!isEscaping) {
-
-                if (current == '\\' && openQuote && quote == '\"' && i+1 < input.length()){
-                    char nextChar = input.charAt(i+1);
-                    if (nextChar == '\\' || nextChar == '\"'){
-                        isEscaping = true;
-                        continue;
-                    }
+            if (!openQuote){
+                if (isEscaping){
+                    builder.append(current);
+                    isEscaping = false;
+                    continue;
                 }
 
-                if ((current == '\'' || current == '\"') && !openQuote) {
+                if (!isEscaping && (current == '\"' || current == '\'')){
+                    openQuote = true;
                     quote = current;
-                }
-
-                if (current == quote) {
-                    openQuote = !openQuote;
                     tokenStarted = true;
                     continue;
                 }
 
-                if (!openQuote && Character.isWhitespace(current)) {
-                    if (tokenStarted) {
+                if (current == '\\' && !isEscaping){
+                    isEscaping = true;
+                    continue;
+                }
+
+                if (Character.isWhitespace(current)){
+                    if (tokenStarted){
                         list.add(builder.toString());
                         builder.setLength(0);
                         tokenStarted = false;
@@ -60,9 +53,40 @@ public class CommandLine {
 
                 builder.append(current);
                 tokenStarted = true;
-            }else {
+
+            }else if (quote == '\"'){
+                if (current == '\"'){
+                    list.add(builder.toString());
+                    builder.setLength(0);
+                    tokenStarted = false;
+                    openQuote = false;
+                    continue;
+                }
+
+                if (current == '\\' && i+1 < input.length()){
+                    char nextChar = input.charAt(i+1);
+                    if (nextChar == '\\' || nextChar == '\"'){
+                        builder.append(nextChar);
+                        tokenStarted = true;
+                        i++;
+                        continue;
+                    }
+                }
+
                 builder.append(current);
-                isEscaping = false;
+                tokenStarted = true;
+
+            } else if (quote == '\'') {
+                if (current == '\''){
+                    list.add(builder.toString());
+                    builder.setLength(0);
+                    tokenStarted = false;
+                    openQuote = false;
+                    continue;
+                }
+
+                builder.append(current);
+                tokenStarted = true;
             }
         }
 
