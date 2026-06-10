@@ -55,6 +55,13 @@ public class CommandLine {
                 tokenStarted = true;
 
             }else if (quote == '\"'){
+                if (isEscaping){
+                    builder.append(current);
+                    isEscaping = false;
+                    tokenStarted = true;
+                    continue;
+                }
+
                 if (current == '\"'){
                     list.add(builder.toString());
                     builder.setLength(0);
@@ -66,9 +73,7 @@ public class CommandLine {
                 if (current == '\\' && i+1 < input.length()){
                     char nextChar = input.charAt(i+1);
                     if (nextChar == '\\' || nextChar == '\"'){
-                        builder.append(nextChar);
-                        tokenStarted = true;
-                        i++;
+                        isEscaping = true;
                         continue;
                     }
                 }
