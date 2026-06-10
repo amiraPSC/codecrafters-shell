@@ -24,7 +24,7 @@ public class CommandLine {
         for (int i = 0; i < input.length(); i++){
             char current = input.charAt(i);
 
-            if (current == '\\' && !isEscaping){
+            if (current == '\\' && !isEscaping && !openQuote){
                 isEscaping = true;
                 continue;
             }
