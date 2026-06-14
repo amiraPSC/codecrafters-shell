@@ -12,9 +12,10 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) throws Exception {
         try (Terminal terminal = TerminalBuilder.builder().build()) {
+            ShellCompleter completer = new ShellCompleter();
             LineReader reader = LineReaderBuilder.builder()
                     .terminal(terminal)
-                    .completer(new ShellCompleter())
+                    .completer(completer.getCompleter())
                     .option(LineReader.Option.DISABLE_EVENT_EXPANSION, true)
                     .build();
 
