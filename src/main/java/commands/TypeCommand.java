@@ -1,7 +1,7 @@
 package commands;
 
 import parser.CommandLine;
-import utils.PathSearch;
+import utils.PathScanning;
 
 public class TypeCommand implements Command{
     @Override
@@ -10,7 +10,7 @@ public class TypeCommand implements Command{
         if (Types.isBuiltin(arg1)){
             System.out.println(arg1 + " is a shell builtin");
         }else{
-            String result = PathSearch.searchInDirs(arg1);
+            String result = PathScanning.searchInDirs(arg1);
             System.out.println(result);
         }
     }

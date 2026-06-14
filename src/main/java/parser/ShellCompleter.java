@@ -6,24 +6,20 @@ import org.jline.reader.LineReader;
 import org.jline.reader.ParsedLine;
 import org.jline.reader.impl.completer.AggregateCompleter;
 import org.jline.reader.impl.completer.StringsCompleter;
+import utils.PathScanning;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 public class ShellCompleter implements Completer {
     @Override
     public void complete(LineReader reader, ParsedLine line, List<Candidate> candidates) {
         String word = line.word();
 
-        List<String> paths = listOfPATHs();
-        for (String path : paths) {
-            if (path.startsWith(word)) {
-                Path p = Paths.get(path);
-                if (p.toFile().exists()) {
-                    candidates.add(new Candidate(path));
-                }
+        Set<String> exeNames = PathScanning.listOfPATHs();
+        for (String exe : exeNames) {
+            if (exe.startsWith(word)) {
+                candidates.add(new Candidate(exe));
             }
         }
     }
@@ -36,11 +32,5 @@ public class ShellCompleter implements Completer {
         return new StringsCompleter("echo", "exit");
     }
 
-    private List<String> listOfPATHs(){
-        String path = System.getenv("PATH");
-        String separator = System.getProperty("path.separator");
-        String[] paths = path.split(separator);
 
-        return Arrays.asList(paths);
-    }
 }

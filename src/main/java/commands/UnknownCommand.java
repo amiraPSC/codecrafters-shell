@@ -2,7 +2,7 @@ package commands;
 
 import parser.CommandLine;
 import parser.OperatorParser;
-import utils.PathSearch;
+import utils.PathScanning;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -23,10 +23,10 @@ public class UnknownCommand implements Command {
     private void simpleExternalExecutable(CommandLine commandLine) throws Exception {
         List<String> args = commandLine.getArgsWithCommand();
 
-        String resultSearch = PathSearch.searchInDirs(commandLine.getCommand());
+        String resultSearch = PathScanning.searchInDirs(commandLine.getCommand());
         if (!resultSearch.contains("not found")) {
             ProcessBuilder processBuilder = new ProcessBuilder(args);
-            processBuilder.directory(PathSearch.getCurrentDir().toFile());
+            processBuilder.directory(PathScanning.getCurrentDir().toFile());
             Process process = processBuilder.start();
             process.getInputStream().transferTo(System.out);
             process.waitFor();
@@ -49,7 +49,7 @@ public class UnknownCommand implements Command {
         File file = createFile(operatorParser);
         try{
             ProcessBuilder processBuilder = new ProcessBuilder(tokens);
-            processBuilder.directory(PathSearch.getCurrentDir().toFile());
+            processBuilder.directory(PathScanning.getCurrentDir().toFile());
             if (isAppend){
                 processBuilder.redirectOutput(ProcessBuilder.Redirect.appendTo(file));
             }else {
@@ -68,7 +68,7 @@ public class UnknownCommand implements Command {
         File file = createFile(operatorParser);
         try {
             ProcessBuilder processBuilder = new ProcessBuilder(tokens);
-            processBuilder.directory(PathSearch.getCurrentDir().toFile());
+            processBuilder.directory(PathScanning.getCurrentDir().toFile());
             if (!isAppend) {
                 processBuilder.redirectError(ProcessBuilder.Redirect.to(file));
             }else {
