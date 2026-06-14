@@ -34,7 +34,7 @@ public class PathScanning {
                 DirectoryStream<Path> stream = Files.newDirectoryStream(p1);
                 for (Path p2 : stream) {
                     if(Files.isExecutable(p2) && isExists(p2)){
-                        pathSet.add(String.valueOf(p2.getFileName()));
+                        pathSet.add(p2.getFileName().toString());
                     }
                 }
             } catch (IOException e) {
