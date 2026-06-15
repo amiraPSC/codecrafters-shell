@@ -15,6 +15,8 @@ public class ShellCompleter implements Completer {
         BUILTINS.add(new Candidate("echo", "echo", null, null, " ", null, true));
         BUILTINS.add(new Candidate("exit", "exit", null, null, " ", null, true));
     }
+    private int tabCount = 0;
+    private String lastLine = "";
 
     @Override
     public void complete(LineReader reader, ParsedLine line, List<Candidate> candidates) {
@@ -26,14 +28,26 @@ public class ShellCompleter implements Completer {
             }
         }
 
-        for (String exe : PathScanning.listOfPATHs()) {
-            addCandidateIfMatches(candidates, exe, word);
+        if (!word.equals(lastLine)){
+            tabCount = 0;
+            lastLine = word;
+        }
+
+        tabCount++;
+
+        if (tabCount == 1) {
+            System.out.println("\\x07");
+        }else if (tabCount == 2) {
+            for (String exe : PathScanning.listOfPATHs()) {
+                addCandidateIfMatches(candidates, exe, word);
+            }
+            reader.readLine("$ " + word);
         }
     }
 
     private void addCandidateIfMatches(List<Candidate> candidates, String value, String word) {
         if (value.startsWith(word)) {
-            candidates.add(new Candidate(value, value, null, null, " ", null, true));
+            candidates.add(new Candidate(value, value, null, null, "  ", null, true));
         }
     }
 
