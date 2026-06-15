@@ -20,6 +20,7 @@ public class ShellCompleter implements Completer {
         for (String exe : exeNames) {
             if (exe.startsWith(word)) {
                 candidates.add(new Candidate(exe));
+                System.out.println(exe);
             }
         }
     }
