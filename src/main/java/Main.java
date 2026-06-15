@@ -17,6 +17,7 @@ public class Main {
                     .terminal(terminal)
                     .completer(new ShellCompleter())
                     .option(LineReader.Option.DISABLE_EVENT_EXPANSION, true)
+                    .option(LineReader.Option.AUTO_FRESH_LINE, true)
                     .build();
 
             while (true) {
