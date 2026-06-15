@@ -36,13 +36,22 @@ public class ShellCompleter implements Completer {
         tabCount++;
 
         if (tabCount == 1) {
-            System.out.println("\\x07");
+            reader.getTerminal().writer().print('\u0007');
+            reader.getTerminal().writer().flush();
         }else if (tabCount == 2) {
             for (String exe : PathScanning.listOfPATHs()) {
                 addCandidateIfMatches(candidates, exe, word);
             }
-            reader.readLine("$ " + word);
+            showPromptAgain(reader);
         }
+    }
+
+    private void showPromptAgain(LineReader reader){
+        reader.getTerminal().writer().println();
+        reader.getTerminal().writer().flush();
+
+        reader.callWidget(LineReader.REDRAW_LINE);
+        reader.callWidget(LineReader.REDISPLAY);
     }
 
     private void addCandidateIfMatches(List<Candidate> candidates, String value, String word) {
