@@ -30,6 +30,7 @@ public class PathScanning {
 
         for (String p : paths) {
             Path p1 = Paths.get(p);
+            if (!Files.isDirectory(p1)) continue;
             try {
                 DirectoryStream<Path> stream = Files.newDirectoryStream(p1);
                 for (Path p2 : stream) {
@@ -37,9 +38,7 @@ public class PathScanning {
                         pathSet.add(p2.getFileName().toString());
                     }
                 }
-            } catch (IOException e) {
-                System.err.println(e.getMessage());
-            }
+            } catch (IOException e) {}
         }
         return pathSet;
     }
