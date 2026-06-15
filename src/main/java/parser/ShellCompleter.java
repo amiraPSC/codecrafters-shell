@@ -19,7 +19,9 @@ public class ShellCompleter implements Completer {
         Set<String> exeNames = PathScanning.listOfPATHs();
         for (String exe : exeNames) {
             if (exe.startsWith(word)) {
-                candidates.add(new Candidate(exe));
+                System.out.println(word);
+                System.out.println(exe);
+                //candidates.add(new Candidate(exe));
             }
         }
     }
