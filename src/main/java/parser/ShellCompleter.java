@@ -12,8 +12,8 @@ import java.util.List;
 public class ShellCompleter implements Completer {
     private static final List<Candidate> BUILTINS = new ArrayList<>();
     {
-        BUILTINS.add(new Candidate("echo", "echo", "builtins", null, " ", null, true));
-        BUILTINS.add(new Candidate("exit", "exit", "builtins", null, " ", null, true));
+        BUILTINS.add(new Candidate("echo", "echo", null, null, " ", null, true));
+        BUILTINS.add(new Candidate("exit", "exit", null, null, " ", null, true));
     }
 
     @Override
@@ -33,7 +33,7 @@ public class ShellCompleter implements Completer {
 
     private void addCandidateIfMatches(List<Candidate> candidates, String value, String word) {
         if (value.startsWith(word)) {
-            candidates.add(new Candidate(value, value, "executables", null, " ", null, true));
+            candidates.add(new Candidate(value, value, null, null, " ", null, true));
         }
     }
 
