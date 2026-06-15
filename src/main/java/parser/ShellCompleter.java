@@ -43,6 +43,8 @@ public class ShellCompleter implements Completer {
             for (String exe : PathScanning.listOfPATHs()) {
                 addCandidateIfMatches(candidates, exe, word);
             }
+        }else if (tabCount == 3) {
+            showPromptAgain(reader);
         }
     }
 
