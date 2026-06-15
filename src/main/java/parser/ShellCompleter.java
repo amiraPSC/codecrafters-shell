@@ -16,10 +16,9 @@ public class ShellCompleter implements Completer {
     public void complete(LineReader reader, ParsedLine line, List<Candidate> candidates) {
         String word = line.word();
 
-        Set<String> exeNames = PathScanning.listOfPATHs();
-        for (String exe : exeNames) {
+        for (String exe : PathScanning.listOfPATHs()) {
             if (exe.startsWith(word)) {
-                System.out.println(exe);
+                candidates.add(new Candidate(exe));
             }
         }
     }
