@@ -36,12 +36,14 @@ public class ShellCompleter implements Completer {
         tabCount++;
 
         if (tabCount == 1) {
-            reader.getTerminal().writer().print('\u0007');
-            reader.getTerminal().writer().flush();
+            reader.callWidget(LineReader.BEEP);
+            /* reader.getTerminal().writer().print('\u0007');
+            reader.getTerminal().writer().flush(); */
         }else if (tabCount == 2) {
             for (String exe : PathScanning.listOfPATHs()) {
                 addCandidateIfMatches(candidates, exe, word);
             }
+            reader.callWidget(LineReader.LIST_CHOICES);
             showPromptAgain(reader);
         }
     }
