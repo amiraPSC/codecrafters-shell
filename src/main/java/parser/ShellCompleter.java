@@ -41,6 +41,7 @@ public class ShellCompleter implements Completer {
             for (String exe : PathScanning.listOfPATHs()) {
                 addCandidateIfMatches(candidates, exe, word);
             }
+            reader.callWidget(LineReader.REDRAW_LINE);
         }
     }
 

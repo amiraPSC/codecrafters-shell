@@ -7,7 +7,6 @@ import org.jline.terminal.TerminalBuilder;
 import parser.CommandLine;
 import parser.ShellCompleter;
 
-import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws Exception {
@@ -17,7 +16,6 @@ public class Main {
                     .terminal(terminal)
                     .completer(new ShellCompleter())
                     .option(LineReader.Option.DISABLE_EVENT_EXPANSION, true)
-                    .option(LineReader.Option.AUTO_FRESH_LINE, true)
                     .build();
 
             while (true) {
