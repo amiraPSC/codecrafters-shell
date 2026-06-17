@@ -3,6 +3,7 @@ package completion;
 import org.jline.keymap.KeyMap;
 import org.jline.reader.Binding;
 import org.jline.reader.LineReader;
+import org.jline.reader.Reference;
 import org.jline.reader.Widget;
 
 public class CompletionWidget {
@@ -15,7 +16,7 @@ public class CompletionWidget {
         this.reader = reader;
     }
 
-    public Widget getWidget() {
+    private void createWidget(){
         widget = () -> {
             String buffer = reader.getBuffer().toString(); //لا تنسي تجيبي النص
 
@@ -29,15 +30,26 @@ public class CompletionWidget {
             if (tabCount == 1) {
                 reader.callWidget(LineReader.BEEP);
             }else if (tabCount == 2) {
-                reader.callWidget(LineReader.COMPLETION_STYLE_LIST_GROUP);
+                reader.callWidget(LineReader.COMPLETE_WORD);
                 reader.callWidget(LineReader.REDRAW_LINE);
             }
             return true;
         };
+    }
 
-        reader.getWidgets().put("completion", widget);
+    private void registerWidget(){
         KeyMap<Binding> keyMap = reader.getKeyMaps().get(LineReader.MAIN);
-        keyMap.bind(widget, KeyMap.ctrl('i'));
+        reader.getWidgets().put("my-completion", widget);
+
+        keyMap.bind(
+                new Reference("my-completion"),
+                "\t"
+        );
+    }
+
+    public Widget getWidget() {
+        createWidget();
+        registerWidget();
         return widget;
     }
 }
