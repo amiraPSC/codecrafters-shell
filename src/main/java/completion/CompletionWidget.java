@@ -32,6 +32,7 @@ public class CompletionWidget {
             }else if (tabCount == 2) {
                 reader.callWidget(LineReader.COMPLETE_WORD);
                 reader.callWidget(LineReader.REDRAW_LINE);
+                reader.callWidget(LineReader.REDISPLAY);
             }
             return true;
         };
