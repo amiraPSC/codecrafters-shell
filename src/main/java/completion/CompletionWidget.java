@@ -30,7 +30,7 @@ public class CompletionWidget {
             if (tabCount == 1) {
                 reader.callWidget(LineReader.BEEP);
             }else if (tabCount == 2) {
-                reader.callWidget(LineReader.COMPLETE_WORD);
+                reader.callWidget(LineReader.LIST_CHOICES);
                 reader.callWidget(LineReader.REDRAW_LINE);
                 reader.callWidget(LineReader.REDISPLAY);
             }
