@@ -31,7 +31,8 @@ public class CompletionWidget {
                 reader.callWidget(LineReader.BEEP);
             }else if (tabCount == 2) {
                 reader.callWidget(LineReader.LIST_CHOICES);
-                System.out.println(buffer);
+                reader.callWidget(LineReader.REDRAW_LINE);
+                reader.callWidget(LineReader.REDISPLAY);
             }
             return true;
         };
