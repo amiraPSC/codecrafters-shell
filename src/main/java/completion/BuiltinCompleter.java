@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BuiltinCompleter implements Completer {
-    private List<String> completions = new ArrayList<>();
-
     private static final List<Candidate> BUILTINS = new ArrayList<>();
     {
         BUILTINS.add(new Candidate("echo", "echo", null, null, " ", null, true));
@@ -27,12 +25,7 @@ public class BuiltinCompleter implements Completer {
         for (Candidate candidate : BUILTINS) {
             if (candidate.value().startsWith(word)) {
                 candidates.add(candidate);
-                completions.add(candidate.value());
             }
         }
-    }
-
-    public List<String> getCompletions() {
-        return completions;
     }
 }
