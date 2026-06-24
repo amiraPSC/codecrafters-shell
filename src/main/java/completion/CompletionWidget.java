@@ -51,6 +51,7 @@ public class CompletionWidget {
                 if (tabCount == 0){
                     reader.callWidget(LineReader.BEEP);
                 }else if (tabCount > 0){
+                    terminal.writer().println();
                     for (Candidate candidate : candidates) {
                         terminal.writer().print(candidate.value() + "  ");
                     }
