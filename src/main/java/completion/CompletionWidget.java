@@ -33,13 +33,11 @@ public class CompletionWidget {
         Collections.sort(candidates);
 
         widget = () -> {
-            if (candidates.isEmpty()) reader.callWidget(LineReader.BEEP);
-
-            if (candidates.size() == 1) {
+            if (candidates.isEmpty()) {
+                reader.callWidget(LineReader.BEEP);
+            }else if (candidates.size() == 1) {
                 reader.callWidget("expand-or-complete");
-            }
-
-            if (candidates.size() > 1) {
+            }else if (candidates.size() > 1) {
                 if (!line.equals(lastLine)){
                     tabCount = 0;
                 }else{
@@ -58,24 +56,6 @@ public class CompletionWidget {
             }
 
             lastLine = line;
-
-            /* String buffer = reader.getBuffer().toString();
-
-            if (!buffer.equals(lastLine)){
-                tabCount = 0;
-                lastLine = buffer;
-            }
-
-            tabCount++;
-
-            if (tabCount == 1) {
-                reader.callWidget(LineReader.BEEP);
-            }else if (tabCount == 2) {
-                reader.callWidget(LineReader.LIST_CHOICES);
-                reader.callWidget(LineReader.REDRAW_LINE);
-                reader.callWidget(LineReader.REDISPLAY);
-                tabCount = 0;
-            } */
             return true;
         };
     }
