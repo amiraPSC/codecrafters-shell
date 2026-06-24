@@ -2,6 +2,8 @@ import commands.Command;
 import commands.CommandFactory;
 import completion.BuiltinCompleter;
 import completion.CompletionWidget;
+import org.jline.keymap.KeyMap;
+import org.jline.reader.Binding;
 import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;
 import org.jline.reader.Widget;
@@ -15,14 +17,14 @@ import completion.ExecutableCompleter;
 public class Main {
     public static void main(String[] args) throws Exception {
         try (Terminal terminal = TerminalBuilder.builder().build()) {
-            ExecutableCompleter completer = new ExecutableCompleter();
+            AggregateCompleter completer = new AggregateCompleter(new BuiltinCompleter(), new ExecutableCompleter());
             LineReader reader = LineReaderBuilder.builder()
                     .terminal(terminal)
-                    .completer(new AggregateCompleter(new ExecutableCompleter(), new BuiltinCompleter()))
+                    .completer(completer)
                     .option(LineReader.Option.DISABLE_EVENT_EXPANSION, true)
                     .build();
 
-            Widget widget = new CompletionWidget(reader).getWidget();
+            Widget widget = new CompletionWidget(reader, completer).getWidget();
 
             while (true) {
                 String line = reader.readLine("$ ");
