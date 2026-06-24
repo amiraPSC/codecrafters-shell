@@ -7,6 +7,7 @@ import org.jline.terminal.Terminal;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class CompletionWidget {
@@ -22,17 +23,20 @@ public class CompletionWidget {
     }
 
     private void createWidget(){
-        String line = reader.getBuffer().toString();
-
-        ParsedLine parsedLine = getParse();
-        Terminal terminal = reader.getTerminal();
-
-        List<Candidate> candidates = new ArrayList<>();
-        completer.complete(reader, parsedLine, candidates);
-
-        Collections.sort(candidates);
-
         widget = () -> {
+            String line = reader.getBuffer().toString();
+
+            ParsedLine parsedLine = getParse();
+            Terminal terminal = reader.getTerminal();
+
+            List<Candidate> candidates = new ArrayList<>();
+            completer.complete(reader, parsedLine, candidates);
+
+            candidates.sort(
+                    Comparator.comparing(Candidate::value)
+            );
+
+
             if (candidates.isEmpty()) {
                 reader.callWidget(LineReader.BEEP);
             }else if (candidates.size() == 1) {
@@ -48,9 +52,10 @@ public class CompletionWidget {
                     reader.callWidget(LineReader.BEEP);
                 }else if (tabCount > 0){
                     for (Candidate candidate : candidates) {
-                        terminal.writer().print(candidate.value());
+                        terminal.writer().print(candidate.value() + "  ");
                     }
-                    terminal.writer().println(line);
+                    terminal.writer().println();
+                    terminal.writer().println("$ " + line);
                     terminal.writer().flush();
                 }
             }
