@@ -5,10 +5,7 @@ import org.jline.reader.*;
 import org.jline.reader.impl.completer.AggregateCompleter;
 import org.jline.terminal.Terminal;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 public class CompletionWidget {
     private int tabCount = 0;
@@ -31,17 +28,18 @@ public class CompletionWidget {
 
             List<Candidate> candidates = new ArrayList<>();
             completer.complete(reader, parsedLine, candidates);
+            Set<Candidate> candidateSet = new HashSet<>(candidates);
 
             candidates.sort(
                     Comparator.comparing(Candidate::value)
             );
 
 
-            if (candidates.isEmpty()) {
+            if (candidateSet.isEmpty()) {
                 reader.callWidget(LineReader.BEEP);
-            }else if (candidates.size() == 1) {
+            }else if (candidateSet.size() == 1) {
                 reader.callWidget("expand-or-complete");
-            }else if (candidates.size() > 1) {
+            }else if (candidateSet.size() > 1) {
                 if (!line.equals(lastLine)){
                     tabCount = 0;
                 }else{
