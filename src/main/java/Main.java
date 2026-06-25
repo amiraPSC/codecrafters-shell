@@ -16,7 +16,7 @@ import completion.ExecutableCompleter;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        try (Terminal terminal = TerminalBuilder.builder().build()) {
+        try (Terminal terminal = TerminalBuilder.builder().system(true).build()) {
             AggregateCompleter completer = new AggregateCompleter(new BuiltinCompleter(), new ExecutableCompleter());
             LineReader reader = LineReaderBuilder.builder()
                     .terminal(terminal)
