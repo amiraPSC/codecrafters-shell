@@ -77,12 +77,20 @@ public class CompletionWidget {
         int len = line.length();
         String shortest = shortest(candidates);
 
+        boolean found = true;
         for (int i = len; i < shortest.length(); i++) {
             String sub = shortest.substring(0, i);
             for (Candidate candidate : candidates) {
-                if (!candidate.value().startsWith(sub)) break;
+                if (!candidate.value().startsWith(sub)) {
+                    found = false;
+                    break;
+                }
             }
-            prefixBuilder.append(shortest.charAt(i));
+            if (found){
+                prefixBuilder.append(shortest.charAt(i));
+            }else {
+                break;
+            }
         }
         return prefixBuilder.toString();
     }
