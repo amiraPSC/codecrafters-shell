@@ -11,7 +11,7 @@ public class CompletionWidget {
     private int tabCount = 0;
     private String lastLine = "";
     private LineReader reader;
-    private Widget widget;
+    private static Widget widget;
     AggregateCompleter completer;
 
     public CompletionWidget(LineReader reader, AggregateCompleter completer) {
@@ -47,7 +47,13 @@ public class CompletionWidget {
                 }
 
                 if (tabCount == 0){
-                    reader.callWidget(LineReader.BEEP);
+                    String theLCP = findLongestCommonPrefix(line, candidates);
+
+                    if (line.length() == theLCP.length()){
+                        reader.callWidget(LineReader.BEEP);
+                    }else {
+                        updateBufferAndDisplay(reader, theLCP);
+                    }
                 }else if (tabCount > 0){
                     terminal.writer().println();
                     for (Candidate candidate : candidates) {
@@ -62,6 +68,44 @@ public class CompletionWidget {
             lastLine = line;
             return true;
         };
+    }
+
+    private String findLongestCommonPrefix(String line, List<Candidate> candidates){
+        StringBuilder prefixBuilder = new StringBuilder();
+        prefixBuilder.append(line);
+
+        int len = line.length();
+        String shortest = shortest(candidates);
+
+        for (int i = len; i < shortest.length(); i++) {
+            String sub = shortest.substring(0, i);
+            for (Candidate candidate : candidates) {
+                if (!candidate.value().startsWith(sub)) break;
+            }
+            prefixBuilder.append(shortest.charAt(i));
+        }
+        return prefixBuilder.toString();
+    }
+
+    private void updateBufferAndDisplay(ٌLineReader reader, String theLCP){
+        Buffer buffer = reader.getBuffer();
+
+        buffer.write(theLCP.substring(buffer.length(), theLCP.length()));
+        reader.callWidget(LineReader.REDRAW_LINE);
+        reader.callWidget(LineReader.REDISPLAY);
+    }
+
+    private String shortest(List<Candidate> candidates){
+        List<String> list = new ArrayList<>();
+        for (Candidate candidate : candidates) {
+            list.add(candidate.value());
+        }
+
+        String shortest = list.stream()
+                .min(Comparator.comparingInt(String::length))
+                .get();
+
+        return shortest;
     }
 
     private ParsedLine getParse(){
