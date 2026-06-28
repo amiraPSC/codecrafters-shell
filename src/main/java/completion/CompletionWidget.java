@@ -75,11 +75,11 @@ public class CompletionWidget {
         prefixBuilder.append(line);
 
         int len = line.length();
-        String shortest = shortest(candidates);
+        String shortest = findShortest(candidates);
 
         boolean found = true;
         for (int i = len; i < shortest.length(); i++) {
-            String sub = shortest.substring(0, i);
+            String sub = shortest.substring(0, i + 1);
             for (Candidate candidate : candidates) {
                 if (!candidate.value().startsWith(sub)) {
                     found = false;
@@ -103,7 +103,7 @@ public class CompletionWidget {
         reader.callWidget(LineReader.REDISPLAY);
     }
 
-    private String shortest(List<Candidate> candidates){
+    private String findShortest(List<Candidate> candidates){
         List<String> list = new ArrayList<>();
         for (Candidate candidate : candidates) {
             list.add(candidate.value());
