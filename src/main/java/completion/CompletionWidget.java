@@ -87,7 +87,7 @@ public class CompletionWidget {
         return prefixBuilder.toString();
     }
 
-    private void updateBufferAndDisplay(ٌLineReader reader, String theLCP){
+    private void updateBufferAndDisplay(LineReader reader, String theLCP){
         Buffer buffer = reader.getBuffer();
 
         buffer.write(theLCP.substring(buffer.length(), theLCP.length()));
