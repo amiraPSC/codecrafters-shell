@@ -19,7 +19,7 @@ public class FileNameCompleter implements Completer {
             int lastSlash = word.lastIndexOf("/");
             String name = word.substring(0, lastSlash + 1);
             String dirName = (PathScanning.getCurrentDir().getFileName().toString()) + "/" + name;
-            word = word.substring(lastSlash + 1 , word.length());
+            word = word.substring(lastSlash + 1);
 
 
             dir = Path.of(dirName);
