@@ -24,9 +24,8 @@ public class PathScanning {
         return (input + ": not found");
     }
 
-    public static Set<String> getFilesInCurrentDirectory(){
+    public static Set<String> getFilesInCurrentDirectory(Path dir){
         Set<String> files = new HashSet<>();
-        Path dir = Path.of(".");
 
         try (Stream<Path> stream = Files.list(dir)){
             for (Path path : stream.toList()){
