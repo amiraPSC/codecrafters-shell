@@ -13,26 +13,39 @@ public class FileNameCompleter implements Completer {
     @Override
     public void complete(LineReader reader, ParsedLine line, List<Candidate> candidates) {
         String word = line.word();
-        String prefix;
-        Path dir;
-
-        if (word.contains("/")){
-            int lastSlash = word.lastIndexOf("/");
-            String name = word.substring(0, lastSlash + 1);
-            String dirName = (PathScanning.getCurrentDir().getFileName().toString()) + "/" + name;
-            prefix = word.substring(lastSlash + 1);
-
-
-            dir = Path.of(dirName);
-        }else {
-            prefix = word;
-            dir = PathScanning.getCurrentDir();
-        }
+        Path dir = getDir(word);
+        String prefix = getPrefix(word);
 
         for (String file : PathScanning.getFilesInCurrentDirectory(dir)) {
             if (file.startsWith(prefix)) {
                 candidates.add(new Candidate(file));
             }
         }
+    }
+
+    private Path getDir(String word){
+        Path dir;
+
+        if (word.contains("/")){
+            int lastSlash = word.lastIndexOf("/");
+            String name = word.substring(0, lastSlash + 1);
+            String dirName = (PathScanning.getCurrentDir().getFileName().toString()) + "/" + name;
+
+            dir = Path.of(dirName);
+        }else {
+            dir = PathScanning.getCurrentDir();
+        }
+        return dir;
+    }
+
+    private String getPrefix(String word){
+        String prefix;
+        if (word.contains("/")){
+            int lastSlash = word.lastIndexOf("/");
+            prefix = word.substring(lastSlash + 1);
+        }else  {
+            prefix = word;
+        }
+        return prefix;
     }
 }
