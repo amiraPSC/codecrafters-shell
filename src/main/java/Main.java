@@ -2,7 +2,7 @@ import commands.Command;
 import commands.CommandFactory;
 import completion.BuiltinCompleter;
 import completion.CompletionWidget;
-import org.jline.builtins.Completers;
+import completion.FileNameCompleter;
 import org.jline.reader.*;
 import org.jline.reader.impl.completer.AggregateCompleter;
 import org.jline.terminal.Terminal;
@@ -17,7 +17,7 @@ public class Main {
             AggregateCompleter completer = new AggregateCompleter(
                     new BuiltinCompleter(),
                     new ExecutableCompleter(),
-                    new Completers.FileNameCompleter());
+                    new FileNameCompleter());
 
             LineReader reader = LineReaderBuilder.builder()
                     .terminal(terminal)

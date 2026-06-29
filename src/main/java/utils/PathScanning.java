@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Stream;
 
 public class PathScanning {
     private static Path currentDir =  Paths.get(System.getProperty("user.dir"));
@@ -21,6 +22,19 @@ public class PathScanning {
             }
         }
         return (input + ": not found");
+    }
+
+    public static Set<String> getFilesInCurrentDirectory(){
+        Set<String> files = new HashSet<>();
+        Path dir = Path.of(".");
+
+        try (Stream<Path> stream = Files.list(dir)){
+            for (Path path : stream.toList()){
+                files.add(path.getFileName().toString());
+            }
+        } catch (IOException e) {
+        }
+        return files;
     }
 
     public static Set<String> listOfPATHs(){
