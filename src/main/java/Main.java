@@ -2,6 +2,7 @@ import commands.Command;
 import commands.CommandFactory;
 import completion.BuiltinCompleter;
 import completion.CompletionWidget;
+import org.jline.builtins.Completers;
 import org.jline.reader.*;
 import org.jline.reader.impl.completer.AggregateCompleter;
 import org.jline.terminal.Terminal;
@@ -13,7 +14,10 @@ import completion.ExecutableCompleter;
 public class Main {
     public static void main(String[] args) throws Exception {
         try (Terminal terminal = TerminalBuilder.builder().system(true).build()) {
-            AggregateCompleter completer = new AggregateCompleter(new BuiltinCompleter(), new ExecutableCompleter());
+            AggregateCompleter completer = new AggregateCompleter(
+                    new BuiltinCompleter(),
+                    new ExecutableCompleter());
+            
             LineReader reader = LineReaderBuilder.builder()
                     .terminal(terminal)
                     .completer(completer)
