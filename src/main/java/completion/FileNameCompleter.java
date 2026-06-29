@@ -29,16 +29,17 @@ public class FileNameCompleter implements Completer {
         if (word.contains("/")){
             int lastSlash = word.lastIndexOf("/");
             String name = word.substring(0, lastSlash + 1);
-            Path dirPath = Path.of(name + "/");
+            Path path = Path.of(name + "/");
 
-            String dirName;
-            if (dirPath.equals(PathScanning.getCurrentDir())){
+            /* String dirName;
+            if (path.equals(PathScanning.getCurrentDir())){
                 dirName = PathScanning.getCurrentDir().getFileName().toString();
             }else {
                 dirName = (PathScanning.getCurrentDir().getFileName().toString()) + "/" + name;
             }
             System.out.println(dirName);
-            dir = Path.of(dirName);
+            dir = Path.of(dirName);*/
+            dir = path;
         }else {
             dir = PathScanning.getCurrentDir();
         }
