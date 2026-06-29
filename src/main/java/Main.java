@@ -16,8 +16,9 @@ public class Main {
         try (Terminal terminal = TerminalBuilder.builder().system(true).build()) {
             AggregateCompleter completer = new AggregateCompleter(
                     new BuiltinCompleter(),
-                    new ExecutableCompleter());
-            
+                    new ExecutableCompleter(),
+                    new Completers.FileNameCompleter());
+
             LineReader reader = LineReaderBuilder.builder()
                     .terminal(terminal)
                     .completer(completer)
