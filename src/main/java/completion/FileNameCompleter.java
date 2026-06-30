@@ -16,9 +16,10 @@ public class FileNameCompleter implements Completer {
         Path dir = getDir(word);
         String prefix = getPrefix(word);
 
-        for (String file : PathScanning.getFilesInDir(dir)) {
-            if (file.startsWith(prefix)) {
-                candidates.add(new Candidate(buildCompletion(word, file), buildCompletion(word, file), null, null, " ", null, true));
+        for (Path path : PathScanning.getFilesInDir(dir)) {
+            String fileName = path.getFileName().toString();
+            if (fileName.startsWith(prefix)) {
+                candidates.add(new Candidate(buildCompletion(word, fileName), buildCompletion(word, fileName), null, null, " ", null, true));
             }
         }
     }

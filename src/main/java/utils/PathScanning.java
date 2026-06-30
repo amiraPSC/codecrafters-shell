@@ -24,12 +24,12 @@ public class PathScanning {
         return (input + ": not found");
     }
 
-    public static Set<String> getFilesInDir(Path dir){
-        Set<String> files = new HashSet<>();
+    public static Set<Path> getFilesInDir(Path dir){
+        Set<Path> files = new HashSet<>();
 
         try (Stream<Path> stream = Files.list(dir)){
             for (Path path : stream.toList()){
-                files.add(path.getFileName().toString());
+                files.add(path);
             }
         } catch (IOException e) {
         }
