@@ -31,7 +31,7 @@ public class FileNameCompleter implements Completer {
             String name = word.substring(0, lastSlash + 1);
             Path path = Path.of(name);
 
-            String dirName;
+            /* String dirName;
             String currentDirName = PathScanning.getCurrentDir().getFileName().toString();
 
             if (path.getFileName().toString().equals(currentDirName)){
@@ -41,7 +41,9 @@ public class FileNameCompleter implements Completer {
                 dirName = currentDirName + "/" + name;
             }
             System.out.println(currentDirName);
-            dir = Path.of(dirName);
+            dir = Path.of(dirName);*/
+
+            dir = path;
         }else {
             dir = PathScanning.getCurrentDir();
         }
