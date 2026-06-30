@@ -12,6 +12,7 @@ import java.util.List;
 public class FileNameCompleter implements Completer {
     @Override
     public void complete(LineReader reader, ParsedLine line, List<Candidate> candidates) {
+        String buffer = line.line();
         String word = line.word();
         Path dir = getDir(word);
         String prefix = getPrefix(word);
