@@ -22,5 +22,4 @@ public class ExecutableCompleter implements Completer {
             candidates.add(new Candidate(value, value, null, null, "  ", null, true));
         }
     }
-
 }

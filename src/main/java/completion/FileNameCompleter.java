@@ -18,9 +18,17 @@ public class FileNameCompleter implements Completer {
 
         for (String file : PathScanning.getFilesInDir(dir)) {
             if (file.startsWith(prefix)) {
-                candidates.add(new Candidate(file));
+                candidates.add(new Candidate(buildCompletion(word, file), buildCompletion(word, file), null, null, " ", null, true));
             }
         }
+    }
+
+    private String buildCompletion(String word, String file) {
+        if (word.contains("/")) {
+            int lastSlash = word.lastIndexOf("/");
+            return word.substring(0, lastSlash + 1) + file;
+        }
+        return file;
     }
 
     private Path getDir(String word){
@@ -30,7 +38,6 @@ public class FileNameCompleter implements Completer {
             int lastSlash = word.lastIndexOf("/");
             String name = word.substring(0, lastSlash + 1);
             Path path = Path.of(name);
-            System.out.println(path.toString());
 
             /* String dirName;
             String currentDirName = PathScanning.getCurrentDir().getFileName().toString();
