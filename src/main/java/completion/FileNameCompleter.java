@@ -37,9 +37,10 @@ public class FileNameCompleter implements Completer {
             if (path.getFileName().toString().equals(currentDirName)){
                 dirName = currentDirName;
             }else {
-                
+
                 dirName = currentDirName + "/" + name;
             }
+            System.out.println(currentDirName);
             System.out.println(dirName);
             dir = Path.of(dirName);
         }else {
