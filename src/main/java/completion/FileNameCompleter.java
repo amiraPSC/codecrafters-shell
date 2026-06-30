@@ -41,7 +41,6 @@ public class FileNameCompleter implements Completer {
                 dirName = currentDirName + "/" + name;
             }
             System.out.println(currentDirName);
-            System.out.println(dirName);
             dir = Path.of(dirName);
         }else {
             dir = PathScanning.getCurrentDir();
