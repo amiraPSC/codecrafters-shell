@@ -14,7 +14,7 @@ public class FileNameCompleter implements Completer {
     public void complete(LineReader reader, ParsedLine line, List<Candidate> candidates) {
         String buffer = line.line();
         String word = line.word();
-        System.out.println(word);
+        System.out.println("Word: " + word);
         Path dir = getDir(word);
         String prefix = getPrefix(word);
 
