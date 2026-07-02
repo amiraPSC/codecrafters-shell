@@ -69,10 +69,7 @@ public class CompletionWidget {
         ParsedLine parsedLine = getParse();
         List<Candidate> candidates = new ArrayList<>();
 
-        String word = parsedLine.word();
-        List<String> words = parsedLine.words();
-
-        if (word.equals(words.get(0))) {
+        if (parsedLine.wordIndex() == 0) {
             Completer builtinCompleter = CompleterFactory.getCompleter(CompleterType.Builtin);
             Completer ExecutableCompleter = CompleterFactory.getCompleter(CompleterType.Executable);
             builtinCompleter.complete(reader, parsedLine, candidates);
