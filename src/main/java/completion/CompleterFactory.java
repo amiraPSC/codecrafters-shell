@@ -9,12 +9,15 @@ import java.util.List;
 import java.util.Map;
 
 public class CompleterFactory {
+    private static Map<CompleterType, Completer> completersMap = createCompletersMap();
     private static AggregateCompleter aggregateCompleter = new AggregateCompleter(getCompleters());
-    private static Map<CompleterType, Completer> completersMap =  new HashMap<>();
-    {
-        completersMap.put(CompleterType.Builtin, new BuiltinCompleter());
-        completersMap.put(CompleterType.Executable, new ExecutableCompleter());
-        completersMap.put(CompleterType.Files, new FileNameCompleter());
+
+    private static Map<CompleterType, Completer> createCompletersMap(){
+        Map<CompleterType, Completer> map = new HashMap<>();
+        map.put(CompleterType.Builtin, new BuiltinCompleter());
+        map.put(CompleterType.Executable, new ExecutableCompleter());
+        map.put(CompleterType.Files, new FileNameCompleter());
+        return map;
     }
 
     public static Completer getCompleter(CompleterType completerType) {
