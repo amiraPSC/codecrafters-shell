@@ -12,31 +12,23 @@ public class CompletionWidget {
     private String lastLine = "";
     private LineReader reader;
     private static Widget widget;
-    private AggregateCompleter completer;
-    private List<Completer> completers;
 
-    public CompletionWidget(LineReader reader, AggregateCompleter completer, List<Completer> completers) {
+    public CompletionWidget(LineReader reader) {
         this.reader = reader;
-        this.completer = completer;
-        this.completers = completers;
     }
 
     private void createWidget(){
         widget = () -> {
             String line = reader.getBuffer().toString();
-
-            ParsedLine parsedLine = getParse();
             Terminal terminal = reader.getTerminal();
 
-            List<Candidate> candidates = new ArrayList<>();
-            completer.complete(reader, parsedLine, candidates);
+            List<Candidate> candidates = resolveCompleter();
             Set<Candidate> candidateSet = new HashSet<>(candidates);
 
             candidates.sort(
                     Comparator.comparing(Candidate::value)
             );
 
-            System.out.println(candidateSet.toString());
 
             if (candidateSet.isEmpty()) {
                 reader.callWidget(LineReader.BEEP);
@@ -73,12 +65,24 @@ public class CompletionWidget {
         };
     }
 
-    private Completer resolveCompleter(ParsedLine parsedLine) {
-        String line = parsedLine.line();
+    private List<Candidate> resolveCompleter() {
+        ParsedLine parsedLine = getParse();
+        List<Candidate> candidates = new ArrayList<>();
+
         String word = parsedLine.word();
         List<String> words = parsedLine.words();
 
-        return completer; //مؤقت
+        if (word.equals(words.get(0))) {
+            Completer builtinCompleter = CompleterFactory.getCompleter(CompleterType.Builtin);
+            Completer ExecutableCompleter = CompleterFactory.getCompleter(CompleterType.Executable);
+            builtinCompleter.complete(reader, parsedLine, candidates);
+            ExecutableCompleter.complete(reader, parsedLine, candidates);
+        }else{
+            Completer fileNameCompleter = CompleterFactory.getCompleter(CompleterType.Files);
+            fileNameCompleter.complete(reader, parsedLine, candidates);
+        }
+
+        return candidates;
     }
 
     private String findLongestCommonPrefix(String line, List<Candidate> candidates){
