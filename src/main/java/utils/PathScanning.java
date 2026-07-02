@@ -31,8 +31,7 @@ public class PathScanning {
             for (Path path : stream.toList()){
                 files.add(path);
             }
-        } catch (IOException e) {
-        }
+        } catch (IOException e) {}
         return files;
     }
 
