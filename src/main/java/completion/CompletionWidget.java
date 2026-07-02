@@ -12,11 +12,13 @@ public class CompletionWidget {
     private String lastLine = "";
     private LineReader reader;
     private static Widget widget;
-    AggregateCompleter completer;
+    private AggregateCompleter completer;
+    private List<Completer> completers;
 
-    public CompletionWidget(LineReader reader, AggregateCompleter completer) {
+    public CompletionWidget(LineReader reader, AggregateCompleter completer, List<Completer> completers) {
         this.reader = reader;
         this.completer = completer;
+        this.completers = completers;
     }
 
     private void createWidget(){
@@ -34,6 +36,7 @@ public class CompletionWidget {
                     Comparator.comparing(Candidate::value)
             );
 
+            System.out.println(candidateSet.toString());
 
             if (candidateSet.isEmpty()) {
                 reader.callWidget(LineReader.BEEP);
@@ -68,6 +71,14 @@ public class CompletionWidget {
             lastLine = line;
             return true;
         };
+    }
+
+    private Completer resolveCompleter(ParsedLine parsedLine) {
+        String line = parsedLine.line();
+        String word = parsedLine.word();
+        List<String> words = parsedLine.words();
+
+        return completer; //مؤقت
     }
 
     private String findLongestCommonPrefix(String line, List<Candidate> candidates){

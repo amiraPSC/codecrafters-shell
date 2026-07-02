@@ -10,14 +10,19 @@ import org.jline.terminal.TerminalBuilder;
 import parser.CommandLine;
 import completion.ExecutableCompleter;
 
+import java.util.List;
+
 
 public class Main {
     public static void main(String[] args) throws Exception {
         try (Terminal terminal = TerminalBuilder.builder().system(true).build()) {
-            AggregateCompleter completer = new AggregateCompleter(
+            List<Completer> completers = List.of(
                     new BuiltinCompleter(),
                     new ExecutableCompleter(),
-                    new FileNameCompleter());
+                    new FileNameCompleter()
+            );
+
+            AggregateCompleter completer = new AggregateCompleter(completers);
 
             LineReader reader = LineReaderBuilder.builder()
                     .terminal(terminal)
@@ -25,7 +30,7 @@ public class Main {
                     .option(LineReader.Option.DISABLE_EVENT_EXPANSION, true)
                     .build();
 
-            Widget widget = new CompletionWidget(reader, completer).getWidget();
+            Widget widget = new CompletionWidget(reader, completer,completers).getWidget();
 
             while (true) {
                 String line = reader.readLine("$ ");
