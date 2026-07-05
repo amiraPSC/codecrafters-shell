@@ -21,7 +21,7 @@ public class CompletionWidget {
         widget = () -> {
             String line = reader.getBuffer().toString();
             Terminal terminal = reader.getTerminal();
-            ParsedLine parsedLine = reader.getParsedLine();
+            ParsedLine parsedLine = getParse();
 
             List<Candidate> candidates = new ArrayList<>();
             CompleterFactory.create().complete(reader, parsedLine, candidates);
