@@ -32,6 +32,9 @@ public class FileNameCompleter implements Completer {
                 candidates.add(new Candidate(buildCompletion(word, fileName), buildCompletion(word, fileName), null, null, " ", null, true));
             }
         }
+
+        System.out.println(path);
+        System.out.println(Files.isDirectory(path));
     }
 
     private String buildCompletion(String word, String file) {
@@ -51,6 +54,9 @@ public class FileNameCompleter implements Completer {
             Path path = Path.of(name);
 
             dir = path;
+
+            // لا يغطي جميع الحالات, يفترض ان المسار نسبي
+            // dir = PathScanning.getCurrentDir().resolve(path).normalize();
         }else {
             dir = PathScanning.getCurrentDir();
         }
