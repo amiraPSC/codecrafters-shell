@@ -35,6 +35,11 @@ public class CompletionWidget {
             if (candidateSet.isEmpty()) {
                 reader.callWidget(LineReader.BEEP);
             }else if (candidateSet.size() == 1) {
+                Candidate c = candidates.get(0);
+
+                System.out.println(c.value());
+                System.out.println(c.suffix());
+                
                 reader.callWidget("expand-or-complete");
             }else if (candidateSet.size() > 1) {
                 if (!line.equals(lastLine)){
