@@ -28,10 +28,10 @@ public class FileNameCompleter implements Completer {
         if (fileName.startsWith(prefix)){
             if (Files.isDirectory(path)) {
                 String completion = buildCompletion(word, fileName) + "/";
-                candidates.add(new Candidate(completion, completion, null, null, "/", null, true));
+                candidates.add(new Candidate(completion));
             }else {
                 String completion = buildCompletion(word, fileName) + " ";
-                candidates.add(new Candidate(completion, completion, null, null, " ", null, true));
+                candidates.add(new Candidate(completion));
             }
         }
     }
