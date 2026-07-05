@@ -30,7 +30,7 @@ public class FileNameCompleter implements Completer {
                 String completion = buildCompletion(word, fileName) + "/";
                 candidates.add(new Candidate(completion, completion, null, null, "/", null, false));
             }else {
-                String completion = buildCompletion(word, fileName) + " ";
+                String completion = buildCompletion(word, fileName);
                 candidates.add(new Candidate(completion, completion, null, null, " ", null, true));
             }
         }
