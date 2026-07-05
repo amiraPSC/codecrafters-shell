@@ -1,4 +1,4 @@
-package completion;
+package completion.completers;
 
 import org.jline.reader.Candidate;
 import org.jline.reader.Completer;

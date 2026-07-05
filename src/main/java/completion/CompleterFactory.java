@@ -1,5 +1,8 @@
 package completion;
 
+import completion.completers.BuiltinCompleter;
+import completion.completers.ExecutableCompleter;
+import completion.completers.FileNameCompleter;
 import org.jline.reader.Completer;
 
 import java.util.ArrayList;
