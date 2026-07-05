@@ -19,7 +19,7 @@ public class ExecutableCompleter implements Completer {
 
     private void addCandidateIfMatches(List<Candidate> candidates, String value, String word) {
         if (value.startsWith(word)) {
-            candidates.add(new Candidate(value + " "));
+            candidates.add(new Candidate(value, value, null, null, "  ", null, true));
         }
     }
 }

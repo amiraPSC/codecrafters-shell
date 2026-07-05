@@ -54,7 +54,7 @@ public class CompletionWidget {
                 }else if (tabCount > 0){
                     terminal.writer().println();
                     for (Candidate candidate : candidates) {
-                        terminal.writer().print(candidate.value());
+                        terminal.writer().print(candidate.value() + "  ");
                     }
                     terminal.writer().println();
                     terminal.writer().println("$ " + line);

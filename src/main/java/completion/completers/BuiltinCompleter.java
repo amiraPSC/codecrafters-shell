@@ -11,11 +11,11 @@ import java.util.List;
 public class BuiltinCompleter implements Completer {
     private static final List<Candidate> BUILTINS = new ArrayList<>();
     {
-        BUILTINS.add(new Candidate("echo "));
-        BUILTINS.add(new Candidate("exit "));
-        BUILTINS.add(new Candidate("cd "));
-        BUILTINS.add(new Candidate("pwd "));
-        BUILTINS.add(new Candidate("type "));
+        BUILTINS.add(new Candidate("echo", "echo", null, null, " ", null, true));
+        BUILTINS.add(new Candidate("exit", "exit", null, null, " ", null, true));
+        BUILTINS.add(new Candidate("cd", "cd", null, null, " ", null, true));
+        BUILTINS.add(new Candidate("pwd", "pwd", null, null, " ", null, true));
+        BUILTINS.add(new Candidate("type", "type", null, null, " ", null, true));
     }
 
     @Override
