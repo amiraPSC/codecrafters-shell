@@ -27,9 +27,11 @@ public class FileNameCompleter implements Completer {
 
         if (fileName.startsWith(prefix)){
             if (Files.isDirectory(path)) {
-                candidates.add(new Candidate(buildCompletion(word, fileName), buildCompletion(word, fileName), null, null, "/", null, true));
+                String completion = buildCompletion(word, fileName) + "/";
+                candidates.add(new Candidate(completion, completion, null, null, "/", null, true));
             }else {
-                candidates.add(new Candidate(buildCompletion(word, fileName), buildCompletion(word, fileName), null, null, " ", null, true));
+                String completion = buildCompletion(word, fileName) + " ";
+                candidates.add(new Candidate(completion, completion, null, null, " ", null, true));
             }
         }
     }
