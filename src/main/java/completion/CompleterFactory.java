@@ -1,7 +1,6 @@
 package completion;
 
 import org.jline.reader.Completer;
-import org.jline.reader.impl.completer.AggregateCompleter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,7 +9,7 @@ import java.util.Map;
 
 public class CompleterFactory {
     private static Map<CompleterType, Completer> completersMap = createCompletersMap();
-    private static AggregateCompleter aggregateCompleter = new AggregateCompleter(getCompleters());
+    private static final ShellCompleter SHELL_COMPLETER = new ShellCompleter();
 
     private static Map<CompleterType, Completer> createCompletersMap(){
         Map<CompleterType, Completer> map = new HashMap<>();
@@ -20,12 +19,12 @@ public class CompleterFactory {
         return map;
     }
 
-    public static Completer getCompleter(CompleterType completerType) {
-        return completersMap.get(completerType);
+    public static Completer create(){
+        return SHELL_COMPLETER;
     }
 
-    public static AggregateCompleter getAggregateCompleter() {
-        return aggregateCompleter;
+    public static Completer getCompleter(CompleterType completerType) {
+        return completersMap.get(completerType);
     }
 
     public static List<Completer> getCompleters() {

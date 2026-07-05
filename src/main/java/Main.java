@@ -15,7 +15,7 @@ public class Main {
         try (Terminal terminal = TerminalBuilder.builder().system(true).build()) {
             LineReader reader = LineReaderBuilder.builder()
                     .terminal(terminal)
-                    .completer(CompleterFactory.getAggregateCompleter())
+                    .completer(CompleterFactory.create())
                     .option(LineReader.Option.DISABLE_EVENT_EXPANSION, true)
                     .build();
 

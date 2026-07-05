@@ -21,8 +21,10 @@ public class CompletionWidget {
         widget = () -> {
             String line = reader.getBuffer().toString();
             Terminal terminal = reader.getTerminal();
+            ParsedLine parsedLine = reader.getParsedLine();
 
-            List<Candidate> candidates = resolveCompleter();
+            List<Candidate> candidates = new ArrayList<>();
+            CompleterFactory.create().complete(reader, parsedLine, candidates);
             Set<Candidate> candidateSet = new HashSet<>(candidates);
 
             candidates.sort(
@@ -63,23 +65,6 @@ public class CompletionWidget {
             lastLine = line;
             return true;
         };
-    }
-
-    private List<Candidate> resolveCompleter() {
-        ParsedLine parsedLine = getParse();
-        List<Candidate> candidates = new ArrayList<>();
-
-        if (parsedLine.wordIndex() == 0) {
-            Completer builtinCompleter = CompleterFactory.getCompleter(CompleterType.Builtin);
-            Completer ExecutableCompleter = CompleterFactory.getCompleter(CompleterType.Executable);
-            builtinCompleter.complete(reader, parsedLine, candidates);
-            ExecutableCompleter.complete(reader, parsedLine, candidates);
-        }else{
-            Completer fileNameCompleter = CompleterFactory.getCompleter(CompleterType.Files);
-            fileNameCompleter.complete(reader, parsedLine, candidates);
-        }
-
-        return candidates;
     }
 
     private String findLongestCommonPrefix(String line, List<Candidate> candidates){
