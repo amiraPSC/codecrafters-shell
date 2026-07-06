@@ -52,13 +52,16 @@ public class CompletionWidget {
                         updateBufferAndDisplay(reader, theLCP);
                     }
                 }else if (tabCount > 0){
-                    terminal.writer().println();
+                    //terminal.writer().println();
+                    StringBuilder builder = new StringBuilder();
                     for (Candidate candidate : candidates) {
-                        terminal.writer().print(candidate.value() + "  ");
+                        // terminal.writer().print(candidate.value() + "  ");
+                        builder.append(candidate.value()).append(" ");
                     }
-                    terminal.writer().println();
+                    reader.printAbove(builder.toString());
+                    /* terminal.writer().println();
                     terminal.writer().println("$ " + line);
-                    terminal.writer().flush();
+                    terminal.writer().flush(); */
                 }
             }
 
