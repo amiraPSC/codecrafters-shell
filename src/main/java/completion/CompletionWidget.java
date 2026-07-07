@@ -2,7 +2,6 @@ package completion;
 
 import org.jline.keymap.KeyMap;
 import org.jline.reader.*;
-import org.jline.reader.impl.completer.AggregateCompleter;
 import org.jline.terminal.Terminal;
 import org.jline.utils.InfoCmp;
 
@@ -45,7 +44,7 @@ public class CompletionWidget {
                 }
 
                 if (tabCount == 0){
-                    String theLCP = findLongestCommonPrefix(line, candidates);
+                    String theLCP = LongestCommonPrefix.findLongestCommonPrefix(line, candidates);
 
                     if (line.length() == theLCP.length()){
                         reader.callWidget(LineReader.BEEP);
@@ -72,50 +71,12 @@ public class CompletionWidget {
         };
     }
 
-    private String findLongestCommonPrefix(String line, List<Candidate> candidates){
-        StringBuilder prefixBuilder = new StringBuilder();
-        prefixBuilder.append(line);
-
-        int len = line.length();
-        String shortest = findShortest(candidates);
-
-        boolean found = true;
-        for (int i = len; i < shortest.length(); i++) {
-            String sub = shortest.substring(0, i + 1);
-            for (Candidate candidate : candidates) {
-                if (!candidate.value().startsWith(sub)) {
-                    found = false;
-                    break;
-                }
-            }
-            if (found){
-                prefixBuilder.append(shortest.charAt(i));
-            }else {
-                break;
-            }
-        }
-        return prefixBuilder.toString();
-    }
-
     private void updateBufferAndDisplay(LineReader reader, String theLCP){
         Buffer buffer = reader.getBuffer();
 
         buffer.write(theLCP.substring(buffer.length(), theLCP.length()));
         reader.callWidget(LineReader.REDRAW_LINE);
         reader.callWidget(LineReader.REDISPLAY);
-    }
-
-    private String findShortest(List<Candidate> candidates){
-        List<String> list = new ArrayList<>();
-        for (Candidate candidate : candidates) {
-            list.add(candidate.value());
-        }
-
-        String shortest = list.stream()
-                .min(Comparator.comparingInt(String::length))
-                .get();
-
-        return shortest;
     }
 
     private ParsedLine getParse(){
