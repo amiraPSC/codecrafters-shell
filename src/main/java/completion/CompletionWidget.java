@@ -44,7 +44,7 @@ public class CompletionWidget {
                 }
 
                 if (tabCount == 0){
-                    String theLCP = LongestCommonPrefix.findLongestCommonPrefix(line, candidates);
+                    String theLCP = LongestCommonPrefix.findLongestCommonPrefix(parsedLine.word(), candidates);
 
                     if (line.length() == theLCP.length()){
                         reader.callWidget(LineReader.BEEP);
