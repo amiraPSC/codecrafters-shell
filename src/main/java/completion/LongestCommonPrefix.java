@@ -30,6 +30,7 @@ public class LongestCommonPrefix {
                 break;
             }
         }
+        System.out.println(shortest);
         System.out.println(prefixBuilder.toString());
         return prefixBuilder.toString();
     }
