@@ -9,12 +9,12 @@ import java.util.List;
 public class LongestCommonPrefix {
 
     protected static String findLongestCommonPrefix(String line, List<Candidate> candidates){
-        System.out.println(candidates.size());
         StringBuilder prefixBuilder = new StringBuilder();
         prefixBuilder.append(line);
 
         int len = line.length();
         String shortest = findShortest(candidates);
+        System.out.println(shortest);
 
         boolean found = true;
         for (int i = len; i < shortest.length(); i++) {
