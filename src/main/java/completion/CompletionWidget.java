@@ -4,6 +4,7 @@ import org.jline.keymap.KeyMap;
 import org.jline.reader.*;
 import org.jline.reader.impl.completer.AggregateCompleter;
 import org.jline.terminal.Terminal;
+import org.jline.utils.InfoCmp;
 
 import java.util.*;
 
@@ -52,16 +53,15 @@ public class CompletionWidget {
                         updateBufferAndDisplay(reader, theLCP);
                     }
                 }else if (tabCount > 0){
-                    //terminal.writer().println();
-                    StringBuilder builder = new StringBuilder();
+                    terminal.puts(InfoCmp.Capability.save_cursor);
+                    terminal.writer().println();
                     for (Candidate candidate : candidates) {
-                        // terminal.writer().print(candidate.value() + "  ");
-                        builder.append(candidate.value()).append(" ");
+                        terminal.writer().print(candidate.value() + "  ");
                     }
-                    reader.printAbove(builder.toString());
-                    /* terminal.writer().println();
+                    terminal.writer().println();
                     terminal.writer().println("$ " + line);
-                    terminal.writer().flush(); */
+                    terminal.puts(InfoCmp.Capability.restore_cursor);
+                    terminal.writer().flush();
                 }
             }
 
