@@ -78,10 +78,7 @@ public class CompletionWidget {
         int end = theLCP.length();
         String sub = theLCP.substring(begin, end);
 
-        System.out.println();
-        System.out.println(sub.length());
-
-        buffer.write(sub);
+        buffer.write(theLCP.substring(word.length(), theLCP.length()));
         reader.callWidget(LineReader.REDRAW_LINE);
         reader.callWidget(LineReader.REDISPLAY);
     }
