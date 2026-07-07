@@ -14,7 +14,6 @@ public class LongestCommonPrefix {
 
         int len = line.length();
         String shortest = findShortest(candidates);
-        System.out.println(shortest);
 
         boolean found = true;
         for (int i = len; i < shortest.length(); i++) {
@@ -31,6 +30,7 @@ public class LongestCommonPrefix {
                 break;
             }
         }
+        System.out.println(prefixBuilder.toString());
         return prefixBuilder.toString();
     }
 
