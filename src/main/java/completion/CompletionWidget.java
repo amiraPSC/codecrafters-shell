@@ -59,7 +59,6 @@ public class CompletionWidget {
                         terminal.writer().print(candidate.value() + "  ");
                     }
                     terminal.writer().println();
-                    //terminal.writer().println("$ " + line);
                     terminal.puts(InfoCmp.Capability.restore_cursor);
                     terminal.writer().flush();
 
