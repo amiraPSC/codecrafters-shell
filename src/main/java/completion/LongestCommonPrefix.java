@@ -8,11 +8,11 @@ import java.util.List;
 
 public class LongestCommonPrefix {
 
-    protected static String findLongestCommonPrefix(String line, List<Candidate> candidates){
+    protected static String findLongestCommonPrefix(String word, List<Candidate> candidates){
         StringBuilder prefixBuilder = new StringBuilder();
-        prefixBuilder.append(line);
+        prefixBuilder.append(word);
 
-        int len = line.length();
+        int len = word.length();
         String shortest = findShortest(candidates);
 
         boolean found = true;
@@ -30,11 +30,6 @@ public class LongestCommonPrefix {
                 break;
             }
         }
-        System.out.println();
-        System.out.println(line);
-        System.out.println(shortest);
-        System.out.println(prefixBuilder.toString());
-        System.out.println(candidates.toString());
         return prefixBuilder.toString();
     }
 

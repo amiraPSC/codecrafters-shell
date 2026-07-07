@@ -22,6 +22,7 @@ public class CompletionWidget {
             String line = reader.getBuffer().toString();
             Terminal terminal = reader.getTerminal();
             ParsedLine parsedLine = getParse();
+            String word = parsedLine.word();
 
             List<Candidate> candidates = new ArrayList<>();
             CompleterFactory.create().complete(reader, parsedLine, candidates);
@@ -44,12 +45,12 @@ public class CompletionWidget {
                 }
 
                 if (tabCount == 0){
-                    String theLCP = LongestCommonPrefix.findLongestCommonPrefix(line, candidates);
+                    String theLCP = LongestCommonPrefix.findLongestCommonPrefix(word, candidates);
 
                     if (line.length() == theLCP.length()){
                         reader.callWidget(LineReader.BEEP);
                     }else {
-                        updateBufferAndDisplay(reader, theLCP);
+                        updateBufferAndDisplay(reader,word, theLCP);
                     }
                 }else if (tabCount > 0){
                     terminal.puts(InfoCmp.Capability.save_cursor);
@@ -71,10 +72,12 @@ public class CompletionWidget {
         };
     }
 
-    private void updateBufferAndDisplay(LineReader reader, String theLCP){
+    private void updateBufferAndDisplay(LineReader reader,String word ,String theLCP){
         Buffer buffer = reader.getBuffer();
+        int begin = word.length();
+        int end = theLCP.length();
 
-        buffer.write(theLCP.substring(buffer.length(), theLCP.length()));
+        buffer.write(theLCP.substring(begin, end));
         reader.callWidget(LineReader.REDRAW_LINE);
         reader.callWidget(LineReader.REDISPLAY);
     }
