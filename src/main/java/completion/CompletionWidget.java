@@ -79,7 +79,7 @@ public class CompletionWidget {
         String sub = theLCP.substring(begin, end);
 
         System.out.println();
-        System.out.println(sub);
+        System.out.println(sub.length());
 
         buffer.write(sub);
         reader.callWidget(LineReader.REDRAW_LINE);
