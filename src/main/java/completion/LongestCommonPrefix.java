@@ -9,6 +9,7 @@ import java.util.List;
 public class LongestCommonPrefix {
 
     protected static String findLongestCommonPrefix(String line, List<Candidate> candidates){
+        System.out.println(candidates.size());
         StringBuilder prefixBuilder = new StringBuilder();
         prefixBuilder.append(line);
 
