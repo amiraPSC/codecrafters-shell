@@ -1,8 +1,10 @@
 package commands;
 
+import commands.enums.CommandsTypes;
+
 public class CommandFactory {
     public static Command getCommand(String command){
-        Types type = Types.getType(command);
+        CommandsTypes type = CommandsTypes.getType(command);
         switch (type) {
             case CD -> {
                 return new CdCommand();
@@ -15,6 +17,9 @@ public class CommandFactory {
             }
             case TYPE -> {
                 return new TypeCommand();
+            }
+            case COMPLETE -> {
+                return new CompleteCommand();
             }
             case EXIT -> {
                 return new ExitCommand();
