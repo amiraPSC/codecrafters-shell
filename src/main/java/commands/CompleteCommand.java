@@ -11,16 +11,20 @@ public class CompleteCommand implements Command {
 
     @Override
     public void execute(CommandLine commandLine) throws Exception {
+        List<String> args = commandLine.getArgs();
+        if (args.get(1).equals("-p")){
+            print(args.get(2));
+        }
     }
 
     private void print(String command) {
-        try {
+        if (map.containsKey(command)) {
             List<String> list = map.get(command);
             for (String s : list) {
                 System.out.println(s);
             }
-        }catch (Exception e){
-            System.err.println(e.getMessage());
+        }else {
+            System.out.println(String.format("complete: %s: no completion specification", command));
         }
     }
 }
