@@ -1,4 +1,4 @@
-package commands;
+package commands.impl;
 
 import parser.CommandLine;
 import parser.OperatorParser;
@@ -10,7 +10,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
 
-public class EchoCommand implements Command{
+public class EchoCommand implements Command {
     @Override
     public void execute(CommandLine commandLine) throws Exception {
         OperatorParser operatorParser = new OperatorParser(commandLine);

@@ -1,10 +1,10 @@
 package commands;
 
-import commands.enums.CommandsTypes;
+import commands.impl.Command;
 import parser.CommandLine;
 import utils.PathScanning;
 
-public class TypeCommand implements Command{
+public class TypeCommand implements Command {
     @Override
     public void execute(CommandLine commandLine) throws Exception {
         String arg1 = commandLine.getArgs().get(0);

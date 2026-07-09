@@ -1,4 +1,4 @@
-package commands;
+package commands.impl;
 
 import parser.CommandLine;
 import utils.PathScanning;
@@ -6,7 +6,7 @@ import utils.PathScanning;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class CdCommand implements Command{
+public class CdCommand implements Command {
     @Override
     public void execute(CommandLine commandLine) throws Exception {
         String arg1 = commandLine.getArgs().get(0);

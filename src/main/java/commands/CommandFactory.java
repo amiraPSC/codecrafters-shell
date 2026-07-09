@@ -1,6 +1,6 @@
 package commands;
 
-import commands.enums.CommandsTypes;
+import commands.impl.*;
 
 public class CommandFactory {
     public static Command getCommand(String command){

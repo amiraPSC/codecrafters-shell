@@ -1,13 +1,10 @@
-import commands.Command;
+import commands.impl.Command;
 import commands.CommandFactory;
 import completion.*;
 import org.jline.reader.*;
-import org.jline.reader.impl.completer.AggregateCompleter;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
 import parser.CommandLine;
-
-import java.util.List;
 
 
 public class Main {
