@@ -12,8 +12,8 @@ public class CompleteCommand implements Command {
     @Override
     public void execute(CommandLine commandLine) throws Exception {
         List<String> args = commandLine.getArgs();
-        if (args.get(1).equals("-p")){
-            print(args.get(2));
+        if (args.get(0).equals("-p")){
+            print(args.get(1));
         }
     }
 
