@@ -5,6 +5,7 @@ public enum Types {
     CD,
     PWD,
     ECHO,
+    COMPLETE,
     EXIT,
     UNKNOWN;
 
