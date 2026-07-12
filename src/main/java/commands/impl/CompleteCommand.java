@@ -22,6 +22,8 @@ public class CompleteCommand implements Command {
             case "-C":
                 registerCompletionScript(args);
                 break;
+            default:
+                System.out.println(command);
         }
     }
 
@@ -41,7 +43,6 @@ public class CompleteCommand implements Command {
     }
 
     private void print(String command) {
-        System.out.println("Command: " + command);
         if (map.containsKey(command)) {
             System.out.println(String.format("complete -C %1$s %2$s", map.get(command), command));
         }else {
