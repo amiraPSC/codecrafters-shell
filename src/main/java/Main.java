@@ -1,4 +1,4 @@
-import commands.impl.Command;
+import commands.Command;
 import commands.CommandFactory;
 import completion.*;
 import org.jline.reader.*;

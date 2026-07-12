@@ -1,5 +1,6 @@
 package commands.impl;
 
+import commands.Command;
 import parser.CommandLine;
 import parser.OperatorParser;
 

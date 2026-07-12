@@ -1,4 +1,4 @@
-package commands.impl;
+package commands;
 
 import parser.CommandLine;
 

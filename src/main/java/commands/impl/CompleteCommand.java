@@ -1,5 +1,6 @@
 package commands.impl;
 
+import commands.Command;
 import parser.CommandLine;
 
 import java.util.HashMap;
@@ -40,6 +41,7 @@ public class CompleteCommand implements Command {
     }
 
     private void print(String command) {
+        System.out.println("Command: " + command);
         if (map.containsKey(command)) {
             System.out.println(String.format("complete -C %1$s %2$s", map.get(command), command));
         }else {

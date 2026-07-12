@@ -1,5 +1,6 @@
 package commands.impl;
 
+import commands.Command;
 import commands.CommandsTypes;
 import parser.CommandLine;
 import utils.PathScanning;
