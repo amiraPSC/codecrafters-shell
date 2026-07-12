@@ -8,7 +8,7 @@ import java.util.List;
 
 public class CommandLine {
     private String command;
-    private List<String> args = new ArrayList<>();
+    private List<String> args;
     private Reader reader;
 
     public CommandLine(String input){
@@ -20,6 +20,8 @@ public class CommandLine {
     }
 
     public void parseCommandLine(){
+        args = new ArrayList<>();
+
         ParsedLine parsedLine = reader.getParse();
         List<String> words = parsedLine.words();
 

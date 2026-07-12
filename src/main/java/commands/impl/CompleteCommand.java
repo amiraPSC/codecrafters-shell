@@ -22,8 +22,6 @@ public class CompleteCommand implements Command {
             case "-C":
                 registerCompletionScript(args);
                 break;
-            default:
-                System.out.println(command);
         }
     }
 
