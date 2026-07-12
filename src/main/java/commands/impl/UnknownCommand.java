@@ -14,6 +14,7 @@ public class UnknownCommand implements Command {
     @Override
     public void execute(CommandLine commandLine) throws Exception {
         OperatorParser operatorParser = new OperatorParser(commandLine);
+        System.out.println(commandLine);
         if (!operatorParser.haveOperator()){
             simpleExternalExecutable(commandLine);
         }else {

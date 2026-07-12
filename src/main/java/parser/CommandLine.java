@@ -130,4 +130,12 @@ public class CommandLine {
     public List<String> getArgs() {
         return args;
     }
+
+    @Override
+    public String toString() {
+        return "CommandLine{" +
+                "args=" + args +
+                ", command='" + command + '\'' +
+                '}';
+    }
 }
