@@ -36,6 +36,8 @@ public class CompleteCommand implements Command {
         script.deleteCharAt(script.length() - 1);
         script.append("\'");
 
+        System.out.println(script);
+
         map.put(command, script.toString());
     }
 
