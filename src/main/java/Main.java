@@ -13,13 +13,13 @@ public class Main {
         try (Terminal terminal = TerminalBuilder.builder().system(true).build()) {
             Reader reader = new Reader(terminal);
             LineReader lineReader = reader.getLineReader();
+            CommandLine commandLine = new CommandLine(reader);
 
             Widget widget = new CompletionWidget(reader).getWidget();
 
             while (true) {
                 String line = lineReader.readLine("$ ");
 
-                CommandLine commandLine = new CommandLine(line);
                 Command cmd = CommandFactory.getCommand(commandLine.getCommand());
                 cmd.execute(commandLine);
             }

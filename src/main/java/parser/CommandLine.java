@@ -1,20 +1,31 @@
 package parser;
 
 import org.jline.reader.LineReader;
+import org.jline.reader.ParsedLine;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CommandLine {
     private String command;
-    private List<String> args;
+    private List<String> args = new ArrayList<>();
+    private Reader reader;
 
     public CommandLine(String input){
         parseCommandLine(input);
     }
 
-    private void parseCommandLine(Reader reader){
+    public CommandLine(Reader reader){
+        this.reader = reader;
+    }
 
+    private void parseCommandLine(){
+        ParsedLine parsedLine = reader.getParse();
+        List<String> words = parsedLine.words();
+
+        args.addAll(words);
+        args.remove(0);
+        command = words.get(0);
     }
 
     private void parseCommandLine(String input){
