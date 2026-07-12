@@ -18,7 +18,7 @@ public class Main {
             Widget widget = new CompletionWidget(reader).getWidget();
 
             while (true) {
-                String line = lineReader.readLine("$ ");
+                lineReader.readLine("$ ");
 
                 Command cmd = CommandFactory.getCommand(commandLine.getCommand());
                 cmd.execute(commandLine);

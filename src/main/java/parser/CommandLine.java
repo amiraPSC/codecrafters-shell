@@ -17,6 +17,7 @@ public class CommandLine {
 
     public CommandLine(Reader reader){
         this.reader = reader;
+        parseCommandLine();
     }
 
     private void parseCommandLine(){
