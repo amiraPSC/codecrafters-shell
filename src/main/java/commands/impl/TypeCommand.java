@@ -1,6 +1,6 @@
-package commands;
+package commands.impl;
 
-import commands.impl.Command;
+import commands.CommandsTypes;
 import parser.CommandLine;
 import utils.PathScanning;
 

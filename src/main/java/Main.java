@@ -19,6 +19,7 @@ public class Main {
 
             while (true) {
                 lineReader.readLine("$ ");
+                commandLine.parseCommandLine();
 
                 Command cmd = CommandFactory.getCommand(commandLine.getCommand());
                 cmd.execute(commandLine);

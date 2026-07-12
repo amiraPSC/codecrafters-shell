@@ -17,10 +17,9 @@ public class CommandLine {
 
     public CommandLine(Reader reader){
         this.reader = reader;
-        parseCommandLine();
     }
 
-    private void parseCommandLine(){
+    public void parseCommandLine(){
         ParsedLine parsedLine = reader.getParse();
         List<String> words = parsedLine.words();
 
