@@ -1,5 +1,7 @@
 package parser;
 
+import org.jline.reader.LineReader;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +12,8 @@ public class CommandLine {
     public CommandLine(String input){
         parseCommandLine(input);
     }
+
+    private void parseCommandLine(LineReader reader){}
 
     private void parseCommandLine(String input){
         var list = new ArrayList<String>();
