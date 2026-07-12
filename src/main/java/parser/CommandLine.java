@@ -13,7 +13,9 @@ public class CommandLine {
         parseCommandLine(input);
     }
 
-    private void parseCommandLine(LineReader reader){}
+    private void parseCommandLine(Reader reader){
+
+    }
 
     private void parseCommandLine(String input){
         var list = new ArrayList<String>();

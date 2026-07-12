@@ -1,7 +1,6 @@
 package parser;
 
 import completion.CompleterFactory;
-import org.jline.reader.Buffer;
 import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;
 import org.jline.reader.ParsedLine;
