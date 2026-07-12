@@ -19,30 +19,26 @@ public class CompleteCommand implements Command {
                 print(args.get(1));
                 break;
             case "-C":
-                registerCompletionScript(commandLine);
+                registerCompletionScript(args);
                 break;
         }
     }
 
-    private void registerCompletionScript(CommandLine commandLine) {
-        List<String> args = commandLine.getArgs();
-        String command = commandLine.getCommand();
+    private void registerCompletionScript(List<String> args) {
         StringBuilder script = new StringBuilder();
 
         script.append("\'");
         for (String arg : args) {
+            if (args.getLast().equals(arg)) break;
             script.append(arg).append(" ");
         }
         script.deleteCharAt(script.length() - 1);
         script.append("\'");
 
-        System.out.println(script);
-
-        map.put(command, script.toString());
+        map.put(args.getLast(), script.toString());
     }
 
     private void print(String command) {
-        System.out.println(map.get(command));
         if (map.containsKey(command)) {
             System.out.println(String.format("complete -C %1$s %2$s", map.get(command), command));
         }else {
