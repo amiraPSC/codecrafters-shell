@@ -1,8 +1,10 @@
 package parser;
 
 import completion.CompleterFactory;
+import org.jline.reader.Buffer;
 import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;
+import org.jline.reader.ParsedLine;
 import org.jline.terminal.Terminal;
 
 public class Reader {
@@ -18,5 +20,18 @@ public class Reader {
 
     public LineReader getLineReader(){
         return reader;
+    }
+
+    public Terminal getTerminal(){
+        return reader.getTerminal();
+    }
+
+    public ParsedLine getParse(){
+        ParsedLine parsedLine =
+                reader.getParser().parse(
+                        reader.getBuffer().toString(),
+                        reader.getBuffer().cursor()
+                );
+        return parsedLine;
     }
 }

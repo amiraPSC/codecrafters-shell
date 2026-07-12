@@ -14,7 +14,7 @@ public class Main {
             Reader reader = new Reader(terminal);
             LineReader lineReader = reader.getLineReader();
 
-            Widget widget = new CompletionWidget(lineReader).getWidget();
+            Widget widget = new CompletionWidget(reader).getWidget();
 
             while (true) {
                 String line = lineReader.readLine("$ ");
