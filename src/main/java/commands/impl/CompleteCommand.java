@@ -30,6 +30,7 @@ public class CompleteCommand implements Command {
         script.append("\'");
         for (String arg : args) {
             if (args.getLast().equals(arg)) break;
+            if (args.getFirst().equals(arg)) continue;
             script.append(arg).append(" ");
         }
         script.deleteCharAt(script.length() - 1);
