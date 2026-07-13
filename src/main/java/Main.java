@@ -11,15 +11,17 @@ import parser.Reader;
 public class Main {
     public static void main(String[] args) throws Exception {
         try (Terminal terminal = TerminalBuilder.builder().system(true).build()) {
+
             Reader reader = new Reader(terminal);
             LineReader lineReader = reader.getLineReader();
-            CommandLine commandLine = new CommandLine(reader);
 
             Widget widget = new CompletionWidget(reader).getWidget();
 
             while (true) {
-                lineReader.readLine("$ ");
-                commandLine.parseCommandLine();
+                CommandLine commandLine = new CommandLine();
+
+                String line = lineReader.readLine("$ ");
+                commandLine.parseCommandLine(line);
 
                 Command cmd = CommandFactory.getCommand(commandLine.getCommand());
                 cmd.execute(commandLine);
