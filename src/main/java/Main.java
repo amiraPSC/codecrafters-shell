@@ -5,17 +5,19 @@ import org.jline.reader.*;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
 import parser.CommandLine;
-import parser.Reader;
+import terminal.DisplayManager;
+import terminal.TerminalContext;
 
 
 public class Main {
     public static void main(String[] args) throws Exception {
         try (Terminal terminal = TerminalBuilder.builder().system(true).build()) {
+            TerminalContext terminalContext = new TerminalContext(terminal);
 
-            Reader reader = new Reader(terminal);
-            LineReader lineReader = reader.getLineReader();
+            DisplayManager displayManager = new DisplayManager(terminalContext);
+            LineReader lineReader = terminalContext.getReader();
 
-            Widget widget = new CompletionWidget(reader).getWidget();
+            Widget widget = new CompletionWidget(displayManager, terminalContext).getWidget();
 
             while (true) {
                 CommandLine commandLine = new CommandLine();

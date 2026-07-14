@@ -1,4 +1,4 @@
-package completion;
+package parser;
 
 import org.jline.reader.Candidate;
 
@@ -8,7 +8,7 @@ import java.util.List;
 
 public class LongestCommonPrefix {
 
-    protected static String findLongestCommonPrefix(String word, List<Candidate> candidates){
+    public static String findLongestCommonPrefix(String word, List<Candidate> candidates){
         StringBuilder prefixBuilder = new StringBuilder();
         prefixBuilder.append(word);
 
