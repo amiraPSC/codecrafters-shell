@@ -8,17 +8,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-public class ExternalCommand implements Command {
+public class ExternalCommand extends RedirectableCommand {
     @Override
     public void execute(Parser parser) throws Exception {
-        if (!parser.haveOperator()){
-            simpleExternalExecutable(parser);
-        }else {
-            handleStanderRedirection(parser);
-        }
+        super.execute(parser);
     }
 
-    private void simpleExternalExecutable(Parser parser) throws Exception {
+    protected void executeNormally(Parser parser) throws Exception {
         List<String> args = parser.getArgsWithCommand();
 
         ProcessBuilder processBuilder = new ProcessBuilder(args);
@@ -28,16 +24,7 @@ public class ExternalCommand implements Command {
         process.waitFor();
     }
 
-    public void handleStanderRedirection(Parser parser){
-        switch (parser.getOperatorType()){
-            case STDOUT_REDIRECT ->  stdoutRedirect(parser,false);
-            case STDERR_REDIRECT -> stderrRedirect(parser, false);
-            case APPEND_STDOUT ->  stdoutRedirect(parser, true);
-            case APPEND_STDERR ->  stderrRedirect(parser, true);
-        }
-    }
-
-    private void stdoutRedirect(Parser parser, boolean isAppend){
+    protected void stdoutRedirect(Parser parser, boolean isAppend){
         List<String> tokens = parser.getTokens();
         File file = PathScanning.createFile(parser);
         try{
@@ -56,7 +43,7 @@ public class ExternalCommand implements Command {
         }
     }
 
-    private void stderrRedirect(Parser parser, boolean isAppend){
+    protected void stderrRedirect(Parser parser, boolean isAppend){
         List<String> tokens = parser.getTokens();
         File file = PathScanning.createFile(parser);
         try {

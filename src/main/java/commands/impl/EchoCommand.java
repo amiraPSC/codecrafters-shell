@@ -1,7 +1,6 @@
 package commands.impl;
 
 import commands.Command;
-import parser.OperatorParser;
 import parser.Parser;
 import utils.PathScanning;
 
@@ -12,26 +11,18 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
 
-public class EchoCommand implements Command {
+public class EchoCommand extends RedirectableCommand {
     @Override
     public void execute(Parser parser) throws Exception {
-        if (!parser.haveOperator()){
-            System.out.println(String.join(" ", parser.getTokens()));
-        }else  {
-            handleStanderRedirection(parser);
-        }
+        super.execute(parser);
     }
 
-    public void handleStanderRedirection(Parser parser) throws IOException {
-        switch (parser.getOperatorType()){
-            case STDOUT_REDIRECT ->  stdoutRedirect(parser,false);
-            case STDERR_REDIRECT -> stderrRedirect(parser, false);
-            case APPEND_STDOUT ->  stdoutRedirect(parser, true);
-            case APPEND_STDERR ->  stderrRedirect(parser, true);
-        }
+    @Override
+    protected void executeNormally(Parser parser) throws Exception {
+        System.out.println(String.join(" ", parser.getTokens()));
     }
 
-    private void stdoutRedirect(Parser parser, boolean isAppend){
+    protected void stdoutRedirect(Parser parser, boolean isAppend){
         List<String> tokens = parser.getTokens();
         String line = String.join(" ", tokens.subList(1,tokens.size()));
         Path path = PathScanning.createFile(parser).toPath();
@@ -46,7 +37,7 @@ public class EchoCommand implements Command {
         }
     }
 
-    private void stderrRedirect(Parser parser, boolean isAppend){
+    protected void stderrRedirect(Parser parser, boolean isAppend){
         File file = PathScanning.createFile(parser);
         List<String> tokens = parser.getTokens();
         System.out.println(String.join(" ", tokens.subList(1, tokens.size())));
