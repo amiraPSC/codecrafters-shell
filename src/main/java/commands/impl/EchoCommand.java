@@ -1,6 +1,5 @@
 package commands.impl;
 
-import commands.Command;
 import parser.Parser;
 import utils.PathScanning;
 
