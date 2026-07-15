@@ -9,7 +9,7 @@ public class OperatorParser {
     private List<String> tokens;
     private String fileName;
 
-    public OperatorParser(CommandLine commandLine) {
+    OperatorParser(CommandLine commandLine) {
         this.commandLine = commandLine;
         List<String> args = commandLine.getArgsWithCommand();
         if (haveOperator()) {
@@ -20,7 +20,7 @@ public class OperatorParser {
         }
     }
 
-    public boolean haveOperator() {
+    boolean haveOperator() {
         List<String> tokens = commandLine.getArgsWithCommand();
         boolean haveOperator =
                 tokens.contains(">") || tokens.contains("1>") ||
@@ -53,15 +53,15 @@ public class OperatorParser {
         fileName = tokens.get(operatorIndex + 1);
     }
 
-    public OperatorType getOperatorType() {
+    OperatorType getOperatorType() {
         return operatorType;
     }
 
-    public List<String> getTokens() {
+    List<String> getTokens() {
         return tokens;
     }
 
-    public String getFileName() {
+    String getFileName() {
         return fileName;
     }
 }

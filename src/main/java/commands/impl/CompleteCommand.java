@@ -1,7 +1,7 @@
 package commands.impl;
 
 import commands.Command;
-import parser.CommandLine;
+import parser.Parser;
 
 import java.util.HashMap;
 import java.util.List;
@@ -11,8 +11,8 @@ public class CompleteCommand implements Command {
     private static Map<String, String> map = new HashMap<>();
 
     @Override
-    public void execute(CommandLine commandLine) throws Exception {
-        List<String> args = commandLine.getArgs();
+    public void execute(Parser parser) throws Exception {
+        List<String> args = parser.getTokens();
         String command = args.get(0);
 
         switch (command) {

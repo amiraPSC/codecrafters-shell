@@ -4,7 +4,7 @@ import completion.*;
 import org.jline.reader.*;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
-import parser.CommandLine;
+import parser.Parser;
 import terminal.DisplayManager;
 import terminal.TerminalContext;
 
@@ -20,13 +20,13 @@ public class Main {
             Widget widget = new CompletionWidget(displayManager, terminalContext).getWidget();
 
             while (true) {
-                CommandLine commandLine = new CommandLine();
+                Parser parser = new Parser();
 
                 String line = lineReader.readLine("$ ");
-                commandLine.parseCommandLine(line);
+                parser.parse(line);
 
-                Command cmd = CommandFactory.getCommand(commandLine.getCommand());
-                cmd.execute(commandLine);
+                Command cmd = CommandFactory.getCommand(parser.getCommand());
+                cmd.execute(parser);
             }
         }
     }

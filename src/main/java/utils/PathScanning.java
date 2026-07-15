@@ -1,5 +1,8 @@
 package utils;
 
+import parser.Parser;
+
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
@@ -11,17 +14,26 @@ import java.util.stream.Stream;
 
 public class PathScanning {
     private static Path currentDir =  Paths.get(System.getProperty("user.dir"));
+    private static String executablePath;
 
-    public static String searchInDirs(String input){
+    public static String getExecutablePath(String input){
+        if (existsInPath(input)){
+            return (input + " is " + executablePath);
+        }
+        return (input + ": not found");
+    }
+
+    public static boolean existsInPath(String input){
         String[] paths = getPaths();
 
         for (String path1 : paths){
             Path p = Paths.get(path1, input);
             if (p.toFile().exists() && p.toFile().canExecute()){
-                return (input + " is " + p.toFile().getAbsolutePath());
+                executablePath = p.toFile().getAbsolutePath();
+                return true;
             }
         }
-        return (input + ": not found");
+        return false;
     }
 
     public static Set<Path> getFilesInDir(Path dir){
@@ -53,6 +65,19 @@ public class PathScanning {
             } catch (IOException e) {}
         }
         return pathSet;
+    }
+
+    public static File createFile(Parser parser){
+        File file = new File(parser.getFileName());
+        try {
+            Path path = file.toPath();
+            if (!Files.exists(path)){
+                file = Files.createFile(path).toFile();
+            }
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
+        return file;
     }
 
     private static String[] getPaths(){

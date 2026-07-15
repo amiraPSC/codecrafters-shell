@@ -1,7 +1,7 @@
 package commands.impl;
 
 import commands.Command;
-import parser.CommandLine;
+import parser.Parser;
 import utils.PathScanning;
 
 import java.nio.file.Path;
@@ -9,8 +9,8 @@ import java.nio.file.Paths;
 
 public class CdCommand implements Command {
     @Override
-    public void execute(CommandLine commandLine) throws Exception {
-        String arg1 = commandLine.getArgs().get(0);
+    public void execute(Parser parser) throws Exception {
+        String arg1 = parser.getTokens().get(0);
         if (arg1.equals("~")) {
             PathScanning.setCurrentDir(Paths.get(System.getenv("HOME")));
             return;

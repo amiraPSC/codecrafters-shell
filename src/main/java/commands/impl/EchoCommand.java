@@ -1,8 +1,9 @@
 package commands.impl;
 
 import commands.Command;
-import parser.CommandLine;
 import parser.OperatorParser;
+import parser.Parser;
+import utils.PathScanning;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,28 +14,27 @@ import java.util.List;
 
 public class EchoCommand implements Command {
     @Override
-    public void execute(CommandLine commandLine) throws Exception {
-        OperatorParser operatorParser = new OperatorParser(commandLine);
-        if (!operatorParser.haveOperator()){
-            System.out.println(String.join(" ", commandLine.getArgs()));
+    public void execute(Parser parser) throws Exception {
+        if (!parser.haveOperator()){
+            System.out.println(String.join(" ", parser.getTokens()));
         }else  {
-            handleStanderRedirection(operatorParser);
+            handleStanderRedirection(parser);
         }
     }
 
-    public void handleStanderRedirection(OperatorParser operatorParser){
-        switch (operatorParser.getOperatorType()){
-            case STDOUT_REDIRECT ->  stdoutRedirect(operatorParser,false);
-            case STDERR_REDIRECT -> stderrRedirect(operatorParser, false);
-            case APPEND_STDOUT ->  stdoutRedirect(operatorParser, true);
-            case APPEND_STDERR ->  stderrRedirect(operatorParser, true);
+    public void handleStanderRedirection(Parser parser) throws IOException {
+        switch (parser.getOperatorType()){
+            case STDOUT_REDIRECT ->  stdoutRedirect(parser,false);
+            case STDERR_REDIRECT -> stderrRedirect(parser, false);
+            case APPEND_STDOUT ->  stdoutRedirect(parser, true);
+            case APPEND_STDERR ->  stderrRedirect(parser, true);
         }
     }
 
-    private void stdoutRedirect(OperatorParser operatorParser, boolean isAppend){
-        List<String> tokens = operatorParser.getTokens();
+    private void stdoutRedirect(Parser parser, boolean isAppend){
+        List<String> tokens = parser.getTokens();
         String line = String.join(" ", tokens.subList(1,tokens.size()));
-        Path path = createFile(operatorParser).toPath();
+        Path path = PathScanning.createFile(parser).toPath();
         try {
             if (!isAppend) {
                 Files.writeString(path, line + '\n');
@@ -46,24 +46,9 @@ public class EchoCommand implements Command {
         }
     }
 
-    private void stderrRedirect(OperatorParser operatorParser, boolean isAppend){
-        File file = createFile(operatorParser);
-        List<String> tokens = operatorParser.getTokens();
+    private void stderrRedirect(Parser parser, boolean isAppend){
+        File file = PathScanning.createFile(parser);
+        List<String> tokens = parser.getTokens();
         System.out.println(String.join(" ", tokens.subList(1, tokens.size())));
-    }
-
-    private File createFile(OperatorParser operatorParser){
-        File file = new File(operatorParser.getFileName());
-        try {
-            Path path = file.toPath();
-            {
-                if (!Files.exists(path)){
-                    file = Files.createFile(path).toFile();
-                }
-            }
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
-        }
-        return file;
     }
 }
