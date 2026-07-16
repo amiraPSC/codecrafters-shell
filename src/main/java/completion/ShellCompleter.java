@@ -23,7 +23,9 @@ public class ShellCompleter implements Completer {
 
         }else if (wordIndex == 1 && CompleteCommand.hasKey(line.words().get(0))) {
             List<String> args = new ArrayList<>();
-            args.add(CompleteCommand.getValue(line.words().get(0)));
+            String value = CompleteCommand.getValue(line.words().get(0));
+            String script = value.substring(1, value.length() - 1);
+            args.add(script);
             args.add(line.words().get(0));
 
             ProcessExecutor processExecutor = new ProcessExecutor();
