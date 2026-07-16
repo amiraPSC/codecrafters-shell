@@ -47,4 +47,12 @@ public class CompleteCommand implements Command {
             System.out.println(String.format("complete: %s: no completion specification", command));
         }
     }
+
+    public static String getValue(String key){
+        return map.get(key);
+    }
+
+    public static boolean hasKey(String key){
+        return map.containsKey(key);
+    }
 }
