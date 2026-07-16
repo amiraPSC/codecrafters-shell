@@ -12,11 +12,6 @@ import java.util.List;
 
 public class EchoCommand extends RedirectableCommand {
     @Override
-    public void execute(Parser parser) throws Exception {
-        super.execute(parser);
-    }
-
-    @Override
     protected void executeNormally(Parser parser) throws Exception {
         System.out.println(String.join(" ", parser.getTokens()));
     }

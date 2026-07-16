@@ -9,10 +9,6 @@ import java.io.IOException;
 import java.util.List;
 
 public class ExternalCommand extends RedirectableCommand {
-    @Override
-    public void execute(Parser parser) throws Exception {
-        super.execute(parser);
-    }
 
     protected void executeNormally(Parser parser) throws Exception {
         List<String> args = parser.getArgsWithCommand();
