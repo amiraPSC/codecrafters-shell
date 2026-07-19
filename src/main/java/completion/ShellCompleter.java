@@ -21,21 +21,8 @@ public class ShellCompleter implements Completer {
             builtinCompleter.complete(reader, line, candidates);
             ExecutableCompleter.complete(reader, line, candidates);
 
-        }else if (wordIndex == 1 && CompleteCommand.hasKey(line.words().get(0))) {
-            List<String> args = new ArrayList<>();
-            String value = CompleteCommand.getValue(line.words().get(0));
-            String script = value.substring(1, value.length() - 1);
-            args.add(script);
-            args.add(line.words().get(0));
-
-            ProcessExecutor processExecutor = new ProcessExecutor();
-            List<String> output;
-            try {
-                output = processExecutor.executeProcess(args);
-            } catch (Exception e) {
-                System.err.println(e.getMessage());
-                output = List.of();
-            }
+        }else if (CompleteCommand.hasKey(line.words().get(0))) {
+            List<String> output = runCompletionScript(line);
 
             for (String s : output) {
                 candidates.add(new Candidate(s));
@@ -45,5 +32,35 @@ public class ShellCompleter implements Completer {
             Completer fileNameCompleter = CompleterFactory.getCompleter(CompleterType.Files);
             fileNameCompleter.complete(reader, line, candidates);
         }
+    }
+
+    private List<String> runCompletionScript(ParsedLine line) {
+        List<String> words = line.words();
+        String currentWord = line.word();
+        String command = words.getFirst();
+
+        List<String> args = new ArrayList<>();
+        String value = CompleteCommand.getValue(line.words().get(0));
+        String script = value.substring(1, value.length() - 1);
+        args.add(script);
+        args.add(command);
+        args.add(currentWord);
+
+        if (words.size() > 1) {
+            args.add(words.get(words.size() - 2));
+        }else {
+            args.add("");
+        }
+
+        ProcessExecutor processExecutor = new ProcessExecutor();
+        List<String> output;
+        try {
+            output = processExecutor.executeProcess(args);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            output = List.of();
+        }
+
+        return output;
     }
 }
