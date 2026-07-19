@@ -38,7 +38,10 @@ public class CommandFactory {
             case EXIT -> {
                 return new ExitCommand();
             }
+            case JOBS -> {
+                return new JobsCommand();
+            }
         }
-        return null;
+        return new UnknownCommand();
     }
 }

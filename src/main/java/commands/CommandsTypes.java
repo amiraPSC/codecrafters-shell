@@ -5,6 +5,7 @@ public enum CommandsTypes {
     CD,
     PWD,
     ECHO,
+    JOBS,
     COMPLETE,
     EXIT,
     UNKNOWN;
