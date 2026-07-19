@@ -13,6 +13,7 @@ public class CompleteCommand implements Command {
     @Override
     public void execute(Parser parser) throws Exception {
         List<String> args = parser.getTokens();
+        String command = args.getLast();
         String option = args.get(0);
 
         switch (option) {
@@ -23,7 +24,7 @@ public class CompleteCommand implements Command {
                 registerCompletionScript(args);
                 break;
             case "-r":
-                removeCompletionScript(parser.getCommand());
+                removeCompletionScript(command);
                 break;
         }
     }
