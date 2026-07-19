@@ -8,7 +8,9 @@ import org.jline.reader.ParsedLine;
 import utils.ProcessExecutor;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ShellCompleter implements Completer {
     @Override
@@ -53,14 +55,24 @@ public class ShellCompleter implements Completer {
         }
 
         ProcessExecutor processExecutor = new ProcessExecutor();
+        Map<String, String> env = getEnvVars(line);
         List<String> output;
         try {
-            output = processExecutor.executeProcess(args);
+            output = processExecutor.executeProcess(args, env);
         } catch (Exception e) {
             System.err.println(e.getMessage());
             output = List.of();
         }
 
         return output;
+    }
+
+    private Map<String, String> getEnvVars(ParsedLine parsedLine) {
+        String line = parsedLine.line();
+
+        Map<String, String> env = new HashMap<>();
+        env.put("COMP_LINE", line);
+        env.put("COMP_POINT", String.valueOf(parsedLine.cursor()));
+        return env;
     }
 }
