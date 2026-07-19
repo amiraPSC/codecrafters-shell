@@ -42,8 +42,7 @@ public class ShellCompleter implements Completer {
         String command = words.getFirst();
 
         List<String> args = new ArrayList<>();
-        String value = CompleteCommand.getValue(line.words().get(0));
-        String script = value.substring(1, value.length() - 1);
+        String script = CompleteCommand.getValue(line.words().get(0));
         args.add(script);
         args.add(command);
         args.add(currentWord);

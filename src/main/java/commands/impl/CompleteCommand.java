@@ -32,21 +32,19 @@ public class CompleteCommand implements Command {
     private void registerCompletionScript(List<String> args) {
         StringBuilder script = new StringBuilder();
 
-        script.append("\'");
         for (String arg : args) {
             if (args.getLast().equals(arg)) break;
             if (args.getFirst().equals(arg)) continue;
             script.append(arg).append(" ");
         }
         script.deleteCharAt(script.length() - 1);
-        script.append("\'");
 
         map.put(args.getLast(), script.toString());
     }
 
     private void print(String command) {
         if (map.containsKey(command)) {
-            System.out.println(String.format("complete -C %1$s %2$s", map.get(command), command));
+            System.out.println(String.format("complete -C '%1$s' %2$s", map.get(command), command));
         }else {
             System.out.println(String.format("complete: %s: no completion specification", command));
         }
