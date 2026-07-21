@@ -25,7 +25,7 @@ public class Main {
                 String line = lineReader.readLine("$ ");
                 parser.parse(line);
 
-                Command cmd = CommandFactory.getCommand(parser.getCommand());
+                Command cmd = CommandFactory.getCommand(parser);
                 cmd.execute(parser);
             }
         }

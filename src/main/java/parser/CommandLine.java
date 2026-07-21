@@ -6,6 +6,7 @@ import java.util.List;
 public class CommandLine {
     private String command;
     private List<String> args;
+    private boolean hasBackgroundOperator = false;
 
     void parse(String line){
         ParserState state = new ParserState();
@@ -23,8 +24,8 @@ public class CommandLine {
         }
 
         state.finishLastToken();
-
         assignCommandAndArguments(state.getTokens());
+        setHasBackgroundOperator();
     }
 
     void assignCommandAndArguments(List<String> tokens){
@@ -37,11 +38,24 @@ public class CommandLine {
         }
     }
 
+    void setHasBackgroundOperator(){
+        if (args.isEmpty()) return;
+
+        if (args.getLast().equals("&")){
+            hasBackgroundOperator = true;
+            args.removeLast();
+        }
+    }
+
     List<String> getArgsWithCommand(){
         var list = new ArrayList<String>();
         list.add(getCommand());
         list.addAll(args);
         return list;
+    }
+
+    boolean hasBackgroundOperator() {
+        return hasBackgroundOperator;
     }
 
     String getCommand() {

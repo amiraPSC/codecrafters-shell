@@ -8,8 +8,9 @@ import org.jline.reader.ParsedLine;
 import org.jline.terminal.Terminal;
 
 public class TerminalContext {
-    private final LineReader reader;
-    private final Terminal terminal;
+    private static LineReader reader;
+    private static Terminal terminal;
+
 
     public TerminalContext(Terminal terminal) {
         this.terminal = terminal;

@@ -1,8 +1,8 @@
 package utils;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,5 +17,12 @@ public class ProcessExecutor {
             process.waitFor();
             return reader.lines().toList();
         }
+    }
+
+    public static Process startInBackground(List<String> args) throws IOException {
+        ProcessBuilder processBuilder = new ProcessBuilder(args);
+        Process process = processBuilder.start();
+
+        return process;
     }
 }

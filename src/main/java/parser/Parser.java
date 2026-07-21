@@ -42,6 +42,10 @@ public class Parser {
         return list;
     }
 
+    public boolean hasBackgroundOperator(){
+        return commandLine.hasBackgroundOperator();
+    }
+
     public String getFileName() {
         return operatorParser.getFileName();
     }}

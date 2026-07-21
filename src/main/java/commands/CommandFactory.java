@@ -1,10 +1,16 @@
 package commands;
 
 import commands.impl.*;
+import parser.Parser;
 import utils.PathScanning;
 
 public class CommandFactory {
-    public static Command getCommand(String command){
+    public static Command getCommand(Parser parser){
+        if (parser.hasBackgroundOperator()){
+            return new JobsCommand();
+        }
+
+        String command = parser.getCommand();
         CommandsTypes type = CommandsTypes.getType(command);
 
         if (CommandsTypes.isBuiltin(command)){

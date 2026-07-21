@@ -6,6 +6,7 @@ import org.jline.reader.LineReader;
 import org.jline.terminal.Terminal;
 import org.jline.utils.InfoCmp;
 
+import java.io.OutputStream;
 import java.util.List;
 
 public class DisplayManager {
