@@ -1,8 +1,5 @@
 package jobs;
 
-import org.jline.terminal.Terminal;
-import terminal.DisplayManager;
-import terminal.TerminalContext;
 import utils.ProcessExecutor;
 
 import java.io.IOException;

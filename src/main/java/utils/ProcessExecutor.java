@@ -21,6 +21,7 @@ public class ProcessExecutor {
 
     public static Process startInBackground(List<String> args) throws IOException {
         ProcessBuilder processBuilder = new ProcessBuilder(args);
+        processBuilder.inheritIO();
         Process process = processBuilder.start();
 
         return process;
