@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JobManager{
-    private int nextJobNumber = 1;
+    private static int nextJobNumber = 1;
     private static List<Job> jobs = new ArrayList<>();
 
     public Job addJob(List<String> args) throws IOException {
@@ -60,8 +60,6 @@ public class JobManager{
     }
 
     private int setJobNumber(){
-        int num = nextJobNumber;
-        nextJobNumber = nextJobNumber++;
-        return num;
+        return nextJobNumber++;
     }
 }
