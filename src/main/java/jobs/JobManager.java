@@ -51,7 +51,10 @@ public class JobManager{
         markerOfSpecialJobs(job, builder);
         builder.append("  ");
         builder.append(job.getStringStatus());
-        builder.append(job.getCommand() + " &");
+        builder.append(job.getCommand());
+        if (job.getJobStatus() == JobStatus.RUNNING){
+            builder.append(" &");
+        }
 
         return builder.toString();
     }
