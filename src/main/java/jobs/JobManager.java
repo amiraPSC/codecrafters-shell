@@ -15,7 +15,7 @@ public class JobManager{
         int jobNum = setJobNumber();
         long pid = process.pid();
 
-        Job job = new Job(jobNum, pid, process);
+        Job job = new Job(jobNum, pid, args, process);
         jobs.add(job);
 
         return job;
@@ -24,6 +24,27 @@ public class JobManager{
     public void printJobInformation(Job job){
         String line = String.format("[%1$d] %2$d", job.getJobNum(), job.getPid());
         System.out.printf(line + "\n");
+    }
+
+    public void printStatusJobs(){
+        for (Job job : jobs){
+            String line = statusLine(job);
+            System.out.printf(line + "\n");
+        }
+    }
+
+    private String statusLine(Job job){
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("[" + job.getJobNum() + "]");
+        if (jobs.getLast().equals(job)){
+            builder.append("+");
+        }
+        builder.append("  ");
+        builder.append(job.getStatus());
+        builder.append(job.getCommand() + " &");
+
+        return builder.toString();
     }
 
     private Process startProcess(List<String> args) throws IOException {

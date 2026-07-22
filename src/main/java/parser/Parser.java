@@ -42,6 +42,10 @@ public class Parser {
         return list;
     }
 
+    public boolean isEmpty(){
+        return getTokens().isEmpty();
+    }
+
     public boolean hasBackgroundOperator(){
         return commandLine.hasBackgroundOperator();
     }
