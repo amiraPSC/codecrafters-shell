@@ -13,6 +13,7 @@ public class JobsCommand implements Command {
         JobManager jobManager = new JobManager();
         if (parser.isEmpty()) {
             jobManager.printStatusJobs();
+            jobManager.removeCompletedJobs();
             return;
         }
 

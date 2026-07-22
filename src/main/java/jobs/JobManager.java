@@ -4,6 +4,7 @@ import utils.ProcessExecutor;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class JobManager{
@@ -33,13 +34,23 @@ public class JobManager{
         }
     }
 
+    public void removeCompletedJobs(){
+        Iterator<Job> iterator = jobs.iterator();
+        while (iterator.hasNext()){
+            Job job = iterator.next();
+            if (job.getJobStatus() == JobStatus.DONE) {
+                iterator.remove();
+            }
+        }
+    }
+
     private String statusLine(Job job){
         StringBuilder builder = new StringBuilder();
 
         builder.append("[" + job.getJobNum() + "]");
         markerOfSpecialJobs(job, builder);
         builder.append("  ");
-        builder.append(job.getStatus());
+        builder.append(job.getStringStatus());
         builder.append(job.getCommand() + " &");
 
         return builder.toString();

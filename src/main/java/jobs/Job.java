@@ -31,7 +31,11 @@ public class Job{
         return line.toString().trim();
     }
 
-    String getStatus(){
+    JobStatus getJobStatus(){
+        return JobStatus.getJobStatus(process);
+    }
+
+    String getStringStatus(){
         JobStatus status = JobStatus.getJobStatus(process);
         String name = status.getStatusName();
 

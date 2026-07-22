@@ -2,17 +2,17 @@ package jobs;
 
 public enum JobStatus {
     RUNNING,
-    STOPPED;
+    DONE;
 
     static JobStatus getJobStatus(Process process){
         if (process.isAlive()) return RUNNING;
-        return STOPPED;
+        return DONE;
     }
 
     String getStatusName(){
         if (this == RUNNING){
             return "Running";
         }
-        return "Stopped";
+        return "Done";
     }
 }
