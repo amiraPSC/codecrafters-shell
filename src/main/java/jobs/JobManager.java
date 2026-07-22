@@ -37,14 +37,22 @@ public class JobManager{
         StringBuilder builder = new StringBuilder();
 
         builder.append("[" + job.getJobNum() + "]");
-        if (jobs.getLast().equals(job)){
-            builder.append("+");
-        }
+        markerOfSpecialJobs(job, builder);
         builder.append("  ");
         builder.append(job.getStatus());
         builder.append(job.getCommand() + " &");
 
         return builder.toString();
+    }
+
+    private void markerOfSpecialJobs(Job job, StringBuilder builder){
+        if (jobs.getLast().equals(job)){
+            builder.append("+");
+        }else if (jobs.get(jobs.size()-2).equals(job)){
+            builder.append("-");
+        }else {
+            builder.append(" ");
+        }
     }
 
     private Process startProcess(List<String> args) throws IOException {
