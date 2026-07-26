@@ -1,6 +1,7 @@
 import commands.Command;
 import commands.CommandFactory;
 import completion.*;
+import jobs.JobManager;
 import org.jline.reader.*;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
@@ -19,8 +20,11 @@ public class Main {
 
             Widget widget = new CompletionWidget(displayManager, terminalContext).getWidget();
 
+            JobManager jobManager = new JobManager();
+
             while (true) {
                 Parser parser = new Parser();
+                jobManager.reapCompletedJobs();
 
                 String line = lineReader.readLine("$ ");
                 parser.parse(line);

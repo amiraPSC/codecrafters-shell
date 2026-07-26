@@ -22,6 +22,16 @@ public class JobManager{
         return job;
     }
 
+    public void reapCompletedJobs(){
+        for (Job job : jobs){
+            if (job.getJobStatus() == JobStatus.DONE){
+                String line = statusLine(job);
+                System.out.printf(line + "\n");
+            }
+        }
+        removeCompletedJobs();
+    }
+
     public void printJobInformation(Job job){
         String line = String.format("[%1$d] %2$d", job.getJobNum(), job.getPid());
         System.out.printf(line + "\n");
