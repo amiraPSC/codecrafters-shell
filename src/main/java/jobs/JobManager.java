@@ -84,6 +84,9 @@ public class JobManager{
     }
 
     private int setJobNumber(){
+        if (jobs.isEmpty()){
+            nextJobNumber = 1;
+        }
         return nextJobNumber++;
     }
 }
