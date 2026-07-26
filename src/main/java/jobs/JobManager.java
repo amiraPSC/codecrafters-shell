@@ -8,12 +8,11 @@ import java.util.Iterator;
 import java.util.List;
 
 public class JobManager{
-    private static int nextJobNumber = 1;
     private static List<Job> jobs = new ArrayList<>();
 
     public Job addJob(List<String> args) throws IOException {
         Process process = startProcess(args);
-        int jobNum = setJobNumber();
+        int jobNum = getJobNumber();
         long pid = process.pid();
 
         Job job = new Job(jobNum, pid, args, process);
@@ -83,12 +82,13 @@ public class JobManager{
         return ProcessExecutor.startInBackground(args);
     }
 
-    private int setJobNumber(){
+    private int getJobNumber(){
+        int nextJobNumber;
         if (jobs.isEmpty()){
             nextJobNumber = 1;
         }else {
-            nextJobNumber = jobs.size();
+            nextJobNumber = jobs.size()+1;
         }
-        return nextJobNumber++;
+        return nextJobNumber;
     }
 }
