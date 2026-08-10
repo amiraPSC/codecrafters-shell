@@ -1,6 +1,6 @@
 package utils;
 
-import parser.Parser;
+import parser.Parser2;
 
 import java.io.File;
 import java.io.IOException;
@@ -67,8 +67,8 @@ public class PathScanning {
         return pathSet;
     }
 
-    public static File createFile(Parser parser){
-        File file = new File(parser.getFileName());
+    public static File createFile(Parser2 parser2){
+        File file = new File(parser2.getFileName());
         try {
             Path path = file.toPath();
             if (!Files.exists(path)){

@@ -1,6 +1,8 @@
-package commands.impl;
+package Executebale;
 
-import parser.Parser;
+import executors.ExecutionContext;
+import parser.Parser2;
+import parser.nodes.impl.CommandNode;
 import utils.PathScanning;
 
 import java.io.File;
@@ -8,9 +10,24 @@ import java.io.IOException;
 import java.util.List;
 
 public class ExternalCommand extends RedirectableCommand {
+    @Override
+    public void execute(CommandNode node, ExecutionContext context) throws Exception {
+    }
 
-    protected void executeNormally(Parser parser) throws Exception {
-        List<String> args = parser.getArgsWithCommand();
+    @Override
+    public void execute(Parser2 parser2) throws Exception {
+        if (parser2.hasPipeOperator()){
+            List<Process> processes = ProcessExecutor.startPipeline(parser2);
+            Process last = processes.getLast();
+            ProcessExecutor.PrintProcessResult(last);
+
+        }else {
+            super.execute(parser2);
+        }
+    }
+
+    protected void executeNormally(Parser2 parser2) throws Exception {
+        List<String> args = parser2.getArgsWithCommand();
 
         ProcessBuilder processBuilder = new ProcessBuilder(args);
         processBuilder.directory(PathScanning.getCurrentDir().toFile());
@@ -19,9 +36,9 @@ public class ExternalCommand extends RedirectableCommand {
         process.waitFor();
     }
 
-    protected void stdoutRedirect(Parser parser, boolean isAppend){
-        List<String> tokens = parser.getTokens();
-        File file = PathScanning.createFile(parser);
+    protected void stdoutRedirect(Parser2 parser2, boolean isAppend){
+        List<String> tokens = parser2.getTokens();
+        File file = PathScanning.createFile(parser2);
         try{
             ProcessBuilder processBuilder = new ProcessBuilder(tokens);
             processBuilder.directory(PathScanning.getCurrentDir().toFile());
@@ -38,9 +55,9 @@ public class ExternalCommand extends RedirectableCommand {
         }
     }
 
-    protected void stderrRedirect(Parser parser, boolean isAppend){
-        List<String> tokens = parser.getTokens();
-        File file = PathScanning.createFile(parser);
+    protected void stderrRedirect(Parser2 parser2, boolean isAppend){
+        List<String> tokens = parser2.getTokens();
+        File file = PathScanning.createFile(parser2);
         try {
             ProcessBuilder processBuilder = new ProcessBuilder(tokens);
             processBuilder.directory(PathScanning.getCurrentDir().toFile());

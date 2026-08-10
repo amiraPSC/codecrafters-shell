@@ -1,8 +1,10 @@
 package jobs;
 
-import utils.ProcessExecutor;
+import Executebale.ProcessExecutor;
+import executors.ExecutionContext;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -21,6 +23,16 @@ public class JobManager{
         return job;
     }
 
+    public Job addJob(Process process, List<String> tokens) throws IOException {
+        int jobNum = getJobNumber();
+        long pid = process.pid();
+
+        Job job = new Job(jobNum, pid, tokens, process);
+        jobs.add(job);
+
+        return job;
+    }
+
     public void reapCompletedJobs(){
         for (Job job : jobs){
             if (job.getJobStatus() == JobStatus.DONE){
@@ -34,6 +46,19 @@ public class JobManager{
     public void printJobInformation(Job job){
         String line = String.format("[%1$d] %2$d", job.getJobNum(), job.getPid());
         System.out.printf(line + "\n");
+    }
+
+    public void printJobInformation(Job job, ExecutionContext context){
+        String line = String.format("[%1$d] %2$d", job.getJobNum(), job.getPid());
+        context.getWriter().printf(line + "\n");
+    }
+
+    public void printStatusJobs(ExecutionContext context){
+        PrintWriter writer = context.getWriter();
+        for (Job job : jobs){
+            String line = statusLine(job);
+            writer.printf(line + "\n");
+        }
     }
 
     public void printStatusJobs(){

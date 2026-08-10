@@ -1,6 +1,6 @@
 package commands;
 
-public enum CommandsTypes {
+public enum CommandType {
     TYPE,
     CD,
     PWD,
@@ -10,8 +10,8 @@ public enum CommandsTypes {
     EXIT,
     UNKNOWN;
 
-    public static CommandsTypes getType(String type) {
-        for (CommandsTypes t : values()) {
+    public static CommandType getType(String type) {
+        for (CommandType t : values()) {
             if (t.name().equalsIgnoreCase(type)) {
                 return t;
             }

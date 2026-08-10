@@ -2,7 +2,7 @@ package parser;
 
 import java.util.List;
 
-public class OperatorParser {
+public class OperatorParser{
     private CommandLine commandLine;
     private OperatorType operatorType;
     private int operatorIndex;
@@ -11,23 +11,13 @@ public class OperatorParser {
 
     OperatorParser(CommandLine commandLine) {
         this.commandLine = commandLine;
-        List<String> args = commandLine.getArgsWithCommand();
-        if (haveOperator()) {
+        if (haveOperator()){
+            List<String> args = commandLine.getArgsWithCommand();
             setOperatorIndex(args);
             setOperatorType(args);
             setTokens(args);
             setFileName(args);
         }
-    }
-
-    boolean haveOperator() {
-        List<String> tokens = commandLine.getArgsWithCommand();
-        boolean haveOperator =
-                tokens.contains(">") || tokens.contains("1>") ||
-                tokens.contains(">>") || tokens.contains("1>>") ||
-                tokens.contains("2>") || tokens.contains("2>>");
-
-        return haveOperator;
     }
 
     private void setOperatorType(List<String> tokens) {
@@ -63,5 +53,15 @@ public class OperatorParser {
 
     String getFileName() {
         return fileName;
+    }
+
+    boolean haveOperator() {
+        List<String> tokens = getTokens();
+        boolean haveOperator =
+                tokens.contains(">") || tokens.contains("1>") ||
+                        tokens.contains(">>") || tokens.contains("1>>") ||
+                        tokens.contains("2>") || tokens.contains("2>>");
+
+        return haveOperator;
     }
 }

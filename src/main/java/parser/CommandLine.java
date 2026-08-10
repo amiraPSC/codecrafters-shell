@@ -1,25 +1,27 @@
 package parser;
 
+import parser.lexer.ParserState;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class CommandLine {
+public class CommandLine{
     private String command;
-    private List<String> args;
+    private List<String> Tokens;
     private boolean hasBackgroundOperator = false;
 
-    void parse(String line){
+    public void parse(String line){
         ParserState state = new ParserState();
 
         for (int i = 0; i < line.length(); i++){
             char currentChar = line.charAt(i);
 
             if (!state.isOpenQuote()){
-                state.handelNormalState(currentChar);
+                //state.handelNormalState(currentChar);
             }else if (state.getQuote() == '\"'){
-                i = state.handleDoubleQuote(line, currentChar, i);
+                //i = state.handleDoubleQuote(line, currentChar, i);
             } else if (state.getQuote() == '\'') {
-                state.handelSingleQuote(currentChar);
+                //state.handelSingleQuote(currentChar);
             }
         }
 
@@ -31,26 +33,26 @@ public class CommandLine {
     void assignCommandAndArguments(List<String> tokens){
         if (!tokens.isEmpty()) {
             command = tokens.get(0);
-            args = tokens.subList(1, tokens.size());
+            Tokens = tokens.subList(1, tokens.size());
         } else {
             command = "";
-            args = new ArrayList<>();
+            Tokens = new ArrayList<>();
         }
     }
 
     void setHasBackgroundOperator(){
-        if (args.isEmpty()) return;
+        if (Tokens.isEmpty()) return;
 
-        if (args.getLast().equals("&")){
+        if (Tokens.getLast().equals("&")){
             hasBackgroundOperator = true;
-            args.removeLast();
+            Tokens.removeLast();
         }
     }
 
-    List<String> getArgsWithCommand(){
+    public List<String> getArgsWithCommand(){
         var list = new ArrayList<String>();
         list.add(getCommand());
-        list.addAll(args);
+        list.addAll(Tokens);
         return list;
     }
 
@@ -62,7 +64,8 @@ public class CommandLine {
         return command;
     }
 
-    List<String> getArgs() {
-        return args;
+    List<String> getTokens() {
+        return Tokens;
     }
+
 }

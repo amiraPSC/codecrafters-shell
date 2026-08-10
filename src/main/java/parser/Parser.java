@@ -1,55 +1,98 @@
 package parser;
 
+import parser.lexer.Token;
+import parser.lexer.TokenType;
+import parser.lexer.Tokenizer;
+import parser.nodes.Node;
+import parser.nodes.impl.BackgroundNode;
+import parser.nodes.impl.CommandNode;
+import parser.nodes.impl.PipelineNode;
+import parser.nodes.impl.RedirectionNode;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Parser {
-    private CommandLine commandLine;
-    private OperatorParser operatorParser;
+    private List<Token> tokens;
+    private int pointer;
 
-    public Parser() {
-        this.commandLine = new CommandLine();
+    public Node parse(String line){
+        Tokenizer tokenizer = new Tokenizer();
+        tokens = tokenizer.tokenize(line);
+        return parseBackground();
     }
 
-    public void parse(String line){
-        commandLine.parse(line);
-        operatorParser = new OperatorParser(commandLine);
-    }
+    //Node parseExpression(){}
 
-    public String getCommand() {
-        return commandLine.getCommand();
-    }
+    Node parseBackground(){
+        Node node = parsePipeLine();
+        Token token = currentToken();
 
-    public boolean haveOperator(){
-        return operatorParser.haveOperator();
-    }
+        if (token != null){
+            TokenType type = token.getTokenType();
 
-    public OperatorType getOperatorType() {
-        return operatorParser.getOperatorType();
-    }
-
-    public List<String> getTokens() {
-        if (haveOperator()){
-            return operatorParser.getTokens();
+            if (TokenType.isBackground(type)) {
+                return new BackgroundNode(node);
+            }
         }
-        return commandLine.getArgs();
+
+        return node;
     }
 
-    public List<String> getArgsWithCommand(){
-        var list = new ArrayList<String>();
-        list.add(getCommand());
-        list.addAll(getTokens());
-        return list;
+    Node parsePipeLine(){
+        Node leftNode = parseRedirect();
+        Token token = currentToken();
+
+        if (token != null){
+            TokenType type = token.getTokenType();
+
+            if (type == TokenType.PIPE) {
+                pointer++;
+                Node rightNode = parseRedirect();
+                return new PipelineNode(leftNode, rightNode);
+            }
+        }
+
+        return leftNode;
     }
 
-    public boolean isEmpty(){
-        return getTokens().isEmpty();
+    Node parseRedirect(){
+        Node node = parseSimpleCommand();
+        Token token = currentToken();
+
+        if (token != null && TokenType.isRedirectOperator(token)){
+            pointer++;
+            Token token2 = tokens.get(pointer);
+            pointer++;
+            return new RedirectionNode(token.getTokenType() ,node, token2.getValue());
+        }
+
+        return node;
     }
 
-    public boolean hasBackgroundOperator(){
-        return commandLine.hasBackgroundOperator();
+    Node parseSimpleCommand(){
+        CommandNode node = new CommandNode(tokens.get(pointer).getValue());
+        var args = new ArrayList<String>();
+
+        pointer++;
+        for (int i = pointer; i < tokens.size(); i++){
+            Token token = tokens.get(i);
+            if (!TokenType.isTypeOperator(token)){
+                args.add(token.getValue());
+            }else {
+                pointer = i;
+                break;
+            }
+        }
+
+        node.addAll(args);
+        return node;
     }
 
-    public String getFileName() {
-        return operatorParser.getFileName();
-    }}
+    private Token currentToken() {
+        if (pointer >= tokens.size()) {
+            return null;
+        }
+        return tokens.get(pointer);
+    }
+}

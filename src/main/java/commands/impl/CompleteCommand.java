@@ -1,7 +1,9 @@
 package commands.impl;
 
 import commands.Command;
-import parser.Parser;
+import executors.ExecutionContext;
+import parser.Parser2;
+import parser.nodes.impl.CommandNode;
 
 import java.util.HashMap;
 import java.util.List;
@@ -11,8 +13,27 @@ public class CompleteCommand implements Command {
     private static Map<String, String> map = new HashMap<>();
 
     @Override
-    public void execute(Parser parser) throws Exception {
-        List<String> args = parser.getTokens();
+    public void execute(CommandNode node, ExecutionContext context) {
+        List<String> args = node.getArgs();
+        String command = args.getLast();
+        String option = args.getFirst();
+
+        switch (option) {
+            case "-p":
+                print(args.get(1), context);
+                break;
+            case "-C":
+                registerCompletionScript(args);
+                break;
+            case "-r":
+                removeCompletionScript(command);
+                break;
+        }
+    }
+
+    @Override
+    public void execute(Parser2 parser2) throws Exception {
+        List<String> args = parser2.getTokens();
         String command = args.getLast();
         String option = args.get(0);
 
@@ -40,6 +61,17 @@ public class CompleteCommand implements Command {
         script.deleteCharAt(script.length() - 1);
 
         map.put(args.getLast(), script.toString());
+    }
+
+    private void print(String command, ExecutionContext context){
+        String line;
+        if (map.containsKey(command)) {
+            line = String.format("complete -C '%1$s' %2$s", map.get(command), command);
+        }else {
+            line = String.format("complete: %s: no completion specification", command);
+        }
+
+        context.getWriter().println(line);
     }
 
     private void print(String command) {
