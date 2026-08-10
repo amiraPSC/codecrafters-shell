@@ -1,6 +1,6 @@
 package jobs;
 
-import Executebale.ProcessExecutor;
+import utils.ProcessExecutor;
 import executors.ExecutionContext;
 
 import java.io.IOException;
@@ -23,7 +23,7 @@ public class JobManager{
         return job;
     }
 
-    public Job addJob(Process process, List<String> tokens) throws IOException {
+    public Job addJob(Process process, List<String> tokens){
         int jobNum = getJobNumber();
         long pid = process.pid();
 
@@ -43,11 +43,6 @@ public class JobManager{
         removeCompletedJobs();
     }
 
-    public void printJobInformation(Job job){
-        String line = String.format("[%1$d] %2$d", job.getJobNum(), job.getPid());
-        System.out.printf(line + "\n");
-    }
-
     public void printJobInformation(Job job, ExecutionContext context){
         String line = String.format("[%1$d] %2$d", job.getJobNum(), job.getPid());
         context.getWriter().printf(line + "\n");
@@ -58,13 +53,6 @@ public class JobManager{
         for (Job job : jobs){
             String line = statusLine(job);
             writer.printf(line + "\n");
-        }
-    }
-
-    public void printStatusJobs(){
-        for (Job job : jobs){
-            String line = statusLine(job);
-            System.out.printf(line + "\n");
         }
     }
 

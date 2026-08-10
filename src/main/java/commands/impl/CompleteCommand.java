@@ -2,7 +2,6 @@ package commands.impl;
 
 import commands.Command;
 import executors.ExecutionContext;
-import parser.Parser2;
 import parser.nodes.impl.CommandNode;
 
 import java.util.HashMap;
@@ -21,25 +20,6 @@ public class CompleteCommand implements Command {
         switch (option) {
             case "-p":
                 print(args.get(1), context);
-                break;
-            case "-C":
-                registerCompletionScript(args);
-                break;
-            case "-r":
-                removeCompletionScript(command);
-                break;
-        }
-    }
-
-    @Override
-    public void execute(Parser2 parser2) throws Exception {
-        List<String> args = parser2.getTokens();
-        String command = args.getLast();
-        String option = args.get(0);
-
-        switch (option) {
-            case "-p":
-                print(args.get(1));
                 break;
             case "-C":
                 registerCompletionScript(args);
@@ -72,14 +52,6 @@ public class CompleteCommand implements Command {
         }
 
         context.getWriter().println(line);
-    }
-
-    private void print(String command) {
-        if (map.containsKey(command)) {
-            System.out.println(String.format("complete -C '%1$s' %2$s", map.get(command), command));
-        }else {
-            System.out.println(String.format("complete: %s: no completion specification", command));
-        }
     }
 
     private void removeCompletionScript(String command) {

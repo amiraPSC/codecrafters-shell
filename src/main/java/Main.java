@@ -1,5 +1,3 @@
-import commands.Command;
-import commands.CommandFactory;
 import completion.*;
 import executors.Executor;
 import jobs.JobManager;
@@ -7,7 +5,6 @@ import org.jline.reader.*;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
 import parser.Parser;
-import parser.Parser2;
 import parser.nodes.Node;
 import terminal.DisplayManager;
 import terminal.TerminalContext;

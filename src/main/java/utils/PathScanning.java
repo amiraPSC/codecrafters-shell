@@ -1,8 +1,5 @@
 package utils;
 
-import parser.Parser2;
-
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
@@ -65,19 +62,6 @@ public class PathScanning {
             } catch (IOException e) {}
         }
         return pathSet;
-    }
-
-    public static File createFile(Parser2 parser2){
-        File file = new File(parser2.getFileName());
-        try {
-            Path path = file.toPath();
-            if (!Files.exists(path)){
-                file = Files.createFile(path).toFile();
-            }
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
-        }
-        return file;
     }
 
     private static String[] getPaths(){
