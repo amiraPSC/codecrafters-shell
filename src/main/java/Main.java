@@ -23,8 +23,6 @@ public class Main {
             JobManager jobManager = new JobManager();
 
             while (true) {
-                //Parser2 parser2 = new Parser2();
-
                 Parser parser = new Parser();
                 Executor executor = new Executor();
                 jobManager.reapCompletedJobs();
@@ -33,11 +31,6 @@ public class Main {
 
                 Node node = parser.parse(line);
                 executor.execute(node);
-
-                /*parser2.parse(line);
-
-                Command cmd = CommandFactory.getCommand(parser2);
-                cmd.execute(parser2);*/
             }
         }
     }

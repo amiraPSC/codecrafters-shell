@@ -46,9 +46,9 @@ public class Parser {
         if (token != null){
             TokenType type = token.getTokenType();
 
-            if (type == TokenType.PIPE) {
+            if (type == TokenType.PIPE){
                 pointer++;
-                Node rightNode = parseRedirect();
+                Node rightNode = parsePipeLine();
                 return new PipelineNode(leftNode, rightNode);
             }
         }

@@ -49,13 +49,9 @@ public class Executor {
     }
 
     private int executePipeline(PipelineNode pipelineNode, ExecutionContext context) throws Exception {
-        if (pipelineNode.getLeft() instanceof CommandNode left
-                && pipelineNode.getRight() instanceof CommandNode right
-                && !CommandType.isBuiltin(left.getCommand())
-                && !CommandType.isBuiltin(right.getCommand())
-                && PathScanning.existsInPath(left.getCommand())
-                && PathScanning.existsInPath(right.getCommand())) {
-            return executeExternalPipeline(left, right, context);
+        List<CommandNode> allCommands = flattenIfAllExternal(pipelineNode);
+        if (allCommands != null) {
+            return executeExternalPipeline(allCommands, context);
         }
 
         PipedOutputStream pipeOut = new PipedOutputStream();
@@ -95,31 +91,32 @@ public class Executor {
         return 0;
     }
 
-    private int executeExternalPipeline(
-            CommandNode left,
-            CommandNode right,
-            ExecutionContext context) throws Exception {
-        List<Process> processes = ProcessBuilder.startPipeline(List.of(
-                createProcessBuilder(left),
-                createProcessBuilder(right)
-        ));
+    private int executeExternalPipeline(List<CommandNode> cmds, ExecutionContext context) throws Exception {
+        List<ProcessBuilder> builders = new ArrayList<>();
+        for (CommandNode command : cmds) builders.add(createProcessBuilder(command));
+
+        List<Process> processes = ProcessBuilder.startPipeline(builders);
 
         Process lastProcess = processes.getLast();
+        this.process = lastProcess;
         Thread outputThread = new Thread(() -> copy(lastProcess.getInputStream(), context.getStdout()));
-        Thread leftErrorThread = new Thread(() -> copy(processes.getFirst().getErrorStream(), context.getStderr()));
-        Thread rightErrorThread = new Thread(() -> copy(lastProcess.getErrorStream(), context.getStderr()));
 
-        outputThread.start();
-        leftErrorThread.start();
-        rightErrorThread.start();
-
-        for (Process process : processes) {
-            process.waitFor();
+        List<Thread> errorThreads = new ArrayList<>();
+        for (Process p : processes) {
+            Thread t = new Thread(() -> copy(p.getErrorStream(), context.getStderr()));
+            errorThreads.add(t);
+            t.start();
         }
 
-        outputThread.join();
-        leftErrorThread.join();
-        rightErrorThread.join();
+        outputThread.start();
+
+        if (!isBackground){
+            for (Process process : processes) process.waitFor();
+
+            outputThread.join();
+            for (Thread t : errorThreads) t.join();
+        }
+
         return 0;
     }
 
@@ -238,5 +235,29 @@ public class Executor {
         ProcessBuilder builder = new ProcessBuilder(command.getCommandWithArgs());
         builder.directory(PathScanning.getCurrentDir().toFile());
         return builder;
+    }
+
+    private List<CommandNode> flattenIfAllExternal(PipelineNode pipelineNode) {
+        List<CommandNode> commandsList = new ArrayList<>();
+        Node current = pipelineNode;
+
+        while (current instanceof PipelineNode pn) {
+            if (!(pn.getLeft() instanceof CommandNode left)
+                    || CommandType.isBuiltin(left.getCommand())
+                    || !PathScanning.existsInPath(left.getCommand())) {
+                return null;
+            }
+            commandsList.add(left);
+            current = pn.getRight();
+        }
+
+        if (!(current instanceof CommandNode last)
+                || CommandType.isBuiltin(last.getCommand())
+                || !PathScanning.existsInPath(last.getCommand())) {
+            return null;
+        }
+        commandsList.add(last);
+
+        return commandsList;
     }
 }
