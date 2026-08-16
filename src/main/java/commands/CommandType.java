@@ -6,6 +6,7 @@ public enum CommandType {
     PWD,
     ECHO,
     JOBS,
+    HISTORY,
     COMPLETE,
     EXIT,
     UNKNOWN;

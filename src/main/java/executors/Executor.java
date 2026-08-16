@@ -16,42 +16,42 @@ import utils.PathScanning;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class Executor {
-    private boolean isBackground = false;
-    private Process process;
-    private List<String> commands = new ArrayList<>();
 
     public int execute(Node node) throws Exception {
         ExecutionContext context = new ExecutionContext();
-        return execute(node, context);
+        return execute(node, false, context).getExitCode();
     }
 
-    private int execute(Node node, ExecutionContext context) throws Exception {
+    private ExecutionResult execute(Node node, boolean isBackground, ExecutionContext context) throws Exception {
         if (node instanceof CommandNode c)
-            executeCommand(c, context);
+            return executeCommand(c, isBackground, context);
         else if (node instanceof BackgroundNode b)
-            executeBackground(b, context);
+            return executeBackground(b, context);
         else if (node instanceof PipelineNode p)
-            executePipeline(p, context);
+            return executePipeline(p, isBackground, context);
         else if (node instanceof RedirectionNode r)
-            executeRedirect(r, context);
-        return 0;
+            return executeRedirect(r, isBackground, context);
+
+        return new ExecutionResult();
     }
 
-    private int executeBackground(BackgroundNode backgroundNode, ExecutionContext context) throws Exception {
-        isBackground = true;
-        execute(backgroundNode.getChild(), context);
+    private ExecutionResult executeBackground(BackgroundNode backgroundNode, ExecutionContext context) throws Exception {
+        ExecutionResult result = execute(backgroundNode.getChild(), true, context);
         JobManager jobManager = new JobManager();
-        Job job = jobManager.addJob(process, commands);
+        Job job = jobManager.addJob(result.getProcess(), result.getCommands());
         jobManager.printJobInformation(job, context);
-        return 0;
+        return result;
     }
 
-    private int executePipeline(PipelineNode pipelineNode, ExecutionContext context) throws Exception {
+    private ExecutionResult executePipeline(PipelineNode pipelineNode, boolean isBackground, ExecutionContext context) throws Exception {
         List<CommandNode> allCommands = flattenIfAllExternal(pipelineNode);
         if (allCommands != null) {
-            return executeExternalPipeline(allCommands, context);
+            return executeExternalPipeline(allCommands, isBackground, context);
         }
 
         PipedOutputStream pipeOut = new PipedOutputStream();
@@ -60,45 +60,44 @@ public class Executor {
         ExecutionContext leftContext = context.withOutput(pipeOut);
         ExecutionContext rightContext = context.withInput(pipeIn);
 
-        Thread leftThread = new Thread(() -> {
-            try {
-                execute(pipelineNode.getLeft(), leftContext);
-            } catch (Exception e) {
-                System.err.println(e.getMessage());
-            }finally {
-                try {
-                    pipeOut.close();
-                } catch (IOException e) {
-                    System.err.println(e.getMessage());
-                }
-            }
-        });
+        ExecutorService executor = Executors.newFixedThreadPool(2);
 
-        Thread rightThread = new Thread(() -> {
-            try {
-                execute(pipelineNode.getRight(), rightContext);
-            } catch (Exception e) {
-                System.err.println(e.getMessage());
-            }
-        });
+        Future<ExecutionResult> leftFuture =
+                executor.submit(() -> {
+                    try {
+                        return execute(pipelineNode.getLeft(), isBackground, leftContext);
+                    } finally {
+                        pipeOut.close();
+                    }
+                });
 
-        leftThread.start();
-        rightThread.start();
+        Future<ExecutionResult> rightFuture =
+                executor.submit(() -> execute(pipelineNode.getRight(), isBackground, rightContext));
 
-        leftThread.join();
-        rightThread.join();
+        ExecutionResult leftResult = leftFuture.get();
+        ExecutionResult rightResult = rightFuture.get();
 
-        return 0;
+        executor.shutdown();
+
+        return rightResult;
     }
 
-    private int executeExternalPipeline(List<CommandNode> cmds, ExecutionContext context) throws Exception {
+    private ExecutionResult executeExternalPipeline(List<CommandNode> cmds,
+                                                    boolean isBackground, ExecutionContext context) throws Exception {
+
         List<ProcessBuilder> builders = new ArrayList<>();
         for (CommandNode command : cmds) builders.add(createProcessBuilder(command));
 
         List<Process> processes = ProcessBuilder.startPipeline(builders);
 
+        ExecutionResult result = new ExecutionResult();
+
         Process lastProcess = processes.getLast();
-        this.process = lastProcess;
+        List<String> lastCommands = cmds.getLast().getCommandWithArgs();
+
+        result = result.withProcess(lastProcess);
+        result = result.withCommands(lastCommands);
+
         Thread outputThread = new Thread(() -> copy(lastProcess.getInputStream(), context.getStdout()));
 
         List<Thread> errorThreads = new ArrayList<>();
@@ -117,7 +116,7 @@ public class Executor {
             for (Thread t : errorThreads) t.join();
         }
 
-        return 0;
+        return result;
     }
 
     private void copy(InputStream input, OutputStream output) {
@@ -127,7 +126,7 @@ public class Executor {
         }
     }
 
-    private int executeRedirect(RedirectionNode redirectionNode, ExecutionContext context) throws Exception {
+    private ExecutionResult executeRedirect(RedirectionNode redirectionNode, boolean isBackground, ExecutionContext context) throws Exception {
         TokenType type = redirectionNode.getTokenType();
 
         String file = redirectionNode.getFile();
@@ -147,11 +146,13 @@ public class Executor {
 
             default -> throw new IllegalStateException("Unexpected redirect type: " + type);
         }
-        return execute(redirectionNode.getChild(), newContext);
+        return execute(redirectionNode.getChild(), isBackground, newContext);
     }
 
-    private int executeCommand(CommandNode commandNode, ExecutionContext context) throws Exception {
-        commands.addAll(commandNode.getCommandWithArgs());
+    private ExecutionResult executeCommand(CommandNode commandNode, boolean isBackground, ExecutionContext context) throws Exception {
+        ExecutionResult result = new ExecutionResult();
+        result = result.withCommands(commandNode.getCommandWithArgs());
+
         Command cmd = CommandFactory.getCommand(commandNode.getCommand());
 
         if (CommandType.isBuiltin(commandNode.getCommand())){
@@ -159,18 +160,19 @@ public class Executor {
         }else {
             if (!PathScanning.existsInPath(commandNode.getCommand())){
                 cmd.execute(commandNode, context);
-                return 1;
+                result = result.withExitCode(1);
+                return result;
             }
 
             Process process = startProcess(commandNode);
-            streamsCopying(process, context);
-            this.process = process;
+            streamsCopying(process, isBackground, context);
+            result = result.withProcess(process);
         }
 
-        return 0;
+        return result;
     }
 
-    private void streamsCopying(Process process, ExecutionContext context) throws Exception {
+    private void streamsCopying(Process process, boolean isBackground, ExecutionContext context) throws Exception {
         Thread inputThread = null;
 
         if (context.getStdin() != System.in) {
