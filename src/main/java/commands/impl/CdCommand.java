@@ -5,12 +5,13 @@ import executors.ExecutionContext;
 import parser.nodes.impl.CommandNode;
 import utils.PathScanning;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class CdCommand implements Command {
     @Override
-    public void execute(CommandNode node, ExecutionContext context) {
+    public void execute(CommandNode node, ExecutionContext context) throws IOException {
         String firstArg = node.getArgs().getFirst();
 
         if (firstArg.equals("~")){

@@ -26,4 +26,14 @@ public class ProcessExecutor {
 
         return process;
     }
+
+    public static ProcessBuilder createProcessBuilder(List<String> args){
+        ProcessBuilder builder = new ProcessBuilder(args);
+        builder.directory(PathScanning.getCurrentDir().toFile());
+        return builder;
+    }
+
+    public static Process startProcess(List<String> args) throws IOException {
+        return createProcessBuilder(args).start();
+    }
 }

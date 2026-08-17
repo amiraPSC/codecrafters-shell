@@ -6,11 +6,12 @@ import jobs.Job;
 import jobs.JobManager;
 import parser.nodes.impl.CommandNode;
 
+import java.io.IOException;
 import java.util.List;
 
 public class JobsCommand implements Command {
     @Override
-    public void execute(CommandNode node, ExecutionContext context) throws Exception{
+    public void execute(CommandNode node, ExecutionContext context) throws IOException {
         JobManager jobManager = new JobManager();
         if (node.getArgs().isEmpty()){
             jobManager.printStatusJobs(context);

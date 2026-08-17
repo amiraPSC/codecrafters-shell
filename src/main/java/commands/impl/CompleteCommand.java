@@ -4,6 +4,7 @@ import commands.Command;
 import executors.ExecutionContext;
 import parser.nodes.impl.CommandNode;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +13,7 @@ public class CompleteCommand implements Command {
     private static Map<String, String> map = new HashMap<>();
 
     @Override
-    public void execute(CommandNode node, ExecutionContext context) {
+    public void execute(CommandNode node, ExecutionContext context) throws IOException {
         List<String> args = node.getArgs();
         String command = args.getLast();
         String option = args.getFirst();
