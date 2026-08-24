@@ -16,12 +16,15 @@ public class HistoryCommand implements Command {
     @Override
     public void execute(CommandNode node, ExecutionContext context) throws IOException {
         List<String> args = node.getArgs();
-        history.add(node.getCommand() + " " + args.getFirst());
 
         if (!node.getArgs().isEmpty()) {
+            history.add(node.getCommand() + " " + args.getFirst());
+
             int n = Integer.parseInt(args.getFirst());
             printNHistory(n, context);
+
         }else {
+            history.add(node.getCommand());
             printAllHistory(context);
         }
     }
@@ -39,7 +42,7 @@ public class HistoryCommand implements Command {
 
     private void printNHistory(int n, ExecutionContext context) {
         int limit = history.size() - n;
-        for (int i = limit - 1; i < history.size(); i++){
+        for (int i = limit; i < history.size(); i++){
             formatPrint(i, context);
         }
     }
