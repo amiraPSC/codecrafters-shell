@@ -19,7 +19,7 @@ public class HistoryCommand implements Command {
         history.add(node.getCommand() + " " + args.getFirst());
 
         if (!node.getArgs().isEmpty()) {
-            int n = Integer.getInteger(args.getFirst());
+            int n = Integer.parseInt(args.getFirst());
             printNHistory(n, context);
         }else {
             printAllHistory(context);
