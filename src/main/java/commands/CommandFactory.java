@@ -31,6 +31,9 @@ public class CommandFactory {
             case JOBS -> {
                 return new JobsCommand();
             }
+            case HISTORY -> {
+                return new HistoryCommand();
+            }
         }
         return new UnknownCommand();
     }
