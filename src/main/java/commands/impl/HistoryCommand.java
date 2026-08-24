@@ -15,14 +15,36 @@ public class HistoryCommand implements Command {
 
     @Override
     public void execute(CommandNode node, ExecutionContext context) throws IOException {
-        history.add("history");
-        for (int i = 0; i < history.size(); i++){
-            context.getWriter().println( "    " + (i+1) + "  " + history.get(i));
+        List<String> args = node.getArgs();
+        history.add(node.getCommand() + " " + args.getFirst());
+
+        if (!node.getArgs().isEmpty()) {
+            int n = Integer.getInteger(args.getFirst());
+            printNHistory(n, context);
+        }else {
+            printAllHistory(context);
         }
     }
 
     public static void addCommand(String line) {
-        if (line.trim().equals("history")) return;
+        if (line.startsWith("history")) return;
         history.add(line);
+    }
+
+    private void printAllHistory(ExecutionContext context) {
+        for (int i = 0; i < history.size(); i++){
+            formatPrint(i, context);
+        }
+    }
+
+    private void printNHistory(int n, ExecutionContext context) {
+        int limit = history.size() - n;
+        for (int i = limit - 1; i < history.size(); i++){
+            formatPrint(i, context);
+        }
+    }
+
+    private void formatPrint(int i, ExecutionContext context) {
+        context.getWriter().println( "    " + (i+1) + "  " + history.get(i));
     }
 }
