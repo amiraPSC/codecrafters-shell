@@ -8,6 +8,7 @@ import parser.nodes.impl.CommandNode;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,10 +40,15 @@ public class HistoryCommand implements Command {
 
     private void handleHistoryOption(List<String> args, ExecutionContext context) throws IOException {
         String option = args.getFirst();
+        Path path = Paths.get(args.get(1));
 
         switch (option){
             case "-r":
-                loadHistoryFromFile(Path.of(args.get(1)));
+                loadHistoryFromFile(path);
+                break;
+            case "-w":
+                writeHistoryToFile(path);
+                break;
         }
     }
 
@@ -54,6 +60,17 @@ public class HistoryCommand implements Command {
                 history.add(line);
             }
         }
+    }
+
+    private void writeHistoryToFile(Path path) throws IOException {
+        List<String> lines = new ArrayList<>();
+
+        for (History.Entry entry : history) {
+            if (!entry.line().isEmpty()){
+                lines.add(entry.line());
+            }
+        }
+        Files.write(path, lines);
     }
 
     private void printAllHistory(ExecutionContext context) {
