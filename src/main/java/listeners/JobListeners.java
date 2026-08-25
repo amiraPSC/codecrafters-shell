@@ -10,7 +10,7 @@ public class JobListeners implements Listener {
     }
 
     @Override
-    public void event(String line) {
+    public void event() {
         jobManager.reapCompletedJobs();
     }
 }

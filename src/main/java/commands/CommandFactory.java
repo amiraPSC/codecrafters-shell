@@ -3,6 +3,8 @@ package commands;
 import commands.impl.*;
 
 public class CommandFactory {
+    private static HistoryCommand history;
+
     public static Command getCommand(String command){
         CommandType type = CommandType.getType(command);
         return getBuiltinCommand(type);
@@ -32,9 +34,13 @@ public class CommandFactory {
                 return new JobsCommand();
             }
             case HISTORY -> {
-                return new HistoryCommand();
+                return history;
             }
         }
         return new UnknownCommand();
+    }
+
+    public static void installationHistory(HistoryCommand history){
+        CommandFactory.history = history;
     }
 }

@@ -15,7 +15,7 @@ public class Main {
 
             LineReader lineReader = terminalContext.getReader();
             Application application = new Application();
-            application.start(terminalContext);
+            application.start(terminalContext, lineReader);
 
             while (true) {
                 Parser parser = new Parser();
