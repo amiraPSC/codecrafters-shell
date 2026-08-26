@@ -31,7 +31,7 @@ public class DeclareCommand implements Command {
         if (parameters.containsKey(variable)) {
             out.println(variable + " " + parameters.get(variable));
         }else {
-            out.printf("declare: %s: not found", variable);
+            out.println(String.format("declare: %s: not found", variable));
         }
     }
 }
