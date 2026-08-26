@@ -9,7 +9,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class HistoryCommand implements Command {
@@ -47,7 +49,10 @@ public class HistoryCommand implements Command {
                 loadHistoryFromFile(path);
                 break;
             case "-w":
-                writeHistoryToFile(path);
+                writeHistoryToFile(path, false);
+                break;
+            case "-a":
+                writeHistoryToFile(path, true);
                 break;
         }
     }
@@ -62,15 +67,23 @@ public class HistoryCommand implements Command {
         }
     }
 
-    private void writeHistoryToFile(Path path) throws IOException {
+    private void writeHistoryToFile(Path path, boolean isAppend) throws IOException {
         List<String> lines = new ArrayList<>();
+        Iterator<History.Entry> iterator = history.iterator();
 
-        for (History.Entry entry : history) {
+        while (iterator.hasNext()){
+            History.Entry entry = iterator.next();
             if (!entry.line().isEmpty()){
                 lines.add(entry.line());
             }
+            iterator.remove();
         }
-        Files.write(path, lines);
+
+        if (isAppend){
+            Files.write(path, lines, StandardOpenOption.APPEND, StandardOpenOption.CREATE);
+        }else {
+            Files.write(path, lines);
+        }
     }
 
     private void printAllHistory(ExecutionContext context) {
