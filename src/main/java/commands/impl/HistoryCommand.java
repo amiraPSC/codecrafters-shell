@@ -68,7 +68,7 @@ public class HistoryCommand implements Command {
     public void saveToHistFile() throws IOException {
         Path path = PathScanning.getHistFilePath();
         if (path != null) {
-            writeHistoryToFile(path, true);
+            writeHistoryToFile(path, false);
         }
     }
 
