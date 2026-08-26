@@ -6,17 +6,21 @@ import parser.nodes.impl.CommandNode;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import java.util.Map;
 
 public class DeclareCommand implements Command {
-    private Map<String, String> parameters;
+    private static Map<String, String> parameters;
 
     @Override
     public void execute(CommandNode node, ExecutionContext context) throws IOException {
-        String option = node.getArgs().getFirst();
+        List<String> args = node.getArgs();
+        String option = args.getFirst();
 
         switch (option) {
             case "-p":
+                printDescriptionVariable(args.get(1), context);
+                break;
         }
     }
 
