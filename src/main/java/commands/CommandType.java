@@ -8,6 +8,7 @@ public enum CommandType {
     JOBS,
     HISTORY,
     COMPLETE,
+    DECLARE,
     EXIT,
     UNKNOWN;
 

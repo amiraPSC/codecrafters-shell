@@ -36,6 +36,9 @@ public class CommandFactory {
             case HISTORY -> {
                 return history;
             }
+            case DECLARE -> {
+                return new DeclareCommand();
+            }
         }
         return new UnknownCommand();
     }
