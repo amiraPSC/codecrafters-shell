@@ -25,7 +25,7 @@ public class Main {
 
                 Node node = parser.parse(line);
                 executor.execute(node);
-                application.notify(line);
+                application.notifyListeners();
             }
         }
     }

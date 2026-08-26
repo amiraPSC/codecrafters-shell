@@ -4,6 +4,7 @@ import commands.Command;
 import executors.ExecutionContext;
 import org.jline.reader.History;
 import parser.nodes.impl.CommandNode;
+import utils.PathScanning;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -36,11 +37,11 @@ public class HistoryCommand implements Command {
                 break;
 
             default:
-                handleHistoryOption(args, context);
+                handleHistoryOption(args);
         }
     }
 
-    private void handleHistoryOption(List<String> args, ExecutionContext context) throws IOException {
+    private void handleHistoryOption(List<String> args) throws IOException {
         String option = args.getFirst();
         Path path = Paths.get(args.get(1));
 
@@ -54,6 +55,20 @@ public class HistoryCommand implements Command {
             case "-a":
                 writeHistoryToFile(path, true);
                 break;
+        }
+    }
+
+    public void loadFromHistFile() throws IOException {
+        Path path = PathScanning.getHistFilePath();
+        if (path != null) {
+            loadHistoryFromFile(path);
+        }
+    }
+
+    public void saveToHistFile() throws IOException {
+        Path path = PathScanning.getHistFilePath();
+        if (path != null) {
+            writeHistoryToFile(path, true);
         }
     }
 

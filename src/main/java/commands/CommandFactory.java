@@ -40,6 +40,10 @@ public class CommandFactory {
         return new UnknownCommand();
     }
 
+    public static HistoryCommand getHistory() {
+        return history;
+    }
+
     public static void installationHistory(HistoryCommand history){
         CommandFactory.history = history;
     }

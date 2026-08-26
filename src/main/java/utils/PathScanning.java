@@ -72,6 +72,14 @@ public class PathScanning {
         return paths;
     }
 
+    public static Path getHistFilePath(){
+        String histEnv = System.getenv("HISTFILE");
+        if (histEnv != null){
+            return Paths.get(histEnv);
+        }
+        return null;
+    }
+
     public static boolean isExists(Path path){
         return Files.exists(path);
     }
