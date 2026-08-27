@@ -29,7 +29,9 @@ public class DeclareCommand implements Command {
 
     private void  recordVariable(String input){
         String[] split = input.split("=");
-        parameters.put(split[0], split[1]);
+        if (split.length == 2) {
+            parameters.put(split[0], split[1]);
+        }
     }
 
     private void printDescriptionVariable(String variable, ExecutionContext context) {
