@@ -22,14 +22,21 @@ public class DeclareCommand implements Command {
             case "-p":
                 printDescriptionVariable(args.get(1), context);
                 break;
+            default:
+                recordVariable(option);
         }
+    }
+
+    private void  recordVariable(String input){
+        String[] split = input.split("=");
+        parameters.put(split[0], split[1]);
     }
 
     private void printDescriptionVariable(String variable, ExecutionContext context) {
         PrintWriter out = context.getWriter();
 
         if (parameters.containsKey(variable)) {
-            out.println(variable + " " + parameters.get(variable));
+            out.println(String.format("declare -- %1$s=\"%2$s\"", variable, parameters.get(variable)));
         }else {
             out.println(String.format("declare: %s: not found", variable));
         }
