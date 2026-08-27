@@ -23,14 +23,18 @@ public class DeclareCommand implements Command {
                 printDescriptionVariable(args.get(1), context);
                 break;
             default:
-                recordVariable(option);
+                recordVariable(option, context);
         }
     }
 
-    private void  recordVariable(String input){
+    private void  recordVariable(String input, ExecutionContext context){
         String[] split = input.split("=");
-        if (split.length == 2) {
+        boolean isValid = split[0].matches("[a-zA-Z_][a-zA-Z_0-9]*");
+
+        if (isValid && split.length == 2) {
             parameters.put(split[0], split[1]);
+        }else {
+            context.getWriter().println(String.format("declare: `%s': not a valid identifier", input));
         }
     }
 
