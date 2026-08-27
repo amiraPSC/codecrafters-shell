@@ -17,6 +17,7 @@ import java.util.List;
 
 public class HistoryCommand implements Command {
     private final History history;
+    private int lastWrittenIndex = 0;
 
     public HistoryCommand(History history) {
         this.history = history;
@@ -84,14 +85,14 @@ public class HistoryCommand implements Command {
 
     private void writeHistoryToFile(Path path, boolean isAppend) throws IOException {
         List<String> lines = new ArrayList<>();
-        Iterator<History.Entry> iterator = history.iterator();
+        int start = isAppend ? lastWrittenIndex : 0;
 
-        while (iterator.hasNext()){
-            History.Entry entry = iterator.next();
-            if (!entry.line().isEmpty()){
-                lines.add(entry.line());
+        for (int i = start; i < history.size(); i++) {
+            String line = history.get(i);
+
+            if (!line.isEmpty()) {
+                lines.add(line);
             }
-            iterator.remove();
         }
 
         if (isAppend){
@@ -99,6 +100,8 @@ public class HistoryCommand implements Command {
         }else {
             Files.write(path, lines);
         }
+
+        lastWrittenIndex = history.size();
     }
 
     private void printAllHistory(ExecutionContext context) {
