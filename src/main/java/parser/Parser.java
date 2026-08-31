@@ -1,5 +1,6 @@
 package parser;
 
+import commands.impl.DeclareCommand;
 import parser.lexer.Token;
 import parser.lexer.TokenType;
 import parser.lexer.Tokenizer;

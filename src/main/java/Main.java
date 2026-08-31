@@ -18,6 +18,8 @@ public class Main {
             application.start(terminalContext, lineReader);
 
             while (true) {
+                application.notifyListeners();
+
                 Parser parser = new Parser();
                 Executor executor = new Executor();
 

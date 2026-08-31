@@ -1,25 +1,20 @@
 package parser.lexer;
 
+import commands.impl.DeclareCommand;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class ParserState{
-    private StringBuilder builder;
-    private List<String> tokens;
+    private StringBuilder builder = new StringBuilder();
+    private StringBuilder variableBuilder = new StringBuilder();
+    private List<String> tokens = new ArrayList<>();
 
-    private boolean isEscape;
-    private boolean openQuote;
-    private boolean tokenStarted;
-    private char quote;
-
-    public ParserState() {
-        this.builder = new StringBuilder();
-        this.tokens = new ArrayList<>();
-        this.isEscape = false;
-        this.openQuote = false;
-        this.tokenStarted = false;
-        this.quote = '\'';
-    }
+    private boolean isEscape = false;
+    private boolean isVariable = false;
+    private boolean openQuote = false;
+    private boolean tokenStarted = false;
+    private char quote = '\'';
 
     protected void handelNormalState(char currentChar){
         if (handleEscaping(currentChar))
@@ -33,8 +28,10 @@ public class ParserState{
             return;
         }
 
-        if (handleWhitespace(currentChar))
+        if (handleWhitespace(currentChar) || currentChar == '$') {
+            handleVariable(currentChar);
             return;
+        }
 
         append(currentChar);
     }
@@ -68,6 +65,12 @@ public class ParserState{
     }
 
     private void append(char c){
+        if (isVariable && c != '$') {
+            variableBuilder.append(c);
+            tokenStarted = true;
+            return;
+        }
+
         builder.append(c);
         tokenStarted = true;
     }
@@ -101,12 +104,15 @@ public class ParserState{
     }
 
     private void finishToken(){
+        finishTokenVariable();
+
         tokens.add(builder.toString());
         builder.setLength(0);
         tokenStarted = false;
     }
 
     public void finishLastToken(){
+        finishTokenVariable();
         if (tokenStarted) {
             tokens.add(builder.toString());
         }
@@ -115,6 +121,34 @@ public class ParserState{
     private void startEscaping(){
         isEscape = true;
     }
+
+    private void handleVariable(char currentChar){
+        if (isVariable && currentChar == '$'){
+            expandVariable();
+        }else if (!isVariable && currentChar == '$'){
+            startTokenVariable();
+        }
+    }
+
+    private void expandVariable(){
+        String value = "";
+        if (DeclareCommand.checkVariable(variableBuilder.toString())){
+            value = DeclareCommand.getVariable(variableBuilder.toString());
+        }
+        variableBuilder.setLength(0);
+        builder.append(value);
+    }
+
+    private void startTokenVariable(){
+        isVariable = true;
+    }
+
+    private void finishTokenVariable(){
+        expandVariable();
+        isVariable = false;
+    }
+
+
 
     public char getQuote() {
         return quote;

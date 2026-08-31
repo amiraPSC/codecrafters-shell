@@ -42,9 +42,17 @@ public class DeclareCommand implements Command {
         PrintWriter out = context.getWriter();
 
         if (parameters.containsKey(variable)) {
-            out.println(String.format("declare -- %1$s=\"%2$s\"", variable, parameters.get(variable)));
+            out.println(String.format("declare -- %1$s=\"%2$s\"", variable, getVariable(variable)));
         }else {
             out.println(String.format("declare: %s: not found", variable));
         }
+    }
+
+    public static String getVariable(String variable){
+        return parameters.get(variable);
+    }
+
+    public static boolean checkVariable(String variable){
+        return parameters.containsKey(variable);
     }
 }
