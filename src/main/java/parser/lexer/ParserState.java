@@ -112,6 +112,11 @@ public class ParserState{
     private void finishToken(){
         finishTokenVariable();
 
+        if (builder.isEmpty()){
+            tokenStarted = false;
+            return;
+        }
+
         tokens.add(builder.toString());
         builder.setLength(0);
         tokenStarted = false;
@@ -119,6 +124,8 @@ public class ParserState{
 
     public void finishLastToken(){
         finishTokenVariable();
+        if (builder.isEmpty())return;
+        
         if (tokenStarted) {
             tokens.add(builder.toString());
         }
@@ -137,12 +144,15 @@ public class ParserState{
     }
 
     private void expandVariable(){
-        String value = "";
+        String value = null;
         if (DeclareCommand.checkVariable(variableBuilder.toString())){
             value = DeclareCommand.getVariable(variableBuilder.toString());
         }
+
         variableBuilder.setLength(0);
-        builder.append(value);
+        if (value != null){
+            builder.append(value);
+        }
     }
 
     private void startTokenVariable(){
