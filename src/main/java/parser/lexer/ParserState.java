@@ -65,6 +65,12 @@ public class ParserState{
     }
 
     private void append(char c){
+        if (isVariable && c == '{') return;
+        if (isVariable && c == '}'){
+            finishTokenVariable();
+            return;
+        }
+
         if (isVariable && c != '$') {
             variableBuilder.append(c);
             tokenStarted = true;
@@ -123,7 +129,7 @@ public class ParserState{
     }
 
     private void handleVariable(char currentChar){
-        if (isVariable && currentChar == '$'){
+        if (isVariable && (currentChar == '$' || currentChar == '}')){
             expandVariable();
         }else if (!isVariable && currentChar == '$'){
             startTokenVariable();
