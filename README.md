@@ -1,34 +1,44 @@
-[![progress-banner](https://backend.codecrafters.io/progress/shell/28419ec5-5d99-48fa-a4d5-84d4f035247f)](https://app.codecrafters.io/users/amiraPSC?r=2qF)
+# Java Shell
 
-This is a starting point for Java solutions to the
-["Build Your Own Shell" Challenge](https://app.codecrafters.io/courses/shell/overview).
+A Unix-like shell implemented in Java.
 
-In this challenge, you'll build your own POSIX compliant utils that's capable of
-interpreting utils commands, running external programs and builtin commands like
-cd, pwd, echo and more. Along the way, you'll learn about utils commands parsing,
-REPLs, builtin commands, and more.
+## Features
 
-**Note**: If you're viewing this repo on GitHub, head over to
-[codecrafters.io](https://codecrafters.io) to try the challenge.
+* **Built-in Commands** — Supports common shell built-ins such as `cd`, `pwd`, `echo`, `type`,`complete`, `jobs`, `history`, `declare`, and `exit`.
+* **External Commands** — Executes external programs through the system `PATH`.
+* **Pipelines** — Supports multi-command pipelines using `|`.
+* **I/O Redirection** — Supports input and output redirection using `>`, `1>`, `2>`, `1>>`, `>>`, and `2>>`.
+* **Background Processes** — Supports running commands in the background using `&`.
+* **Quoting** — Supports single and double quotes.
+* **Parameter Expansion** — Supports shell variable expansion using `$VAR`.
+* **Command History** — Supports interactive history and persistent history files.
+* **Tab Completion** — Supports command and executable completion.
 
-# Passing the first stage
+## Technologies
 
-The entry point for your `utils` implementation is in `src/main/java/Main.java`.
-Study and uncomment the relevant code, then run the commands below to execute the
-tests on our servers:
+* Java 25
+* Maven
+* JLine
 
-```sh
-codecrafters submit
+## Running the Shell
+
+### Requirements
+
+* Java 25
+* Maven
+
+### Build
+
+```bash
+mvn package
 ```
 
-Time to move on to the next stage!
+### Run
 
-# Stage 2 & beyond
+```bash
+java --enable-native-access=ALL-UNNAMED --enable-preview -jar target/codecrafters-shell.jar
+```
 
-Note: This section is for stages 2 and beyond.
+## CodeCrafters
 
-1. Ensure you have `mvn` installed locally
-1. Run `./your_program.sh` to run your program, which is implemented in
-   `src/main/java/Main.java`.
-1. Run `codecrafters submit` to submit your solution to CodeCrafters. Test
-   output will be streamed to your terminal.
+This project was built as part of the [CodeCrafters Build Your Own Shell](https://codecrafters.io/challenges/shell) challenge.
